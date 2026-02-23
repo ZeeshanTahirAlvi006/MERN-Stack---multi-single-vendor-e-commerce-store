@@ -22,8 +22,20 @@ export const OrderSchema = new mongoose.Schema({
             vendorId:{
                 ref: 'User',
                 type:mongoose.Schema.Types.ObjectId,
+            },
+            itemRevenue: { 
+                type: Number,
+                 default: 0 
+                },
+            platformFee: { 
+                type: Number,
+                 default: 0 
+                },
+            vendorPayout: { 
+                type: Number,
+                 default: 0 
+                },
             }
-        }
     ],
     shippingAddress:{
         name:{
@@ -73,14 +85,14 @@ export const OrderSchema = new mongoose.Schema({
     },
     platformFee:{
         type:Number,
-        default:100,
+        default:0,
     },status:{
         type:String,
         enum:["Pending","Paid","Shipped","Delivered","Cancelled"]
     },paidAt:{
         type:Date,
         validate:{
-            validator:function(val){
+            validator:function(value){
                 return !value || value >= this.createdAt;
             },
             message:"Payment date can not be before order creation date."
@@ -91,8 +103,17 @@ export const OrderSchema = new mongoose.Schema({
 OrderSchema.index({customerId:1});
 OrderSchema.index({"items.vendorId":1})
 OrderSchema.pre('save',function(next){
-    this.total = this.items.reduce((acc,item)=> acc + (item.price*item.qty),0);
-    this.platformFee = this.total*0.10;
+    let totalOrderRevenue = 0;
+    let totalOrderPlatformFee = 0;
+    this.items.forEach(item => {
+        item.itemRevenue = item.price * item.qty;
+        item.platformFee = item.itemRevenue * 0.10;
+        item.vendorPayout = item.itemRevenue - item.platformFee;
+        totalOrderRevenue += item.itemRevenue;
+        totalOrderPlatformFee += item.platformFee;
+    });
+    this.total = totalOrderRevenue;
+    this.platformFee = totalOrderPlatformFee;
     next();
 })
 export default mongoose.model('Order',OrderSchema)
