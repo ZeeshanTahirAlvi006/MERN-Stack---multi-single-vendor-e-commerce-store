@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import { OrderSchema } from './Order';
 
 export const ProductSchema = new mongoose.Schema({
     name:{
@@ -17,21 +16,20 @@ export const ProductSchema = new mongoose.Schema({
         required:true,
         min:[0,"Price can not be less than 0"]
     },
-    images:[{
-        type:String,
-        required:true,
-        validate: function(val){
-            return val.length >0;
-        },
-        message: "Atleast 1 image is required."
-    }],
+    images:{
+        type:[String],
+        validate: {
+            validator: function(val){
+                return val.length > 0;
+            },
+            message: "At least 1 image is required."
+        }
+    },
     stock:{
         type:Number,
         default: 0,
         required:true,
-        validate: function(val){
-            return val.length >= 0;
-        },message: "Out of Stock"
+        min:[0, "Stock can not be less than 0"]
     },
     vendorid:{
         type:mongoose.Schema.Types.ObjectId,

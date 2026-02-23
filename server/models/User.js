@@ -1,6 +1,6 @@
 import mongoose from "mongoose"
-import { hashPassword,comparePassword } from "../middleware/authMiddleware";
-import {createJWTToken} from '../utils/jwtUtils'
+import bcrypt from 'bcrypt'
+import { generateJWTToken } from '../utils/jwtUtils.js'
 
 const UserSchema = new mongoose.Schema({
     name:{
@@ -60,9 +60,23 @@ const UserSchema = new mongoose.Schema({
         required:false,
     }
 },{timestamps:true})
-UserSchema.pre("save",hashPassword);
-UserSchema.methods.comparePassword = comparePassword;
-UserSchema.methods.generateJWTToken = function(){
-    return createJWTToken(this._id);
+
+// Hash password before saving
+UserSchema.pre("save", async function(){
+    if(!this.isModified('password')){
+        return;
+    }
+    const salt = await bcrypt.genSalt(12);
+    this.password = await bcrypt.hash(this.password, salt);
+});
+
+// Compare password method
+UserSchema.methods.comparePassword = async function(passwordfromuser){
+    return await bcrypt.compare(passwordfromuser, this.password);
 }
-export default mongoose.model("User",UserSchema)
+
+UserSchema.methods.generateJWTToken = function(){
+    return generateJWTToken(this._id);
+}
+
+export default mongoose.model("User", UserSchema)

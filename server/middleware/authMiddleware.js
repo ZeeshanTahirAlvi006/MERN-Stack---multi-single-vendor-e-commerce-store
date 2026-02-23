@@ -1,22 +1,6 @@
-import bcrypt from 'bcrypt'
 import jwt from 'jsonwebtoken';
-import User from '../models/User';
+import User from '../models/User.js';
 
-export const hashPassword = async function(next){
-    if(!this.isModified('password')){
-        return next();
-    }
-    try{
-        const salt = await bcrypt.genSalt(12);
-        this.password = await bcrypt.hash(this.password,salt);
-        next();
-    }catch(error){
-        next(error);
-    }
-}
-export const comparePassword =  async function(passwordfromuser){
-    return await bcrypt.compare(passwordfromuser,this.password);
-}
 export const protectRole = async function(req,res,next){
     let token;
     if(req.headers.authorization?.startsWith('Bearer')){
