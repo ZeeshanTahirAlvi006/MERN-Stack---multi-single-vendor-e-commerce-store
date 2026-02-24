@@ -23,6 +23,9 @@ export const loginUser = (email, password) =>
 export const registerUser = (name, email, password, role) =>
   API.post('/auth/register', { name, email, password, role });
 
+export const updateUserProfile = (profileData) =>
+  API.put('/auth/profile', profileData);
+
 // ─── Products ───
 export const getProducts = (params = {}) =>
   API.get('/products', { params });
@@ -56,7 +59,26 @@ export const placeOrder = (orderData) =>
 export const getMyOrders = () =>
   API.get('/orders/mine');
 
+export const getAllOrders = (params = {}) =>
+  API.get('/orders', { params });
+
 export const getOrderById = (id) =>
   API.get(`/orders/${id}`);
+
+export const updateOrderStatus = (id, status) =>
+  API.put(`/orders/${id}/status`, { status });
+
+// ─── Admin ───
+export const getAdminStats = () =>
+  API.get('/admin/stats');
+
+export const getAdminUsers = (params = {}) =>
+  API.get('/admin/users', { params });
+
+export const toggleUserStatus = (id) =>
+  API.put(`/admin/users/${id}`);
+
+export const getAdminCommission = () =>
+  API.get('/admin/commission');
 
 export default API;

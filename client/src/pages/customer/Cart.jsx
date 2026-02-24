@@ -57,8 +57,8 @@ const Cart = () => {
   if (items.length === 0) {
     return (
       <div className="min-h-screen bg-slate-50 flex flex-col items-center justify-center gap-4 px-4">
-        <div className="w-20 h-20 rounded-full bg-teal-50 flex items-center justify-center">
-          <FiShoppingCart className="text-3xl text-teal-700" />
+        <div className="w-20 h-20 rounded-full bg-blue-50 flex items-center justify-center">
+          <FiShoppingCart className="text-3xl text-blue-800" />
         </div>
         <h2 className="text-xl font-bold text-slate-900">Your cart is empty</h2>
         <p className="text-slate-500 text-sm text-center max-w-xs">
@@ -66,7 +66,7 @@ const Cart = () => {
         </p>
         <Link
           to="/"
-          className="flex items-center gap-2 px-6 py-2.5 bg-teal-700 text-white rounded-xl text-sm font-semibold no-underline hover:bg-teal-800 transition-colors"
+          className="flex items-center gap-2 px-6 py-2.5 bg-blue-800 text-white rounded-xl text-sm font-semibold no-underline hover:bg-teal-800 transition-colors"
         >
           <FiArrowLeft /> Continue Shopping
         </Link>
@@ -77,21 +77,6 @@ const Cart = () => {
   /* ─── Cart with items ─── */
   return (
     <div className="min-h-screen bg-slate-50">
-      {/* Header */}
-      <div className="bg-white border-b border-slate-200">
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4 flex items-center gap-4">
-          <button
-            onClick={() => navigate(-1)}
-            className="flex items-center gap-2 text-slate-500 hover:text-teal-700 transition-colors text-sm font-medium bg-transparent border-none cursor-pointer"
-          >
-            <FiArrowLeft /> Back
-          </button>
-          <h1 className="text-xl font-bold text-slate-900">
-            Shopping Cart <span className="text-slate-400 font-normal text-base">({itemCount} items)</span>
-          </h1>
-        </div>
-      </div>
-
       <div className="max-w-6xl mx-auto px-4 sm:px-6 py-8 grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* ─── Items column ─── */}
         <div className="lg:col-span-2 flex flex-col gap-4">
@@ -111,11 +96,11 @@ const Cart = () => {
               <div className="flex-1 min-w-0">
                 <Link
                   to={`/products/${item.productId}`}
-                  className="text-sm font-semibold text-slate-900 hover:text-teal-700 transition-colors no-underline line-clamp-2"
+                  className="text-sm font-semibold text-slate-900 hover:text-blue-800 transition-colors no-underline line-clamp-2"
                 >
                   {item.name}
                 </Link>
-                <p className="text-teal-700 font-bold mt-1">
+                <p className="text-blue-800 font-bold mt-1">
                   Rs. {item.price?.toLocaleString()}
                 </p>
 
@@ -169,7 +154,7 @@ const Cart = () => {
             </div>
             <div className="flex justify-between text-sm text-slate-600 mb-4">
               <span>Delivery</span>
-              <span className="text-emerald-600 font-medium">Free</span>
+              <span className="text-blue-600 font-medium">Free</span>
             </div>
             <div className="border-t border-slate-200 pt-4 flex justify-between text-base font-bold text-slate-900 mb-6">
               <span>Total</span>
@@ -185,7 +170,7 @@ const Cart = () => {
                   }
                   setShowCheckout(true);
                 }}
-                className="w-full h-12 bg-gradient-to-br from-teal-700 to-emerald-800 text-white rounded-xl font-semibold cursor-pointer transition-all duration-300 hover:shadow-lg hover:shadow-teal-700/35 hover:-translate-y-0.5 active:translate-y-0 border-none"
+                className="w-full h-12 bg-gradient-to-br from-blue-800 to-blue-800 text-white rounded-xl font-semibold cursor-pointer transition-all duration-300 hover:shadow-lg hover:shadow-blue-800/35 hover:-translate-y-0.5 active:translate-y-0 border-none"
               >
                 Proceed to Checkout
               </button>
@@ -208,7 +193,7 @@ const Cart = () => {
                     placeholder={field.charAt(0).toUpperCase() + field.slice(1) + (field === 'zip' ? ' (optional)' : ' *')}
                     value={address[field]}
                     onChange={(e) => setAddress({ ...address, [field]: e.target.value })}
-                    className="w-full h-10 px-3 border border-slate-200 rounded-lg text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:border-teal-700 focus:ring-2 focus:ring-teal-700/10 transition-all font-[inherit]"
+                    className="w-full h-10 px-3 border border-slate-200 rounded-lg text-sm text-slate-900 placeholder:text-slate-400 outline-none focus:border-blue-800 focus:ring-2 focus:ring-blue-800/10 transition-all font-[inherit]"
                   />
                 ))}
 
@@ -216,7 +201,7 @@ const Cart = () => {
                 <select
                   value={paymentMethod}
                   onChange={(e) => setPaymentMethod(e.target.value)}
-                  className="w-full h-10 px-3 border border-slate-200 rounded-lg text-sm text-slate-900 outline-none focus:border-teal-700 focus:ring-2 focus:ring-teal-700/10 transition-all font-[inherit] bg-white cursor-pointer"
+                  className="w-full h-10 px-3 border border-slate-200 rounded-lg text-sm text-slate-900 outline-none focus:border-blue-800 focus:ring-2 focus:ring-blue-800/10 transition-all font-[inherit] bg-white cursor-pointer"
                 >
                   <option>Cash on Delivery</option>
                   <option>Card (Stripe)</option>
@@ -225,7 +210,7 @@ const Cart = () => {
                 <button
                   onClick={handlePlaceOrder}
                   disabled={placing}
-                  className="w-full h-12 mt-2 bg-gradient-to-br from-teal-700 to-emerald-800 text-white rounded-xl font-semibold cursor-pointer transition-all duration-300 hover:shadow-lg hover:shadow-teal-700/35 hover:-translate-y-0.5 active:translate-y-0 border-none disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  className="w-full h-12 mt-2 bg-gradient-to-br from-blue-800 to-blue-800 text-white rounded-xl font-semibold cursor-pointer transition-all duration-300 hover:shadow-lg hover:shadow-blue-800/35 hover:-translate-y-0.5 active:translate-y-0 border-none disabled:opacity-70 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
                   {placing ? (
                     <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />

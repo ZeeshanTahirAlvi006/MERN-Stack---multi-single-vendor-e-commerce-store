@@ -106,29 +106,16 @@ const AddProduct = () => {
   const inputWrapperBase =
     'flex items-center bg-white border-[1.5px] rounded-xl px-4 h-12 transition-all duration-200';
   const inputWrapperNormal =
-    'border-slate-200 focus-within:border-teal-700 focus-within:ring-3 focus-within:ring-teal-700/10';
+    'border-slate-200 focus-within:border-blue-800 focus-within:ring-3 focus-within:ring-blue-800/10';
   const inputWrapperError =
     'border-red-500 focus-within:ring-3 focus-within:ring-red-500/10';
   const inputClasses =
     'flex-1 border-none outline-none bg-transparent text-[0.925rem] text-slate-900 placeholder:text-slate-300 h-full font-[inherit]';
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      {/* Header */}
-      <div className="bg-white border-b border-slate-200">
-        <div className="max-w-3xl mx-auto px-6 py-4 flex items-center gap-4">
-          <button
-            onClick={() => navigate(-1)}
-            className="flex items-center gap-2 text-slate-500 hover:text-teal-700 transition-colors text-sm font-medium bg-transparent border-none cursor-pointer"
-          >
-            <FiArrowLeft /> Back
-          </button>
-          <h1 className="text-xl font-bold text-slate-900">Add New Product</h1>
-        </div>
-      </div>
-
+    <div className="min-h-screen bg-slate-50 flex">
       {/* Form */}
-      <div className="max-w-3xl mx-auto px-6 py-8">
+      <div className="flex-1 max-w-3xl mx-auto px-6 py-8 w-full">
         <form onSubmit={handleSubmit} className="flex flex-col gap-6" noValidate>
           {/* Product Name */}
           <div>
@@ -165,7 +152,7 @@ const AddProduct = () => {
               className={`w-full bg-white border-[1.5px] rounded-xl px-4 py-3 text-[0.925rem] text-slate-900 placeholder:text-slate-300 font-[inherit] outline-none transition-all duration-200 resize-none
                 ${errors.description
                   ? 'border-red-500 focus:ring-3 focus:ring-red-500/10'
-                  : 'border-slate-200 focus:border-teal-700 focus:ring-3 focus:ring-teal-700/10'}`}
+                  : 'border-slate-200 focus:border-blue-800 focus:ring-3 focus:ring-blue-800/10'}`}
             />
             {errors.description && <span className="block text-red-500 text-xs mt-1 font-medium">{errors.description}</span>}
           </div>
@@ -242,10 +229,10 @@ const AddProduct = () => {
               Product Images
             </label>
             <div className={`border-[1.5px] border-dashed rounded-xl p-6 text-center transition-all duration-200
-              ${errors.images ? 'border-red-500 bg-red-50/50' : 'border-slate-300 bg-white hover:border-teal-700 hover:bg-teal-50/30'}`}>
+              ${errors.images ? 'border-red-500 bg-red-50/50' : 'border-slate-300 bg-white hover:border-blue-800 hover:bg-blue-50/30'}`}>
               <FiImage className="mx-auto text-3xl text-slate-400 mb-2" />
               <p className="text-sm text-slate-500 mb-3">Drag & drop or click to upload</p>
-              <label className="inline-flex items-center gap-2 px-4 py-2 bg-teal-700 text-white text-sm font-medium rounded-lg cursor-pointer hover:bg-teal-800 transition-colors">
+              <label className="inline-flex items-center gap-2 px-4 py-2 bg-blue-800 text-white text-sm font-medium rounded-lg cursor-pointer hover:bg-blue-800 transition-colors">
                 <FiUploadCloud />
                 {uploading ? 'Uploading...' : 'Choose Files'}
                 <input
@@ -283,7 +270,7 @@ const AddProduct = () => {
           <button
             type="submit"
             disabled={loading || uploading}
-            className="flex items-center justify-center gap-2 w-full h-12 bg-gradient-to-br from-teal-700 to-emerald-800 text-white rounded-xl text-[0.95rem] font-semibold cursor-pointer transition-all duration-300 mt-2 hover:not-disabled:shadow-lg hover:not-disabled:shadow-teal-700/35 hover:not-disabled:-translate-y-0.5 active:not-disabled:translate-y-0 disabled:opacity-70 disabled:cursor-not-allowed"
+            className="flex items-center justify-center gap-2 w-full h-12 bg-gradient-to-br from-blue-800 to-blue-800 text-white rounded-xl text-[0.95rem] font-semibold cursor-pointer transition-all duration-300 mt-2 hover:not-disabled:shadow-lg hover:not-disabled:shadow-blue-800/35 hover:not-disabled:-translate-y-0.5 active:not-disabled:translate-y-0 disabled:opacity-70 disabled:cursor-not-allowed"
           >
             {loading ? (
               <span className="w-5.5 h-5.5 border-[2.5px] border-white/30 border-t-white rounded-full animate-spin" />

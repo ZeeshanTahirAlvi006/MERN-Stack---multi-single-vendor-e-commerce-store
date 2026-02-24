@@ -113,7 +113,7 @@ const Register = () => {
   const inputWrapperBase =
     'flex items-center bg-white border-[1.5px] rounded-xl px-4 h-12 transition-all duration-200';
   const inputWrapperNormal =
-    'border-slate-200 focus-within:border-teal-700 focus-within:ring-3 focus-within:ring-teal-700/10';
+    'border-slate-200 focus-within:border-blue-800 focus-within:ring-3 focus-within:ring-blue-800/10';
   const inputWrapperError =
     'border-red-500 focus-within:ring-3 focus-within:ring-red-500/10';
   const inputClasses =
@@ -122,7 +122,7 @@ const Register = () => {
   return (
     <div className="flex min-h-screen bg-slate-50">
       {/* Left Branding Panel */}
-      <div className="hidden lg:flex lg:flex-[0_0_45%] relative items-center justify-center bg-gradient-to-br from-teal-700 via-emerald-800 to-emerald-900 overflow-hidden">
+      <div className="hidden lg:flex lg:flex-[0_0_45%] relative items-center justify-center bg-gradient-to-br from-blue-800 via-blue-800 to-blue-900 overflow-hidden">
         <div className="relative z-10 p-12 text-white max-w-[440px]">
           <div className="flex items-center justify-center w-16 h-16 bg-white/15 backdrop-blur-lg rounded-2xl text-3xl mb-8 border border-white/20">
             <FiShoppingBag />
@@ -134,7 +134,7 @@ const Register = () => {
           <div className="flex flex-col gap-4">
             {['Free Delivery on First Order', 'Become a Vendor & Grow', 'Secure & Easy Checkout'].map((f) => (
               <div key={f} className="flex items-center gap-3 text-[0.95rem] opacity-90">
-                <span className="w-2 h-2 rounded-full bg-emerald-400 shrink-0" />
+                <span className="w-2 h-2 rounded-full bg-blue-400 shrink-0" />
                 <span>{f}</span>
               </div>
             ))}
@@ -149,7 +149,7 @@ const Register = () => {
       <div className="flex-1 flex items-center justify-center px-6 py-8">
         <div className="w-full max-w-[440px]">
           {/* Mobile Logo */}
-          <div className="flex lg:hidden items-center gap-2 text-2xl font-bold text-teal-700 mb-8">
+          <div className="flex lg:hidden items-center gap-2 text-2xl font-bold text-blue-800 mb-8">
             <FiShoppingBag className="text-3xl" />
             <span>Jalal Sons</span>
           </div>
@@ -273,10 +273,10 @@ const Register = () => {
                     onClick={() => setFormData({ ...formData, role: r.value })}
                     className={`flex flex-col items-center gap-1 p-4 bg-white border-[1.5px] rounded-xl cursor-pointer transition-all duration-200 text-center
                       ${formData.role === r.value
-                        ? 'border-teal-700 bg-teal-50 ring-3 ring-teal-700/10'
-                        : 'border-slate-200 hover:border-teal-700 hover:bg-teal-50'}`}
+                        ? 'border-blue-800 bg-blue-50 ring-3 ring-blue-800/10'
+                        : 'border-slate-200 hover:border-blue-800 hover:bg-blue-50'}`}
                   >
-                    <span className="text-2xl text-teal-700 flex">{r.icon}</span>
+                    <span className="text-2xl text-blue-800 flex">{r.icon}</span>
                     <span className="text-[0.9rem] font-semibold text-slate-900">{r.label}</span>
                     <span className="text-xs text-slate-400">{r.description}</span>
                   </button>
@@ -288,7 +288,7 @@ const Register = () => {
             <button
               type="submit"
               disabled={loading}
-              className="flex items-center justify-center gap-2 w-full h-12 bg-gradient-to-br from-teal-700 to-emerald-800 text-white rounded-xl text-[0.95rem] font-semibold cursor-pointer transition-all duration-300 mt-2 hover:not-disabled:shadow-lg hover:not-disabled:shadow-teal-700/35 hover:not-disabled:-translate-y-0.5 active:not-disabled:translate-y-0 disabled:opacity-70 disabled:cursor-not-allowed"
+              className="flex items-center justify-center gap-2 w-full h-12 bg-gradient-to-br from-blue-800 to-blue-800 text-white rounded-xl text-[0.95rem] font-semibold cursor-pointer transition-all duration-300 mt-2 hover:not-disabled:shadow-lg hover:not-disabled:shadow-blue-800/35 hover:not-disabled:-translate-y-0.5 active:not-disabled:translate-y-0 disabled:opacity-70 disabled:cursor-not-allowed"
             >
               {loading ? (
                 <span className="w-5.5 h-5.5 border-[2.5px] border-white/30 border-t-white rounded-full animate-spin" />
@@ -303,7 +303,7 @@ const Register = () => {
 
           <p className="text-center mt-7 text-[0.9rem] text-slate-500">
             Already have an account?{' '}
-            <Link to="/auth/login" className="text-teal-700 font-semibold no-underline hover:text-emerald-800 hover:underline transition-colors">
+            <Link to="/auth/login" className="text-blue-800 font-semibold no-underline hover:text-blue-800 hover:underline transition-colors">
               Sign in
             </Link>
           </p>

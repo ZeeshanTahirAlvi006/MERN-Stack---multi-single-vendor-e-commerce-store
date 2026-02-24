@@ -53,7 +53,7 @@ const ProductDetail = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center">
-        <div className="w-8 h-8 border-3 border-teal-700/30 border-t-teal-700 rounded-full animate-spin" />
+        <div className="w-8 h-8 border-3 border-blue-800/30 border-t-blue-800 rounded-full animate-spin" />
       </div>
     );
   }
@@ -64,22 +64,6 @@ const ProductDetail = () => {
 
   return (
     <div className="min-h-screen bg-slate-50">
-      {/* Top Bar */}
-      <div className="bg-white border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 flex items-center gap-4">
-          <button
-            onClick={() => navigate(-1)}
-            className="flex items-center gap-2 text-slate-500 hover:text-teal-700 transition-colors text-sm font-medium bg-transparent border-none cursor-pointer"
-          >
-            <FiArrowLeft /> Back
-          </button>
-          <span className="text-slate-300">|</span>
-          <Link to="/" className="text-sm text-slate-500 hover:text-teal-700 transition-colors no-underline">Home</Link>
-          <span className="text-slate-300">/</span>
-          <span className="text-sm text-slate-700 font-medium truncate">{product.name}</span>
-        </div>
-      </div>
-
       {/* Product Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
@@ -99,7 +83,7 @@ const ProductDetail = () => {
                     key={i}
                     onClick={() => setSelectedImage(i)}
                     className={`w-16 h-16 rounded-lg overflow-hidden shrink-0 border-2 transition-all cursor-pointer p-0
-                      ${selectedImage === i ? 'border-teal-700 ring-2 ring-teal-700/20' : 'border-slate-200 hover:border-slate-400'}`}
+                      ${selectedImage === i ? 'border-blue-800 ring-2 ring-blue-800/20' : 'border-slate-200 hover:border-slate-400'}`}
                   >
                     <img src={img} alt={`View ${i + 1}`} className="w-full h-full object-cover" />
                   </button>
@@ -110,7 +94,7 @@ const ProductDetail = () => {
 
           {/* Product Info */}
           <div>
-            <span className="inline-block bg-teal-50 text-teal-700 text-xs font-medium px-3 py-1 rounded-full mb-3">
+            <span className="inline-block bg-blue-50 text-blue-800 text-xs font-medium px-3 py-1 rounded-full mb-3">
               {product.category}
             </span>
             <h1 className="text-2xl md:text-3xl font-bold text-slate-900 mb-2">{product.name}</h1>
@@ -118,7 +102,7 @@ const ProductDetail = () => {
               <p className="text-sm text-slate-400 mb-4">Sold by <span className="text-slate-600 font-medium">{product.vendorid.name}</span></p>
             )}
 
-            <p className="text-3xl font-bold text-teal-700 mb-6">
+            <p className="text-3xl font-bold text-blue-800 mb-6">
               Rs. {product.price?.toLocaleString()}
             </p>
 
@@ -128,8 +112,8 @@ const ProductDetail = () => {
 
             {/* Stock Status */}
             <div className="flex items-center gap-2 mb-6">
-              <span className={`w-2.5 h-2.5 rounded-full ${inStock ? 'bg-emerald-500' : 'bg-red-500'}`} />
-              <span className={`text-sm font-medium ${inStock ? 'text-emerald-600' : 'text-red-500'}`}>
+              <span className={`w-2.5 h-2.5 rounded-full ${inStock ? 'bg-blue-500' : 'bg-red-500'}`} />
+              <span className={`text-sm font-medium ${inStock ? 'text-blue-600' : 'text-red-500'}`}>
                 {inStock ? `${product.stock} in stock` : 'Out of Stock'}
               </span>
             </div>
@@ -155,7 +139,7 @@ const ProductDetail = () => {
 
                 <button
                   onClick={handleAddToCart}
-                  className="flex-1 flex items-center justify-center gap-2 h-12 bg-gradient-to-br from-teal-700 to-emerald-800 text-white rounded-xl font-semibold cursor-pointer transition-all duration-300 hover:shadow-lg hover:shadow-teal-700/35 hover:-translate-y-0.5 active:translate-y-0 border-none"
+                  className="flex-1 flex items-center justify-center gap-2 h-12 bg-gradient-to-br from-blue-800 to-blue-800 text-white rounded-xl font-semibold cursor-pointer transition-all duration-300 hover:shadow-lg hover:shadow-blue-800/35 hover:-translate-y-0.5 active:translate-y-0 border-none"
                 >
                   <FiShoppingCart /> Add to Cart
                 </button>
@@ -170,7 +154,7 @@ const ProductDetail = () => {
                 { icon: <FiPackage />, label: 'Quality Assured' },
               ].map((feat) => (
                 <div key={feat.label} className="flex flex-col items-center text-center gap-1.5">
-                  <span className="text-xl text-teal-700">{feat.icon}</span>
+                  <span className="text-xl text-blue-800">{feat.icon}</span>
                   <span className="text-xs text-slate-500 font-medium">{feat.label}</span>
                 </div>
               ))}

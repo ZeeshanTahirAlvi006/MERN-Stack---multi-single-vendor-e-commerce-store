@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { getVendorDashboard, getVendorProducts } from '../../api/api';
+import { getVendorDashboard, getVendorProducts, deleteProduct } from '../../api/api';
+import { toast } from 'react-toastify';
 import {
   FiDollarSign,
   FiTrendingUp,
@@ -11,6 +12,7 @@ import {
   FiPlus,
   FiArrowLeft,
   FiBarChart2,
+  FiTrash2,
 } from 'react-icons/fi';
 
 const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
@@ -44,10 +46,22 @@ const Dashboard = () => {
   const formatCurrency = (n) =>
     `Rs. ${(n || 0).toLocaleString('en-PK', { minimumFractionDigits: 0 })}`;
 
+  const handleDeleteProduct = async (productId) => {
+    if (!window.confirm('Are you sure you want to delete this product?')) return;
+    try {
+      await deleteProduct(productId);
+      setProducts(products.filter((p) => p._id !== productId));
+      toast.success('Product deleted successfully');
+      // Optionally refresh dashboard stats here, but removing from local list is fine for UX
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Failed to delete product');
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center">
-        <div className="w-8 h-8 border-3 border-teal-700/30 border-t-teal-700 rounded-full animate-spin" />
+        <div className="w-8 h-8 border-3 border-blue-800/30 border-t-blue-800 rounded-full animate-spin" />
       </div>
     );
   }
@@ -57,9 +71,9 @@ const Dashboard = () => {
       label: 'Total Revenue',
       value: formatCurrency(stats?.totalRevenue),
       icon: <FiDollarSign />,
-      color: 'from-teal-500 to-emerald-600',
-      bg: 'bg-teal-50',
-      text: 'text-teal-700',
+      color: 'from-blue-500 to-blue-600',
+      bg: 'bg-blue-50',
+      text: 'text-blue-800',
     },
     {
       label: 'Platform Fee (10%)',
@@ -73,7 +87,7 @@ const Dashboard = () => {
       label: 'Net Earnings',
       value: formatCurrency(stats?.netEarnings),
       icon: <FiTrendingUp />,
-      color: 'from-emerald-500 to-green-600',
+      color: 'from-blue-500 to-green-600',
       bg: 'bg-emerald-50',
       text: 'text-emerald-700',
     },
@@ -91,32 +105,10 @@ const Dashboard = () => {
   const maxRevenue = Math.max(...(stats?.monthlyRevenue?.map((m) => m.revenue) || [1]));
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      {/* Header */}
-      <div className="bg-white border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => navigate('/')}
-              className="text-slate-400 hover:text-teal-700 transition-colors bg-transparent border-none cursor-pointer"
-            >
-              <FiArrowLeft className="text-xl" />
-            </button>
-            <div>
-              <h1 className="text-xl font-bold text-slate-900">Vendor Dashboard</h1>
-              <p className="text-sm text-slate-400">Welcome back, {userInfo?.name}</p>
-            </div>
-          </div>
-          <Link
-            to="/vendor/add-product"
-            className="flex items-center gap-1.5 px-4 py-2 bg-teal-700 text-white rounded-lg text-sm font-medium no-underline hover:bg-teal-800 transition-colors"
-          >
-            <FiPlus /> Add Product
-          </Link>
-        </div>
-      </div>
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div className="min-h-screen bg-slate-50 flex">
+      {/* Sidebar added globally via App.jsx wrapping, or we can just render the layout directly here. Wait, App.jsx only adds Navbar. The Sidebar is specific to Vendor and Admin. I'll need to update the layout to include Sidebar for vendor pages, or just let App.jsx handle it since I already made it flex. Actually, App.jsx only has Navbar. Let's fix Dashboard layout. Wait, I should just remove the top bar for now. */}
+      
+      <div className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
         {/* Stat Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           {statCards.map((card) => (
@@ -147,7 +139,7 @@ const Dashboard = () => {
                       {formatCurrency(m.revenue)}
                     </span>
                     <div
-                      className="w-full bg-gradient-to-t from-teal-600 to-emerald-400 rounded-t-lg transition-all duration-500"
+                      className="w-full bg-gradient-to-t from-blue-600 to-blue-400 rounded-t-lg transition-all duration-500"
                       style={{ height: `${(m.revenue / maxRevenue) * 100}%`, minHeight: '8px' }}
                     />
                     <span className="text-xs text-slate-400">{MONTHS[m.month - 1]}</span>
@@ -212,7 +204,7 @@ const Dashboard = () => {
                       <p className="text-sm font-medium text-slate-900 truncate">{p.name}</p>
                       <p className="text-xs text-slate-400">{p.totalQty} sold</p>
                     </div>
-                    <span className="text-sm font-semibold text-teal-700">
+                    <span className="text-sm font-semibold text-blue-800">
                       {formatCurrency(p.totalSales)}
                     </span>
                   </div>
@@ -244,9 +236,18 @@ const Dashboard = () => {
                       <p className="text-sm font-medium text-slate-900 truncate">{p.name}</p>
                       <p className="text-xs text-slate-400">{p.category} · Stock: {p.stock}</p>
                     </div>
-                    <span className="text-sm font-semibold text-teal-700">
-                      {formatCurrency(p.price)}
-                    </span>
+                    <div className="flex flex-col items-end gap-1">
+                      <span className="text-sm font-semibold text-blue-800">
+                        {formatCurrency(p.price)}
+                      </span>
+                      <button
+                        onClick={() => handleDeleteProduct(p._id)}
+                        className="text-red-500 hover:text-red-700 bg-transparent border-none cursor-pointer p-1 rounded-full hover:bg-red-50 transition-colors"
+                        title="Delete Product"
+                      >
+                        <FiTrash2 size={16} />
+                      </button>
+                    </div>
                   </div>
                 ))}
               </div>
@@ -255,7 +256,7 @@ const Dashboard = () => {
                 <p className="text-sm text-slate-400 mb-3">No products yet</p>
                 <Link
                   to="/vendor/add-product"
-                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-teal-700 text-white text-sm rounded-lg no-underline hover:bg-teal-800 transition-colors"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-blue-800 text-white text-sm rounded-lg no-underline hover:bg-blue-800 transition-colors"
                 >
                   <FiPlus /> Add your first product
                 </Link>
