@@ -74,7 +74,7 @@ export const getDashboard = async (vendorId) => {
     const sixMonthsAgo = new Date();
     sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
 
-    const monthlyRevenue = await Order.aggregate([
+    const rawMonthlyRevenue = await Order.aggregate([
         { $unwind: '$items' },
         { $match: { 'items.vendorId': vendorId, createdAt: { $gte: sixMonthsAgo } } },
         {
@@ -86,6 +86,7 @@ export const getDashboard = async (vendorId) => {
                 revenue: { $sum: { $multiply: ['$items.price', '$items.qty'] } },
                 orders: { $addToSet: '$_id' },
             },
+            
         },
         {
             $project: {
@@ -98,6 +99,26 @@ export const getDashboard = async (vendorId) => {
         },
         { $sort: { year: 1, month: 1 } },
     ]);
+
+    // Backfill missing months with 0 revenue
+    const monthlyRevenue = [];
+    for (let i = 5; i >= 0; i--) {
+        const d = new Date();
+        d.setMonth(d.getMonth() - i);
+        const targetYear = d.getFullYear();
+        const targetMonth = d.getMonth() + 1;
+
+        const found = rawMonthlyRevenue.find(
+            (r) => r.year === targetYear && r.month === targetMonth
+        );
+
+        monthlyRevenue.push({
+            year: targetYear,
+            month: targetMonth,
+            revenue: found ? found.revenue : 0,
+            orderCount: found ? found.orderCount : 0,
+        });
+    }
 
     return {
         totalRevenue,

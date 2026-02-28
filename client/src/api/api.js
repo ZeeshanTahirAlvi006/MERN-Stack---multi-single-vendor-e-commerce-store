@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const API = axios.create({
-  baseURL: 'http://localhost:5000/api',
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
 });
 
 // Interceptor to add Token
@@ -22,6 +22,9 @@ export const loginUser = (email, password) =>
 
 export const registerUser = (name, email, password, role) =>
   API.post('/auth/register', { name, email, password, role });
+
+export const getUserProfile = () =>
+  API.get('/auth/profile');
 
 export const updateUserProfile = (profileData) =>
   API.put('/auth/profile', profileData);

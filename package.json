@@ -1,4 +1,9 @@
 {
+  "type": "module",
+  "scripts": {
+    "start": "node server/index.js",
+    "build": "npm install"
+  },
   "dependencies": {
     "@tailwindcss/vite": "^4.2.0",
     "bcrypt": "^6.0.0",
@@ -6,7 +11,9 @@
     "express": "^5.2.1",
     "jsonwebtoken": "^9.0.3",
     "mongodb": "^7.1.0",
+    "nodemon": "^3.1.14",
     "react-router-dom": "^7.13.0",
+    "stripe": "^20.4.0",
     "tailwindcss": "^4.2.0"
   }
 }

@@ -81,7 +81,7 @@ const Orders = () => {
                       </div>
                     </td>
                     <td className="px-6 py-4">
-                      <div className="text-sm font-semibold text-slate-900">{order.customerId?.name || 'Unknown'}</div>
+                      <div className="text-sm font-semibold text-slate-900">{order.customerId?.name || order.shippingAddress?.name || 'Unknown'}</div>
                       <div className="text-xs text-slate-500">{order.customerId?.email}</div>
                     </td>
                     <td className="px-6 py-4 text-sm font-bold text-slate-900">

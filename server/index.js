@@ -11,8 +11,14 @@ import orderRoutes from './routes/orderRoutes.js';
 import adminRoutes from './routes/adminRoutes.js';
 import uploadRoutes from './routes/uploadRoutes.js';
 
+import { handleStripeWebhook } from './controllers/orderController.js';
+
 const app = express();
 app.use(cors());
+
+// Stripe Webhook MUST use express.raw BEFORE express.json() is applied
+app.post('/api/orders/webhook', express.raw({ type: 'application/json' }), handleStripeWebhook);
+
 app.use(express.json());
 
 connectDB();

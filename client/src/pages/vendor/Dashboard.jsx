@@ -102,7 +102,7 @@ const Dashboard = () => {
   ];
 
   // Revenue chart: simple bar chart
-  const maxRevenue = Math.max(...(stats?.monthlyRevenue?.map((m) => m.revenue) || [1]));
+  const maxRevenue = Math.max(1, ...(stats?.monthlyRevenue?.map((m) => m.revenue) || []));
 
   return (
     <div className="min-h-screen bg-slate-50 flex">
@@ -140,7 +140,7 @@ const Dashboard = () => {
                     </span>
                     <div
                       className="w-full bg-gradient-to-t from-blue-600 to-blue-400 rounded-t-lg transition-all duration-500"
-                      style={{ height: `${(m.revenue / maxRevenue) * 100}%`, minHeight: '8px' }}
+                      style={{ height: `${(m.revenue / maxRevenue) * 100}%`, minHeight: m.revenue > 0 ? '8px' : '0px' }}
                     />
                     <span className="text-xs text-slate-400">{MONTHS[m.month - 1]}</span>
                   </div>

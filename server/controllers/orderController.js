@@ -1,5 +1,6 @@
 import * as orderService from '../services/orderService.js';
-
+import Stripe from 'stripe';
+import Order from '../models/Order.js';
 export const placeOrder = async (req, res) => {
     try {
         const result = await orderService.placeOrder(req.user._id, req.body);
@@ -51,5 +52,17 @@ export const updateOrderStatus = async (req, res) => {
         res.json(result);
     } catch (error) {
         res.status(error.statusCode || 400).json({ message: error.message });
+    }
+};
+export const handleStripeWebhook = async (req, res) => {
+    try {
+        await orderService.processStripeWebhook(
+            req.body,
+            req.headers['stripe-signature'],
+            process.env.STRIPE_WEBHOOK_SECRET
+        );
+        res.status(200).send();
+    } catch (error) {
+        res.status(error.statusCode || 400).send(error.message);
     }
 };

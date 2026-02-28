@@ -108,7 +108,7 @@ const Sales = () => {
                     <div>
                       <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Order #{order._id.slice(-6)}</span>
                       <h3 className="text-lg font-bold text-slate-900 mt-1">
-                        {order.customerId?.name || 'Guest Customer'}
+                        {order.customerId?.name || order.shippingAddress?.name || 'Guest Customer'}
                       </h3>
                       <p className="text-sm text-slate-500">
                         Placed on {format(new Date(order.createdAt), 'MMM dd, yyyy - HH:mm')}

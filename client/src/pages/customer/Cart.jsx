@@ -38,14 +38,19 @@ const Cart = () => {
 
     setPlacing(true);
     try {
-      await placeOrder({
+      const res = await placeOrder({
         items: items.map((i) => ({ productId: i.productId, qty: i.qty })),
         shippingAddress: address,
         paymentMethod,
       });
       clearCart();
       toast.success('Order placed successfully!');
-      navigate('/');
+      
+      if (res.data?.stripeUrl) {
+        window.location.href = res.data.stripeUrl;
+      } else {
+        navigate('/success');
+      }
     } catch (error) {
       toast.error(error.response?.data?.message || 'Failed to place order');
     } finally {

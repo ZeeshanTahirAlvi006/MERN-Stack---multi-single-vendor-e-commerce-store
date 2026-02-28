@@ -146,7 +146,14 @@ const Register = () => {
       </div>
 
       {/* Right Form Panel */}
-      <div className="flex-1 flex items-center justify-center px-6 py-8">
+      <div className="flex-1 flex items-center justify-center px-6 py-8 relative">
+        <div className="absolute top-6 left-6 lg:left-8">
+          <Link to="/" className="flex items-center gap-1.5 text-sm font-medium text-slate-500 hover:text-blue-800 transition-colors">
+            <FiArrowRight className="rotate-180" />
+            Back to Shop
+          </Link>
+        </div>
+
         <div className="w-full max-w-[440px]">
           {/* Mobile Logo */}
           <div className="flex lg:hidden items-center gap-2 text-2xl font-bold text-blue-800 mb-8">

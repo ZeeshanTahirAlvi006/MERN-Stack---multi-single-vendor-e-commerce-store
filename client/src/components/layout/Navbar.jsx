@@ -2,8 +2,9 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { MagnifyingGlass, ShoppingCart, User, List } from '@phosphor-icons/react';
 import { logout } from '../../slices/authSlice';
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import useCart from '../../hooks/useCart';
+import { getProducts } from '../../api/api';
 
 const Navbar = () => {
   const { userInfo } = useSelector((state) => state.auth);
@@ -12,14 +13,57 @@ const Navbar = () => {
   const navigate = useNavigate();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const [showDropdown, setShowDropdown] = useState(false);
+  const searchRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (searchRef.current && !searchRef.current.contains(event.target)) {
+        setShowDropdown(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+
+  useEffect(() => {
+    const timer = setTimeout(async () => {
+      if (searchQuery.trim().length >= 2) {
+        setIsSearching(true);
+        try {
+          const res = await getProducts({ search: searchQuery.trim(), limit: 5 });
+          setSearchResults(res.data.products || []);
+          setShowDropdown(true);
+        } catch (error) {
+          console.error('Search error:', error);
+        } finally {
+          setIsSearching(false);
+        }
+      } else {
+        setSearchResults([]);
+        setShowDropdown(false);
+      }
+    }, 300);
+
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
 
   const handleSearch = (e) => {
     e.preventDefault();
     if (searchQuery.trim()) {
       navigate(`/?search=${encodeURIComponent(searchQuery.trim())}`);
-      setSearchQuery('');
+      setShowDropdown(false);
       setIsMenuOpen(false);
     }
+  };
+
+  const handleSelectProduct = (productId) => {
+    navigate(`/product/${productId}`);
+    setSearchQuery('');
+    setShowDropdown(false);
+    setIsMenuOpen(false);
   };
 
   const handleLogout = () => {
@@ -38,18 +82,66 @@ const Navbar = () => {
           </div>
 
           {/* Search Bar - Hidden on mobile */}
-          <form onSubmit={handleSearch} className="hidden sm:flex flex-1 max-w-lg ml-8 relative">
-            <input
-              type="text"
-              placeholder="Search products..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-4 pr-10 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-800 focus:border-transparent"
-            />
-            <button type="submit" className="absolute right-3 top-2.5 text-gray-400 hover:text-blue-800 bg-transparent border-none cursor-pointer">
-              <MagnifyingGlass size={20} weight="bold" />
-            </button>
-          </form>
+          <div ref={searchRef} className="hidden sm:flex flex-1 max-w-lg ml-8 relative z-50">
+            <form onSubmit={handleSearch} className="w-full relative">
+              <input
+                type="text"
+                placeholder="Search products..."
+                value={searchQuery}
+                onFocus={() => searchQuery.trim().length >= 2 && setShowDropdown(true)}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="w-full pl-4 pr-10 py-2 border rounded-full focus:outline-none focus:ring-2 focus:ring-blue-800 focus:border-transparent bg-slate-50 relative z-10"
+              />
+              <button type="submit" className="absolute right-3 top-2.5 text-gray-400 hover:text-blue-800 bg-transparent border-none cursor-pointer z-20">
+                <MagnifyingGlass size={20} weight="bold" />
+              </button>
+            </form>
+
+            {/* Auto-suggest Dropdown */}
+            {showDropdown && (
+              <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-slate-200 rounded-2xl shadow-xl overflow-hidden py-2 z-50">
+                {isSearching ? (
+                  <div className="px-4 py-3 text-sm text-slate-500 flex items-center justify-center">
+                    <div className="w-4 h-4 border-2 border-blue-800 border-t-transparent rounded-full animate-spin mr-2"></div>
+                    Searching...
+                  </div>
+                ) : searchResults.length > 0 ? (
+                  <ul className="max-h-80 overflow-y-auto mb-0 list-none p-0">
+                    {searchResults.map((product) => (
+                      <li key={product._id} className="border-b border-slate-50 last:border-0 hover:bg-slate-50 transition-colors">
+                        <button
+                          onClick={() => handleSelectProduct(product._id)}
+                          className="w-full text-left px-4 py-2 flex items-center gap-3 bg-transparent border-none cursor-pointer"
+                        >
+                          <img 
+                            src={product.images?.[0] || 'https://placehold.co/40x40/e2e8f0/94a3b8?text=?'} 
+                            alt={product.name}
+                            className="w-10 h-10 object-cover rounded-lg flex-shrink-0"
+                          />
+                          <div className="flex-1 min-w-0">
+                            <p className="text-sm font-semibold text-slate-900 truncate">{product.name}</p>
+                            <p className="text-xs text-blue-800 font-bold">Rs. {product.price.toLocaleString()}</p>
+                          </div>
+                        </button>
+                      </li>
+                    ))}
+                    <li className="bg-slate-50 mt-1">
+                      <button 
+                        onClick={handleSearch}
+                        className="w-full text-center px-4 py-2.5 text-xs font-bold text-blue-800 hover:text-blue-900 bg-transparent border-none cursor-pointer"
+                      >
+                        See all results for "{searchQuery}"
+                      </button>
+                    </li>
+                  </ul>
+                ) : (
+                  <div className="px-4 py-3 text-sm text-slate-500 text-center">
+                    No products found matching "{searchQuery}"
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
 
           {/* Desktop Navigation */}
           <div className="hidden sm:flex items-center space-x-6">
@@ -77,7 +169,7 @@ const Navbar = () => {
                 <div className="absolute right-0 w-48 mt-2 py-2 bg-white border rounded-2xl shadow-md opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
                   {userInfo.role === 'customer' && (
                     <>
-                      <Link to="/my-orders" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">My Orders</Link>
+                      <Link to="/orders" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">My Orders</Link>
                       <Link to="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Profile</Link>
                     </>
                   )}
@@ -86,6 +178,9 @@ const Navbar = () => {
                       <Link to="/vendor/dashboard" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Dashboard</Link>
                       <Link to="/vendor/products" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">My Products</Link>
                       <Link to="/vendor/sales" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Sales</Link>
+                      <div className="border-t my-1"></div>
+                      <Link to="/orders" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">My Orders</Link>
+                      <Link to="/profile" className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">Profile</Link>
                     </>
                   )}
                   {userInfo.role === 'admin' && (
@@ -142,7 +237,7 @@ const Navbar = () => {
                 </div>
                 {userInfo.role === 'customer' && (
                   <>
-                    <Link to="/my-orders" className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-blue-800 hover:bg-gray-50 rounded-2xl">My Orders</Link>
+                    <Link to="/orders" className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-blue-800 hover:bg-gray-50 rounded-2xl">My Orders</Link>
                     <Link to="/profile" className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-blue-800 hover:bg-gray-50 rounded-2xl">Profile</Link>
                   </>
                 )}
@@ -150,6 +245,9 @@ const Navbar = () => {
                   <>
                     <Link to="/vendor/dashboard" className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-blue-800 hover:bg-gray-50 rounded-2xl">Dashboard</Link>
                     <Link to="/vendor/products" className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-blue-800 hover:bg-gray-50 rounded-2xl">My Products</Link>
+                    <div className="border-t my-2 border-slate-100"></div>
+                    <Link to="/orders" className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-blue-800 hover:bg-gray-50 rounded-2xl">My Orders</Link>
+                    <Link to="/profile" className="block px-3 py-2 text-base font-medium text-gray-700 hover:text-blue-800 hover:bg-gray-50 rounded-2xl">Profile</Link>
                   </>
                 )}
                 {userInfo.role === 'admin' && (

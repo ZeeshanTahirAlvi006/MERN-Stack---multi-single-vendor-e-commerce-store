@@ -4,6 +4,9 @@ import Register from './pages/auth/Register';
 import Home from './pages/customer/Home';
 import ProductDetail from './pages/customer/ProductDetail';
 import Cart from './pages/customer/Cart';
+import Success from './pages/customer/Success';
+import Orders from './pages/customer/Orders';
+import Profile from './pages/customer/Profile';
 import AddProduct from './pages/vendor/AddProduct';
 import Dashboard from './pages/vendor/Dashboard';
 import Settings from './pages/vendor/Settings';
@@ -32,6 +35,11 @@ function App() {
         <Route path="/cart" element={<Cart />} />
         <Route path="/auth/login" element={<Login />} />
         <Route path="/auth/register" element={<Register />} />
+
+        {/* Customer Protected Routes */}
+        <Route path="/success" element={<ProtectedRoute><Success /></ProtectedRoute>} />
+        <Route path="/orders" element={<ProtectedRoute><Orders /></ProtectedRoute>} />
+        <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
 
         {/* Vendor-only routes */}
         <Route

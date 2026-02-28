@@ -1,5 +1,17 @@
 import Order from '../models/Order.js';
 import Product from '../models/Product.js';
+import Stripe from 'stripe';
+
+let stripeInstance = null;
+const getStripe = () => {
+    if (!stripeInstance) {
+        if (!process.env.STRIPE_SECRET_KEY) {
+            throw new Error('STRIPE_SECRET_KEY is not defined in the environment variables');
+        }
+        stripeInstance = new Stripe(process.env.STRIPE_SECRET_KEY);
+    }
+    return stripeInstance;
+};
 
 export const placeOrder = async (userId, { items, shippingAddress, paymentMethod }) => {
     if (!items || items.length === 0) {
@@ -29,6 +41,7 @@ export const placeOrder = async (userId, { items, shippingAddress, paymentMethod
 
         orderItems.push({
             productId: product._id,
+            name: product.name,
             qty: item.qty,
             price: product.price,
             vendorId: product.vendorid,
@@ -46,6 +59,36 @@ export const placeOrder = async (userId, { items, shippingAddress, paymentMethod
         status: 'Pending',
         total: 0,
     });
+
+    if (paymentMethod === 'Card (Stripe)') {
+        const lineItems = orderItems.map((item) => ({
+            price_data: {
+                currency: 'pkr',
+                product_data: {
+                    name: item.name,
+                },
+                unit_amount: item.price * 100,
+            },
+            quantity: item.qty,
+        }));
+
+        const stripe = getStripe();
+        const session = await stripe.checkout.sessions.create({
+            payment_method_types: ['card'],
+            line_items: lineItems,
+            mode: 'payment',
+            success_url: `${process.env.FRONTEND_URL || 'http://localhost:5173'}/success?session_id={CHECKOUT_SESSION_ID}`,
+            cancel_url: `${process.env.FRONTEND_URL || 'http://localhost:5173'}/cart`,
+            metadata: {
+                orderId: order._id.toString(),
+            },
+        });
+
+        order.stripeSessionId = session.id;
+        await order.save();
+
+        return { ...order.toObject(), stripeUrl: session.url };
+    }
 
     return order;
 };
@@ -131,4 +174,30 @@ export const updateOrderStatus = async (orderId, status, user) => {
     }
 
     return await order.save();
+};
+
+export const processStripeWebhook = async (rawBody, signature, webhookSecret) => {
+    let event;
+    try {
+        const stripe = getStripe();
+        event = stripe.webhooks.constructEvent(rawBody, signature, webhookSecret);
+    } catch (err) {
+        const error = new Error(`Webhook Error: ${err.message}`);
+        error.statusCode = 400;
+        throw error;
+    }
+
+    if (event.type === 'checkout.session.completed') {
+        const session = event.data.object;
+        const orderId = session.metadata?.orderId;
+
+        if (orderId) {
+            const order = await Order.findById(orderId);
+            if (order) {
+                order.status = 'Paid';
+                order.paidAt = new Date();
+                await order.save();
+            }
+        }
+    }
 };
