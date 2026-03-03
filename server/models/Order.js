@@ -11,6 +11,10 @@ export const OrderSchema = new mongoose.Schema({
                 ref: 'Product',
                 type: mongoose.Schema.Types.ObjectId,
             },
+            name:{
+                type: String,
+                trim: true,
+            },
             qty:{
                 type: Number,
                 min:[1,"Qty can not be less than 1"]

@@ -1,164 +1,150 @@
 import { useState, useEffect } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { getProductById } from '../../api/api';
-import { toast } from 'react-toastify';
-import {
-  FiArrowLeft,
-  FiShoppingCart,
-  FiMinus,
-  FiPlus,
-  FiPackage,
-  FiShield,
-  FiTruck,
-} from 'react-icons/fi';
 import useCart from '../../hooks/useCart';
+import { toast } from 'react-toastify';
+import { FiShoppingCart, FiArrowLeft, FiMinus, FiPlus } from 'react-icons/fi';
 
 const ProductDetail = () => {
   const { id } = useParams();
-  const navigate = useNavigate();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [selectedImage, setSelectedImage] = useState(0);
   const [qty, setQty] = useState(1);
+  const [selectedImage, setSelectedImage] = useState(0);
   const { addToCart } = useCart();
 
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const { data } = await getProductById(id);
-        setProduct(data);
+        const res = await getProductById(id);
+        setProduct(res.data);
       } catch {
         toast.error('Product not found');
-        navigate('/');
       } finally {
         setLoading(false);
       }
     };
     fetchProduct();
-  }, [id, navigate]);
+  }, [id]);
 
   const handleAddToCart = () => {
-    addToCart({
-      productId: product._id,
-      name: product.name,
-      price: product.price,
-      qty,
-      image: product.images?.[0] || '',
-      vendorId: product.vendorid?._id || product.vendorid,
-      stock: product.stock,
-    });
-    toast.success(`${product.name} added to cart!`);
+    if (!product || product.stock === 0) return;
+    addToCart(product, qty);
+    toast.success(`${qty} item(s) added to cart`);
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center">
-        <div className="w-8 h-8 border-3 border-blue-800/30 border-t-blue-800 rounded-full animate-spin" />
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="w-8 h-8 border-3 border-gray-200 border-t-[var(--accent)] rounded-full animate-spin" />
       </div>
     );
   }
 
-  if (!product) return null;
+  if (!product) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <p className="text-gray-400 text-lg">Product not found</p>
+      </div>
+    );
+  }
 
   const inStock = product.stock > 0;
 
   return (
-    <div className="min-h-screen bg-slate-50">
-      {/* Product Content */}
+    <div className="min-h-screen bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
-          {/* Image Gallery */}
+        {/* Breadcrumb */}
+        <Link to="/" className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-[var(--accent)] mb-8 transition-colors no-underline">
+          <FiArrowLeft size={16} /> Back to Shop
+        </Link>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+          {/* Images */}
           <div>
-            <div className="aspect-square rounded-2xl overflow-hidden bg-white border border-slate-200 mb-4">
+            <div className="aspect-square bg-[var(--bg-secondary)] rounded-2xl overflow-hidden mb-4">
               <img
-                src={product.images?.[selectedImage] || 'https://placehold.co/600x600/e2e8f0/94a3b8?text=No+Image'}
+                src={product.images?.[selectedImage] || 'https://placehold.co/600x600/f5f7f9/999?text=No+Image'}
                 alt={product.name}
                 className="w-full h-full object-cover"
               />
             </div>
             {product.images?.length > 1 && (
-              <div className="flex gap-3 overflow-x-auto">
-                {product.images.map((img, i) => (
+              <div className="flex gap-3">
+                {product.images.map((img, idx) => (
                   <button
-                    key={i}
-                    onClick={() => setSelectedImage(i)}
-                    className={`w-16 h-16 rounded-lg overflow-hidden shrink-0 border-2 transition-all cursor-pointer p-0
-                      ${selectedImage === i ? 'border-blue-800 ring-2 ring-blue-800/20' : 'border-slate-200 hover:border-slate-400'}`}
+                    key={idx}
+                    onClick={() => setSelectedImage(idx)}
+                    className={`w-20 h-20 rounded-lg overflow-hidden border-2 transition-all cursor-pointer ${
+                      selectedImage === idx ? 'border-[var(--accent)]' : 'border-transparent hover:border-gray-300'
+                    }`}
                   >
-                    <img src={img} alt={`View ${i + 1}`} className="w-full h-full object-cover" />
+                    <img src={img} alt="" className="w-full h-full object-cover" />
                   </button>
                 ))}
               </div>
             )}
           </div>
 
-          {/* Product Info */}
-          <div>
-            <span className="inline-block bg-blue-50 text-blue-800 text-xs font-medium px-3 py-1 rounded-full mb-3">
-              {product.category}
-            </span>
-            <h1 className="text-2xl md:text-3xl font-bold text-slate-900 mb-2">{product.name}</h1>
-            {product.vendorid?.name && (
-              <p className="text-sm text-slate-400 mb-4">Sold by <span className="text-slate-600 font-medium">{product.vendorid.name}</span></p>
+          {/* Details */}
+          <div className="flex flex-col">
+            {product.category && (
+              <p className="text-xs text-gray-400 uppercase tracking-widest mb-2">{product.category}</p>
             )}
-
-            <p className="text-3xl font-bold text-blue-800 mb-6">
-              Rs. {product.price?.toLocaleString()}
-            </p>
-
-            <p className="text-slate-600 leading-relaxed mb-6">
-              {product.description}
+            <h1 className="text-3xl font-bold text-gray-900 mb-4">{product.name}</h1>
+            <p className="text-2xl font-bold text-gray-900 mb-6">
+              Rs. {product.price.toLocaleString()}
             </p>
 
             {/* Stock Status */}
             <div className="flex items-center gap-2 mb-6">
-              <span className={`w-2.5 h-2.5 rounded-full ${inStock ? 'bg-blue-500' : 'bg-red-500'}`} />
-              <span className={`text-sm font-medium ${inStock ? 'text-blue-600' : 'text-red-500'}`}>
+              <span className={`w-2 h-2 rounded-full ${inStock ? 'bg-green-500' : 'bg-red-500'}`} />
+              <span className={`text-sm font-medium ${inStock ? 'text-green-600' : 'text-red-500'}`}>
                 {inStock ? `${product.stock} in stock` : 'Out of Stock'}
               </span>
             </div>
 
-            {/* Qty + Add to Cart */}
+            {/* Description */}
+            <p className="text-gray-600 text-sm leading-relaxed mb-8 border-t border-gray-100 pt-6">
+              {product.description || 'No description available.'}
+            </p>
+
+            {/* Quantity + Add to Cart */}
             {inStock && (
-              <div className="flex items-center gap-4 mb-8">
-                <div className="flex items-center border border-slate-200 rounded-xl overflow-hidden">
+              <div className="flex items-center gap-4 mt-auto">
+                <div className="flex items-center border border-gray-200 rounded-lg overflow-hidden">
                   <button
                     onClick={() => setQty(Math.max(1, qty - 1))}
-                    className="w-10 h-10 flex items-center justify-center text-slate-500 hover:bg-slate-100 transition-colors bg-transparent border-none cursor-pointer"
+                    className="p-3 hover:bg-gray-50 transition-colors cursor-pointer bg-white border-none"
                   >
-                    <FiMinus />
+                    <FiMinus size={14} />
                   </button>
-                  <span className="w-12 text-center font-semibold text-slate-900">{qty}</span>
+                  <span className="px-5 py-3 text-sm font-semibold min-w-[50px] text-center border-x border-gray-200">{qty}</span>
                   <button
                     onClick={() => setQty(Math.min(product.stock, qty + 1))}
-                    className="w-10 h-10 flex items-center justify-center text-slate-500 hover:bg-slate-100 transition-colors bg-transparent border-none cursor-pointer"
+                    className="p-3 hover:bg-gray-50 transition-colors cursor-pointer bg-white border-none"
                   >
-                    <FiPlus />
+                    <FiPlus size={14} />
                   </button>
                 </div>
 
                 <button
                   onClick={handleAddToCart}
-                  className="flex-1 flex items-center justify-center gap-2 h-12 bg-gradient-to-br from-blue-800 to-blue-800 text-white rounded-xl font-semibold cursor-pointer transition-all duration-300 hover:shadow-lg hover:shadow-blue-800/35 hover:-translate-y-0.5 active:translate-y-0 border-none"
+                  className="flex-1 flex items-center justify-center gap-2 px-8 py-3 bg-[var(--accent)] text-white font-semibold rounded-lg hover:bg-[var(--accent-hover)] transition-colors cursor-pointer border-none text-sm"
                 >
-                  <FiShoppingCart /> Add to Cart
+                  <FiShoppingCart size={18} /> Add to Cart
                 </button>
               </div>
             )}
 
-            {/* Features */}
-            <div className="border-t border-slate-200 pt-6 grid grid-cols-3 gap-4">
-              {[
-                { icon: <FiTruck />, label: 'Fast Delivery' },
-                { icon: <FiShield />, label: 'Secure Payment' },
-                { icon: <FiPackage />, label: 'Quality Assured' },
-              ].map((feat) => (
-                <div key={feat.label} className="flex flex-col items-center text-center gap-1.5">
-                  <span className="text-xl text-blue-800">{feat.icon}</span>
-                  <span className="text-xs text-slate-500 font-medium">{feat.label}</span>
-                </div>
-              ))}
-            </div>
+            {/* Vendor */}
+            {product.vendor && (
+              <div className="mt-8 pt-6 border-t border-gray-100">
+                <p className="text-xs text-gray-400">
+                  Sold by <span className="text-gray-700 font-medium">{product.vendor.name}</span>
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </div>

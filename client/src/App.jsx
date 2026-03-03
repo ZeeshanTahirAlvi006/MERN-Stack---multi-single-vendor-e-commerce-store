@@ -25,64 +25,63 @@ import Sidebar from './components/layout/Sidebar';
 function App() {
   return (
     <Router>
-      <div className="flex flex-col min-h-screen bg-gray-50">
+      <div className="flex flex-col min-h-screen bg-white text-gray-900 font-sans">
         <Navbar />
         <main className="flex-grow">
           <Routes>
             {/* Public routes */}
-        <Route path="/" element={<Home />} />
-        <Route path="/products/:id" element={<ProductDetail />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/auth/login" element={<Login />} />
-        <Route path="/auth/register" element={<Register />} />
+            <Route path="/" element={<Home />} />
+            <Route path="/products/:id" element={<ProductDetail />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/auth/login" element={<Login />} />
+            <Route path="/auth/register" element={<Register />} />
 
-        {/* Customer Protected Routes */}
-        <Route path="/success" element={<ProtectedRoute><Success /></ProtectedRoute>} />
-        <Route path="/orders" element={<ProtectedRoute><Orders /></ProtectedRoute>} />
-        <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
+            {/* Customer Protected Routes */}
+            <Route path="/success" element={<ProtectedRoute><Success /></ProtectedRoute>} />
+            <Route path="/orders" element={<ProtectedRoute><Orders /></ProtectedRoute>} />
+            <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
 
-        {/* Vendor-only routes */}
-        <Route
-          path="/vendor/*"
-          element={
-            <RoleRoute roles={['vendor', 'admin']}>
-              <div className="flex bg-slate-50 min-h-[calc(100vh-4rem)]">
-                <Sidebar />
-                <div className="flex-1 w-full relative">
-                  <Routes>
-                    <Route path="dashboard" element={<Dashboard />} />
-                    <Route path="add-product" element={<AddProduct />} />
-                    {/* Placeholder routes for future implementation */}
-                    <Route path="products" element={<MyProducts />} />
-                    <Route path="products/edit/:id" element={<EditProduct />} />
-                    <Route path="sales" element={<Sales />} />
-                    <Route path="settings" element={<Settings />} />
-                  </Routes>
-                </div>
-              </div>
-            </RoleRoute>
-          }
-        />
+            {/* Vendor-only routes */}
+            <Route
+              path="/vendor/*"
+              element={
+                <RoleRoute roles={['vendor', 'admin']}>
+                  <div className="flex bg-[var(--bg-secondary)] min-h-[calc(100vh-4rem)]">
+                    <Sidebar />
+                    <div className="flex-1 w-full relative">
+                      <Routes>
+                        <Route path="dashboard" element={<Dashboard />} />
+                        <Route path="add-product" element={<AddProduct />} />
+                        <Route path="products" element={<MyProducts />} />
+                        <Route path="products/edit/:id" element={<EditProduct />} />
+                        <Route path="sales" element={<Sales />} />
+                        <Route path="settings" element={<Settings />} />
+                      </Routes>
+                    </div>
+                  </div>
+                </RoleRoute>
+              }
+            />
 
-        {/* Admin-only routes */}
-        <Route
-          path="/admin/*"
-          element={
-            <RoleRoute roles={['admin']}>
-              <div className="flex bg-slate-50 min-h-[calc(100vh-4rem)]">
-                <Sidebar />
-                <div className="flex-1 w-full relative">
-                  <Routes>
-                    <Route path="dashboard" element={<AdminDashboard />} />
-                    <Route path="users" element={<AdminUsers />} />
-                    <Route path="orders" element={<AdminOrders />} />
-                    <Route path="products" element={<AdminProducts />} />
-                  </Routes>
-                </div>
-              </div>
-            </RoleRoute>
-          }
-        />
+            {/* Admin-only routes */}
+            <Route
+              path="/admin/*"
+              element={
+                <RoleRoute roles={['admin']}>
+                  <div className="flex bg-[var(--bg-secondary)] min-h-[calc(100vh-4rem)]">
+                    <Sidebar />
+                    <div className="flex-1 w-full relative">
+                      <Routes>
+                        <Route path="dashboard" element={<AdminDashboard />} />
+                        <Route path="users" element={<AdminUsers />} />
+                        <Route path="orders" element={<AdminOrders />} />
+                        <Route path="products" element={<AdminProducts />} />
+                      </Routes>
+                    </div>
+                  </div>
+                </RoleRoute>
+              }
+            />
           </Routes>
         </main>
       </div>

@@ -27,37 +27,37 @@ const AdminDashboard = () => {
 
   if (loading) {
     return (
-      <div className="min-h-[calc(100vh-4rem)] bg-slate-50 flex items-center justify-center">
-        <div className="w-8 h-8 border-3 border-blue-800/30 border-t-blue-800 rounded-full animate-spin" />
+      <div className="min-h-[calc(100vh-4rem)] bg-slate-950 flex items-center justify-center">
+        <div className="w-8 h-8 border-3 border-red-800/30 border-t-red-600 rounded-full animate-spin" />
       </div>
     );
   }
 
   const statCards = [
-    { label: 'Total Revenue', value: formatCurrency(stats?.totalRevenue), icon: <FiDollarSign />, color: 'text-emerald-600', bg: 'bg-emerald-100' },
-    { label: 'Platform Fees', value: formatCurrency(stats?.totalPlatformFee), icon: <FiDollarSign />, color: 'text-blue-600', bg: 'bg-blue-100' },
-    { label: 'Total Orders', value: stats?.totalOrders || 0, icon: <FiShoppingBag />, color: 'text-indigo-600', bg: 'bg-indigo-100' },
-    { label: 'Active Products', value: stats?.totalProducts || 0, icon: <FiPackage />, color: 'text-amber-600', bg: 'bg-amber-100' },
-    { label: 'Total Customers', value: stats?.totalCustomers || 0, icon: <FiUsers />, color: 'text-fuchsia-600', bg: 'bg-fuchsia-100' },
-    { label: 'Total Vendors', value: stats?.totalVendors || 0, icon: <FiUsers />, color: 'text-rose-600', bg: 'bg-rose-100' },
+    { label: 'Total Revenue', value: formatCurrency(stats?.totalRevenue), icon: <FiDollarSign />, color: 'text-amber-500', bg: 'bg-amber-900/20 border border-amber-500/30' },
+    { label: 'Platform Fees', value: formatCurrency(stats?.totalPlatformFee), icon: <FiDollarSign />, color: 'text-red-500', bg: 'bg-red-900/20 border border-red-500/30' },
+    { label: 'Total Orders', value: stats?.totalOrders || 0, icon: <FiShoppingBag />, color: 'text-slate-300', bg: 'bg-slate-800 border border-slate-700' },
+    { label: 'Active Products', value: stats?.totalProducts || 0, icon: <FiPackage />, color: 'text-amber-500', bg: 'bg-amber-900/20 border border-amber-500/30' },
+    { label: 'Total Customers', value: stats?.totalCustomers || 0, icon: <FiUsers />, color: 'text-red-500', bg: 'bg-red-900/20 border border-red-500/30' },
+    { label: 'Total Vendors', value: stats?.totalVendors || 0, icon: <FiUsers />, color: 'text-slate-300', bg: 'bg-slate-800 border border-slate-700' },
   ];
 
   return (
-    <div className="p-8">
+    <div className="p-8 bg-slate-950 min-h-screen">
       <div className="mb-8">
-        <h1 className="text-2xl font-bold text-slate-900 mb-1">Admin Dashboard</h1>
-        <p className="text-slate-500 text-sm">System overview and key performance metrics.</p>
+        <h1 className="text-2xl font-stranger text-red-500 mb-1 drop-shadow-[0_0_8px_rgba(220,38,38,0.8)] tracking-wide">The Core (Admin)</h1>
+        <p className="text-slate-400 text-sm font-light">System overview and key performance metrics of the Hive.</p>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
         {statCards.map((stat, i) => (
-          <div key={i} className="bg-white rounded-2xl p-6 border border-slate-100 flex items-start gap-4 shadow-sm hover:shadow-md transition-shadow">
+          <div key={i} className="bg-slate-900/80 backdrop-blur-sm rounded-2xl p-6 border border-red-900/30 flex items-start gap-4 shadow-[0_0_15px_rgba(0,0,0,0.5)] hover:shadow-[0_0_20px_rgba(220,38,38,0.2)] hover:border-red-500/30 transition-all duration-300">
             <div className={`w-12 h-12 rounded-xl flex items-center justify-center text-xl shrink-0 ${stat.bg} ${stat.color}`}>
               {stat.icon}
             </div>
             <div>
-              <p className="text-sm font-semibold text-slate-500 mb-1">{stat.label}</p>
-              <h3 className="text-2xl font-bold text-slate-900">{stat.value}</h3>
+              <p className="text-sm font-medium text-slate-400 mb-1">{stat.label}</p>
+              <h3 className="text-2xl font-bold text-slate-100 drop-shadow-[0_0_2px_rgba(255,255,255,0.2)]">{stat.value}</h3>
             </div>
           </div>
         ))}
