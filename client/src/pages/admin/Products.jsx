@@ -85,7 +85,7 @@ const Products = () => {
                     <td className="px-6 py-4">
                       {product.images && product.images.length > 0 ? (
                         <img 
-                          src={product.images[0].startsWith('http') ? product.images[0] : `http://localhost:5000${product.images[0]}`} 
+                          src={product.images[0].startsWith('http') ? product.images[0] : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${product.images[0]}`} 
                           alt="product" 
                           className="w-12 h-12 object-cover rounded-lg border border-slate-700 opacity-80 group-hover:opacity-100 transition-opacity" 
                         />
