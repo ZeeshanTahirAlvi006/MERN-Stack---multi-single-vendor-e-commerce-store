@@ -8,9 +8,20 @@ import authRoutes from './routes/authRoutes.js';
 import productRoutes from './routes/productRoutes.js';
 import vendorRoutes from './routes/vendorRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
+import adminRoutes from './routes/adminRoutes.js';
+import uploadRoutes from './routes/uploadRoutes.js';
+
+import { handleStripeWebhook } from './controllers/orderController.js';
 
 const app = express();
-app.use(cors());
+app.use(cors({
+  origin: process.env.FRONDEND_URL,
+  credentials: true,
+}));
+
+// Stripe Webhook MUST use express.raw BEFORE express.json() is applied
+app.post('/api/orders/webhook', express.raw({ type: 'application/json' }), handleStripeWebhook);
+
 app.use(express.json());
 
 connectDB();
@@ -24,6 +35,8 @@ app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/vendors', vendorRoutes);
 app.use('/api/orders', orderRoutes);
+app.use('/api/admin', adminRoutes);
+app.use('/api/upload', uploadRoutes);
 
 app.use(notFound);
 app.use(errorHandler);

@@ -2,14 +2,28 @@ import express from 'express';
 import {
     placeOrder,
     getMyOrders,
+    getVendorSales,
+    getAllOrders,
     getOrderById,
+    updateOrderStatus,
 } from '../controllers/orderController.js';
 import { protectRole } from '../middleware/authMiddleware.js';
 import { authorizeRoles } from '../middleware/roleMiddleWare.js';
 
 const router = express.Router();
-router.post('/', protectRole, authorizeRoles('customer'), placeOrder);
-router.get('/mine', protectRole, authorizeRoles('customer'), getMyOrders);
-router.get('/:id', protectRole, authorizeRoles('customer', 'admin'), getOrderById);
+
+// Static routes first (above /:id to avoid conflicts)
+router.get('/mine', protectRole, authorizeRoles('customer', 'vendor'), getMyOrders);
+router.get('/vendor/sales', protectRole, authorizeRoles('vendor'), getVendorSales);
+
+// Admin — all orders
+router.get('/', protectRole, authorizeRoles('admin'), getAllOrders);
+
+// Customer & Vendor — create order
+router.post('/', protectRole, authorizeRoles('customer', 'vendor'), placeOrder);
+
+// Parameterized routes
+router.get('/:id', protectRole, getOrderById);
+router.put('/:id/status', protectRole, authorizeRoles('vendor', 'admin'), updateOrderStatus);
 
 export default router;

@@ -21,7 +21,7 @@ router.get('/:id', getProductById);
 
 // Protected routes — vendor or admin only
 router.post('/', protectRole, authorizeRoles('vendor', 'admin'), createProduct);
-router.put('/:id', protectRole, authorizeRoles('vendor', 'admin'), updateProduct);
-router.delete('/:id', protectRole, authorizeRoles('admin'), deleteProduct);
+router.put('/:id', protectRole, authorizeRoles('vendor'), updateProduct);
+router.delete('/:id', protectRole, authorizeRoles('vendor', 'admin'), deleteProduct);
 
 export default router;

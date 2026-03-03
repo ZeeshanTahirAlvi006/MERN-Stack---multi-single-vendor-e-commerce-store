@@ -11,6 +11,10 @@ export const OrderSchema = new mongoose.Schema({
                 ref: 'Product',
                 type: mongoose.Schema.Types.ObjectId,
             },
+            name:{
+                type: String,
+                trim: true,
+            },
             qty:{
                 type: Number,
                 min:[1,"Qty can not be less than 1"]
@@ -102,7 +106,7 @@ export const OrderSchema = new mongoose.Schema({
 },{timestamps:true})
 OrderSchema.index({customerId:1});
 OrderSchema.index({"items.vendorId":1})
-OrderSchema.pre('save',function(next){
+OrderSchema.pre('save', function() {
     let totalOrderRevenue = 0;
     let totalOrderPlatformFee = 0;
     this.items.forEach(item => {
@@ -114,6 +118,5 @@ OrderSchema.pre('save',function(next){
     });
     this.total = totalOrderRevenue;
     this.platformFee = totalOrderPlatformFee;
-    next();
 })
 export default mongoose.model('Order',OrderSchema)
