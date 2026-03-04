@@ -81,7 +81,7 @@ const Navbar = () => {
           {/* Logo */}
           <div className="flex-shrink-0">
             <Link to="/" className="text-xl font-extrabold tracking-tight text-gray-900 hover:text-[var(--accent)] transition-colors no-underline">
-              BRANDSTORE
+              THE HIVE PK
             </Link>
           </div>
 

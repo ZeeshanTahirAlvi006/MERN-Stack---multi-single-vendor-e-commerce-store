@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
-import { getMyOrders } from '../../api/api';
+import { getMyOrders, retryOrderPayment } from '../../api/api';
 import { toast } from 'react-toastify';
-import { FiPackage, FiClock, FiCheckCircle, FiTruck, FiXCircle } from 'react-icons/fi';
+import { FiPackage, FiClock, FiCheckCircle, FiTruck, FiXCircle, FiCreditCard } from 'react-icons/fi';
 import { format } from 'date-fns';
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [retryingId, setRetryingId] = useState(null);
 
   useEffect(() => {
     fetchOrders();
@@ -20,6 +21,19 @@ const Orders = () => {
       toast.error('Failed to load orders');
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleRetryPayment = async (orderId) => {
+    setRetryingId(orderId);
+    try {
+      const res = await retryOrderPayment(orderId);
+      if (res.data.stripeUrl) {
+        window.location.href = res.data.stripeUrl;
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Failed to retry payment');
+      setRetryingId(null);
     }
   };
 
@@ -103,8 +117,24 @@ const Orders = () => {
                 </div>
 
                 {/* Footer */}
-                <div className="px-5 py-4 bg-gray-50 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-2">
-                  <span className="text-xs text-gray-500">Payment: {order.paymentMethod}</span>
+                <div className="px-5 py-4 bg-gray-50 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
+                  <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4">
+                    <span className="text-xs text-gray-500">Payment: {order.paymentMethod}</span>
+                    {order.status === 'Pending' && order.paymentMethod === 'Card (Stripe)' && (
+                      <button
+                        onClick={() => handleRetryPayment(order._id)}
+                        disabled={retryingId === order._id}
+                        className="inline-flex items-center gap-1.5 px-4 py-1.5 bg-[var(--accent)] text-white text-xs font-semibold rounded-full hover:opacity-90 transition-all disabled:opacity-60 disabled:cursor-not-allowed cursor-pointer"
+                      >
+                        {retryingId === order._id ? (
+                          <span className="w-3.5 h-3.5 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                        ) : (
+                          <FiCreditCard size={13} />
+                        )}
+                        {retryingId === order._id ? 'Redirecting...' : 'Retry Payment'}
+                      </button>
+                    )}
+                  </div>
                   <span className="text-base font-bold text-gray-900">Total: {formatCurrency(order.total)}</span>
                 </div>
               </div>
