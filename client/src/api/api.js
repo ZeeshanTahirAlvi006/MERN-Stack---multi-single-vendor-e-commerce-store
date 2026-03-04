@@ -71,6 +71,9 @@ export const getOrderById = (id) =>
 export const updateOrderStatus = (id, status) =>
   API.put(`/orders/${id}/status`, { status });
 
+export const retryOrderPayment = (id) =>
+  API.post(`/orders/${id}/retry-payment`);
+
 // ─── Admin ───
 export const getAdminStats = () =>
   API.get('/admin/stats');

@@ -54,6 +54,15 @@ export const updateOrderStatus = async (req, res) => {
         res.status(error.statusCode || 400).json({ message: error.message });
     }
 };
+
+export const retryPayment = async (req, res) => {
+    try {
+        const result = await orderService.retryPayment(req.params.id, req.user._id);
+        res.json(result);
+    } catch (error) {
+        res.status(error.statusCode || 400).json({ message: error.message });
+    }
+};
 export const handleStripeWebhook = async (req, res) => {
     try {
         await orderService.processStripeWebhook(
