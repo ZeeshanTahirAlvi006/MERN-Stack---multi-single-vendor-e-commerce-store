@@ -74,6 +74,9 @@ export const updateOrderStatus = (id, status) =>
 export const retryOrderPayment = (id) =>
   API.post(`/orders/${id}/retry-payment`);
 
+export const verifyStripeSession = (sessionId) =>
+  API.get(`/orders/verify-session?session_id=${sessionId}`);
+
 // ─── Admin ───
 export const getAdminStats = () =>
   API.get('/admin/stats');

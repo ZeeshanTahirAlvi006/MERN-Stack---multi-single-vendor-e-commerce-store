@@ -63,15 +63,30 @@ export const retryPayment = async (req, res) => {
         res.status(error.statusCode || 400).json({ message: error.message });
     }
 };
+
+export const verifyStripeSession = async (req, res) => {
+    try {
+        const result = await orderService.verifyStripeSession(req.query.session_id, req.user._id);
+        res.json(result);
+    } catch (error) {
+        res.status(error.statusCode || 400).json({ message: error.message });
+    }
+};
 export const handleStripeWebhook = async (req, res) => {
+    console.log('🔔 Webhook received');
+    console.log('Has signature:', !!req.headers['stripe-signature']);
+    console.log('Has webhook secret:', !!process.env.STRIPE_WEBHOOK_SECRET);
+    console.log('Body type:', typeof req.body, 'isBuffer:', Buffer.isBuffer(req.body));
     try {
         await orderService.processStripeWebhook(
             req.body,
             req.headers['stripe-signature'],
             process.env.STRIPE_WEBHOOK_SECRET
         );
+        console.log('✅ Webhook processed successfully');
         res.status(200).send();
     } catch (error) {
+        console.log('❌ Webhook error:', error.message);
         res.status(error.statusCode || 400).send(error.message);
     }
 };
