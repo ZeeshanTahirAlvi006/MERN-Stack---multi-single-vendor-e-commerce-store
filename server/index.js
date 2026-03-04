@@ -15,10 +15,10 @@ import { handleStripeWebhook } from './controllers/orderController.js';
 
 const app = express();
 app.use(cors({
-  origin: process.env.FRONDEND_URL,
+  origin: process.env.FRONTEND_URL,
   credentials: true,
 }));
-
+app.options(/.*/, cors())
 // Stripe Webhook MUST use express.raw BEFORE express.json() is applied
 app.post('/api/orders/webhook', express.raw({ type: 'application/json' }), handleStripeWebhook);
 

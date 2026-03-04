@@ -46,9 +46,18 @@ export const placeOrder = async (userId, { items, shippingAddress, paymentMethod
             price: product.price,
             vendorId: product.vendorid,
         });
+    }
 
-        product.stock -= item.qty;
-        await product.save();
+    const isStripe = paymentMethod === 'Card (Stripe)';
+
+    // For Stripe: don't deduct stock yet — wait for payment confirmation
+    // For COD: deduct stock immediately
+    if (!isStripe) {
+        for (const item of items) {
+            const product = await Product.findById(item.productId);
+            product.stock -= item.qty;
+            await product.save();
+        }
     }
 
     const order = await Order.create({
@@ -60,7 +69,7 @@ export const placeOrder = async (userId, { items, shippingAddress, paymentMethod
         total: 0,
     });
 
-    if (paymentMethod === 'Card (Stripe)') {
+    if (isStripe) {
         const lineItems = orderItems.map((item) => ({
             price_data: {
                 currency: 'pkr',
@@ -193,9 +202,31 @@ export const processStripeWebhook = async (rawBody, signature, webhookSecret) =>
 
         if (orderId) {
             const order = await Order.findById(orderId);
-            if (order) {
+            if (order && order.status === 'Pending') {
+                // Payment succeeded — now deduct stock
+                for (const item of order.items) {
+                    const product = await Product.findById(item.productId);
+                    if (product) {
+                        product.stock -= item.qty;
+                        await product.save();
+                    }
+                }
                 order.status = 'Paid';
                 order.paidAt = new Date();
+                await order.save();
+            }
+        }
+    }
+
+    // Handle expired/failed checkout sessions
+    if (event.type === 'checkout.session.expired') {
+        const session = event.data.object;
+        const orderId = session.metadata?.orderId;
+
+        if (orderId) {
+            const order = await Order.findById(orderId);
+            if (order && order.status === 'Pending') {
+                order.status = 'Cancelled';
                 await order.save();
             }
         }
