@@ -76,10 +76,10 @@ export const handleStripeWebhook = async (req, res) => {
     console.log('🔔 Webhook received');
     console.log('Has signature:', !!req.headers['stripe-signature']);
     console.log('Has webhook secret:', !!process.env.STRIPE_WEBHOOK_SECRET);
-    console.log('Body type:', typeof req.body, 'isBuffer:', Buffer.isBuffer(req.body));
+    console.log('Body type:', typeof req.rawBody, 'isBuffer:', Buffer.isBuffer(req.rawBody));
     try {
         await orderService.processStripeWebhook(
-            req.body,
+            req.rawBody || req.body, // Use rawBody if available, fallback to body
             req.headers['stripe-signature'],
             process.env.STRIPE_WEBHOOK_SECRET
         );

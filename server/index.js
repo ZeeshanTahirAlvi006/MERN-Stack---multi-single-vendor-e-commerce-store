@@ -19,10 +19,15 @@ app.use(cors({
   credentials: true,
 }));
 app.options(/.*/, cors())
-// Stripe Webhook MUST use express.raw BEFORE express.json() is applied
-app.post(['/api/orders/webhook', '/api/orders/webhook/'], express.raw({ type: 'application/json' }), handleStripeWebhook);
+// Stripe Webhook route - using the rawBody from express.json
+app.post(['/api/orders/webhook', '/api/orders/webhook/'], handleStripeWebhook);
 
-app.use(express.json());
+// Apply JSON parsing globally, but save the raw body buffer for Stripe
+app.use(express.json({
+  verify: (req, res, buf) => {
+    req.rawBody = buf;
+  }
+}));
 
 connectDB();
 
