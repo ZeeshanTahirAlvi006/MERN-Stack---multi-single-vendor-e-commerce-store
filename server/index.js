@@ -20,7 +20,7 @@ app.use(cors({
 }));
 app.options(/.*/, cors())
 // Stripe Webhook MUST use express.raw BEFORE express.json() is applied
-app.post('/api/orders/webhook', express.raw({ type: 'application/json' }), handleStripeWebhook);
+app.post(['/api/orders/webhook', '/api/orders/webhook/'], express.raw({ type: 'application/json' }), handleStripeWebhook);
 
 app.use(express.json());
 
