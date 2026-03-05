@@ -92,15 +92,9 @@ export const OrderSchema = new mongoose.Schema({
         default:0,
     },status:{
         type:String,
-        enum:["Pending","Paid","Shipped","Delivered","Cancelled"]
-    },paidAt:{
-        type:Date,
-        validate:{
-            validator:function(value){
-                return !value || !this.createdAt || value >= this.createdAt;
-            },
-            message:"Payment date can not be before order creation date."
-        }
+        enum:["Pending","Paid","Shipped","Delivered","Cancelled"]},
+    paidAt: {
+        type: Date
     },
     
 },{timestamps:true})
