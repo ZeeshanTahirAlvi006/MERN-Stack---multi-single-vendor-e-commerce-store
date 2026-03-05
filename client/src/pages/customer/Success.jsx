@@ -20,13 +20,18 @@ const Success = () => {
 
   const verifyPayment = async () => {
     try {
+      console.log('🔍 Calling verifyStripeSession with sessionId:', sessionId);
       const res = await verifyStripeSession(sessionId);
+      console.log('🔍 Verify response:', res.data);
       if (res.data.status === 'Paid') {
         setVerified(true);
         clearCart(); // Clear cart only after payment is confirmed
+      } else {
+        setError(`Payment status: ${res.data.status}`);
       }
     } catch (err) {
-      setError('Could not verify payment status');
+      console.error('❌ Verify error:', err.response?.data || err.message);
+      setError(err.response?.data?.message || 'Could not verify payment status');
     } finally {
       setVerifying(false);
     }

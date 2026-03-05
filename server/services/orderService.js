@@ -1,17 +1,6 @@
 import Order from '../models/Order.js';
 import Product from '../models/Product.js';
-import Stripe from 'stripe';
-
-let stripeInstance = null;
-const getStripe = () => {
-    if (!stripeInstance) {
-        if (!process.env.STRIPE_SECRET_KEY) {
-            throw new Error('STRIPE_SECRET_KEY is not defined in the environment variables');
-        }
-        stripeInstance = new Stripe(process.env.STRIPE_SECRET_KEY);
-    }
-    return stripeInstance;
-};
+import getStripe from '../config/stripe.js';
 
 export const placeOrder = async (userId, { items, shippingAddress, paymentMethod }) => {
     if (!items || items.length === 0) {
@@ -151,8 +140,11 @@ const createOrderFromStripeSession = async (session) => {
 };
 
 export const verifyStripeSession = async (sessionId, userId) => {
+    console.log('🔍 verifyStripeSession called with sessionId:', sessionId, 'userId:', userId);
     const stripe = getStripe();
     const session = await stripe.checkout.sessions.retrieve(sessionId);
+    console.log('🔍 Stripe session retrieved, payment_status:', session?.payment_status);
+    console.log('🔍 Session metadata:', JSON.stringify(session?.metadata));
 
     if (!session) {
         const error = new Error('Session not found');
@@ -160,6 +152,7 @@ export const verifyStripeSession = async (sessionId, userId) => {
         throw error;
     }
 
+    console.log('🔍 Comparing metadata.customerId:', session.metadata?.customerId, 'with userId:', userId.toString());
     if (session.metadata?.customerId !== userId.toString()) {
         const error = new Error('Not authorized');
         error.statusCode = 403;
@@ -167,10 +160,13 @@ export const verifyStripeSession = async (sessionId, userId) => {
     }
 
     if (session.payment_status === 'paid') {
+        console.log('✅ Payment confirmed, creating order...');
         const order = await createOrderFromStripeSession(session);
+        console.log('✅ Order created:', order._id, 'status:', order.status);
         return { status: order.status, orderId: order._id };
     }
 
+    console.log('⚠️ Payment not confirmed, status:', session.payment_status);
     return { status: 'unpaid' };
 };
 
