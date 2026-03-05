@@ -3,12 +3,13 @@
 
 :root {
   --bg-primary: #FFFFFF;
-  --bg-secondary: #F5F7F9;
-  --text-primary: #1A1A1A;
-  --text-secondary: #666666;
-  --accent: #0084D6;
-  --accent-hover: #006BB3;
-  --border: #E5E7EB;
+  --bg-secondary: #F5F2EB;
+  --text-primary: #2D3748;
+  --text-secondary: #636B78;
+  --accent: #6BCFA0;
+  --accent-hover: #55B98A;
+  --accent-dark: #4A5568;
+  --border: #E2E0DB;
   --danger: #EF4444;
 }
 

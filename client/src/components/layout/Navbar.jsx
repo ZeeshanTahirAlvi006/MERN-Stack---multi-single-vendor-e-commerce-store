@@ -80,8 +80,12 @@ const Navbar = () => {
         <div className="flex justify-between h-16 items-center">
           {/* Logo */}
           <div className="flex-shrink-0">
-            <Link to="/" className="text-xl font-extrabold tracking-tight text-gray-900 hover:text-[var(--accent)] transition-colors no-underline">
-              THE HIVE PK
+            <Link to="/" className="flex items-center gap-2 no-underline">
+              <img src="/logo.png" alt="The Hive PK" className="h-9 w-auto" />
+              <div className="hidden sm:block leading-none">
+                <span className="text-lg font-extrabold tracking-tight" style={{ color: '#4A5568' }}>THE HIVE</span>
+                <span className="block text-xs font-bold tracking-widest" style={{ color: '#6BCFA0' }}>PK</span>
+              </div>
             </Link>
           </div>
 

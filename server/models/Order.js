@@ -97,7 +97,7 @@ export const OrderSchema = new mongoose.Schema({
         type:Date,
         validate:{
             validator:function(value){
-                return !value || value >= this.createdAt;
+                return !value || !this.createdAt || value >= this.createdAt;
             },
             message:"Payment date can not be before order creation date."
         }
