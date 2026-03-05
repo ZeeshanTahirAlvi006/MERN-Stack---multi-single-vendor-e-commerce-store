@@ -106,24 +106,24 @@ const AddProduct = () => {
   const inputWrapperBase =
     'flex items-center bg-white border-[1.5px] rounded-xl px-4 h-12 transition-all duration-200';
   const inputWrapperNormal =
-    'border-slate-200 focus-within:border-blue-800 focus-within:ring-3 focus-within:ring-blue-800/10';
+    'border-gray-200 focus-within:border-[var(--accent)] focus-within:ring-3 focus-within:ring-[var(--accent)]/10';
   const inputWrapperError =
     'border-red-500 focus-within:ring-3 focus-within:ring-red-500/10';
   const inputClasses =
-    'flex-1 border-none outline-none bg-transparent text-[0.925rem] text-slate-900 placeholder:text-slate-300 h-full font-[inherit]';
+    'flex-1 border-none outline-none bg-transparent text-[0.925rem] text-gray-900 placeholder:text-gray-300 h-full font-[inherit]';
 
   return (
-    <div className="min-h-screen bg-slate-50 flex">
+    <div className="min-h-screen bg-[var(--bg-primary)] flex">
       {/* Form */}
       <div className="flex-1 max-w-3xl mx-auto px-6 py-8 w-full">
         <form onSubmit={handleSubmit} className="flex flex-col gap-6" noValidate>
           {/* Product Name */}
           <div>
-            <label htmlFor="name" className="block text-sm font-semibold text-slate-700 mb-1.5">
+            <label htmlFor="name" className="block text-sm font-semibold text-gray-700 mb-1.5">
               Product Name
             </label>
             <div className={`${inputWrapperBase} ${errors.name ? inputWrapperError : inputWrapperNormal}`}>
-              <FiPackage className="text-slate-400 text-lg shrink-0 mr-3" />
+              <FiPackage className="text-gray-400 text-lg shrink-0 mr-3" />
               <input
                 id="name"
                 name="name"
@@ -139,7 +139,7 @@ const AddProduct = () => {
 
           {/* Description */}
           <div>
-            <label htmlFor="description" className="block text-sm font-semibold text-slate-700 mb-1.5">
+            <label htmlFor="description" className="block text-sm font-semibold text-gray-700 mb-1.5">
               Description
             </label>
             <textarea
@@ -149,10 +149,10 @@ const AddProduct = () => {
               placeholder="Describe your product in detail..."
               value={formData.description}
               onChange={handleChange}
-              className={`w-full bg-white border-[1.5px] rounded-xl px-4 py-3 text-[0.925rem] text-slate-900 placeholder:text-slate-300 font-[inherit] outline-none transition-all duration-200 resize-none
+              className={`w-full bg-white border-[1.5px] rounded-xl px-4 py-3 text-[0.925rem] text-gray-900 placeholder:text-gray-300 font-[inherit] outline-none transition-all duration-200 resize-none
                 ${errors.description
                   ? 'border-red-500 focus:ring-3 focus:ring-red-500/10'
-                  : 'border-slate-200 focus:border-blue-800 focus:ring-3 focus:ring-blue-800/10'}`}
+                  : 'border-gray-200 focus:border-[var(--accent)] focus:ring-3 focus:ring-[var(--accent)]/10'}`}
             />
             {errors.description && <span className="block text-red-500 text-xs mt-1 font-medium">{errors.description}</span>}
           </div>
@@ -160,11 +160,11 @@ const AddProduct = () => {
           {/* Price & Stock (side by side) */}
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label htmlFor="price" className="block text-sm font-semibold text-slate-700 mb-1.5">
+              <label htmlFor="price" className="block text-sm font-semibold text-gray-700 mb-1.5">
                 Price (PKR)
               </label>
               <div className={`${inputWrapperBase} ${errors.price ? inputWrapperError : inputWrapperNormal}`}>
-                <FiDollarSign className="text-slate-400 text-lg shrink-0 mr-3" />
+                <FiDollarSign className="text-gray-400 text-lg shrink-0 mr-3" />
                 <input
                   id="price"
                   name="price"
@@ -180,11 +180,11 @@ const AddProduct = () => {
             </div>
 
             <div>
-              <label htmlFor="stock" className="block text-sm font-semibold text-slate-700 mb-1.5">
+              <label htmlFor="stock" className="block text-sm font-semibold text-gray-700 mb-1.5">
                 Stock Quantity
               </label>
               <div className={`${inputWrapperBase} ${errors.stock ? inputWrapperError : inputWrapperNormal}`}>
-                <FiHash className="text-slate-400 text-lg shrink-0 mr-3" />
+                <FiHash className="text-gray-400 text-lg shrink-0 mr-3" />
                 <input
                   id="stock"
                   name="stock"
@@ -202,11 +202,11 @@ const AddProduct = () => {
 
           {/* Category */}
           <div>
-            <label htmlFor="category" className="block text-sm font-semibold text-slate-700 mb-1.5">
+            <label htmlFor="category" className="block text-sm font-semibold text-gray-700 mb-1.5">
               Category
             </label>
             <div className={`${inputWrapperBase} ${errors.category ? inputWrapperError : inputWrapperNormal}`}>
-              <FiLayers className="text-slate-400 text-lg shrink-0 mr-3" />
+              <FiLayers className="text-gray-400 text-lg shrink-0 mr-3" />
               <select
                 id="category"
                 name="category"
@@ -225,14 +225,14 @@ const AddProduct = () => {
 
           {/* Image Upload */}
           <div>
-            <label className="block text-sm font-semibold text-slate-700 mb-1.5">
+            <label className="block text-sm font-semibold text-gray-700 mb-1.5">
               Product Images
             </label>
             <div className={`border-[1.5px] border-dashed rounded-xl p-6 text-center transition-all duration-200
-              ${errors.images ? 'border-red-500 bg-red-50/50' : 'border-slate-300 bg-white hover:border-blue-800 hover:bg-blue-50/30'}`}>
-              <FiImage className="mx-auto text-3xl text-slate-400 mb-2" />
-              <p className="text-sm text-slate-500 mb-3">Drag & drop or click to upload</p>
-              <label className="inline-flex items-center gap-2 px-4 py-2 bg-blue-800 text-white text-sm font-medium rounded-lg cursor-pointer hover:bg-blue-800 transition-colors">
+              ${errors.images ? 'border-red-500 bg-red-50/50' : 'border-gray-300 bg-white hover:border-[var(--accent)] hover:bg-[var(--accent-hover)]/30'}`}>
+              <FiImage className="mx-auto text-3xl text-gray-400 mb-2" />
+              <p className="text-sm text-gray-500 mb-3">Drag & drop or click to upload</p>
+              <label className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--accent)] text-white text-sm font-medium rounded-lg cursor-pointer hover:bg-[var(--accent)] transition-colors">
                 <FiUploadCloud />
                 {uploading ? 'Uploading...' : 'Choose Files'}
                 <input
@@ -251,7 +251,7 @@ const AddProduct = () => {
             {images.length > 0 && (
               <div className="flex flex-wrap gap-3 mt-4">
                 {images.map((url, i) => (
-                  <div key={i} className="relative w-20 h-20 rounded-lg overflow-hidden border border-slate-200 group">
+                  <div key={i} className="relative w-20 h-20 rounded-lg overflow-hidden border border-gray-200 group">
                     <img src={url} alt={`Product ${i + 1}`} className="w-full h-full object-cover" />
                     <button
                       type="button"
@@ -270,7 +270,7 @@ const AddProduct = () => {
           <button
             type="submit"
             disabled={loading || uploading}
-            className="flex items-center justify-center gap-2 w-full h-12 bg-gradient-to-br from-blue-800 to-blue-800 text-white rounded-xl text-[0.95rem] font-semibold cursor-pointer transition-all duration-300 mt-2 hover:not-disabled:shadow-lg hover:not-disabled:shadow-blue-800/35 hover:not-disabled:-translate-y-0.5 active:not-disabled:translate-y-0 disabled:opacity-70 disabled:cursor-not-allowed"
+            className="flex items-center justify-center gap-2 w-full h-12 bg-gradient-to-br from-[var(--accent)] to-[var(--accent)] text-white rounded-xl text-[0.95rem] font-semibold cursor-pointer transition-all duration-300 mt-2 hover:not-disabled:shadow-lg hover:not-disabled:shadow-[var(--accent)]/35 hover:not-disabled:-translate-y-0.5 active:not-disabled:translate-y-0 disabled:opacity-70 disabled:cursor-not-allowed"
           >
             {loading ? (
               <span className="w-5.5 h-5.5 border-[2.5px] border-white/30 border-t-white rounded-full animate-spin" />

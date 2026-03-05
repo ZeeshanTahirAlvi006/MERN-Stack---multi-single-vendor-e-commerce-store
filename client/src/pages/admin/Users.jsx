@@ -36,79 +36,79 @@ const Users = () => {
   };
 
   return (
-    <div className="p-8 bg-slate-950 min-h-screen">
+    <div className="p-8 bg-[var(--bg-primary)] min-h-screen">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
         <div>
-          <h1 className="text-2xl font-stranger text-red-500 mb-1 drop-shadow-[0_0_8px_rgba(220,38,38,0.8)] tracking-wide">Network Identities</h1>
-          <p className="text-slate-400 text-sm font-light">Oversee all entities connected to the Hive.</p>
+          <h1 className="text-2xl font-bold text-gray-900 mb-1 tracking-tight">Users</h1>
+          <p className="text-gray-500 text-sm">Manage customers, vendors, and admins.</p>
         </div>
         
-        <div className="flex items-center gap-2 bg-slate-900/50 backdrop-blur-sm border border-red-900/50 rounded-xl px-3 h-10 shadow-[0_0_15px_rgba(0,0,0,0.5)] focus-within:border-red-500 focus-within:shadow-[0_0_15px_rgba(220,38,38,0.3)] transition-all">
-          <FiFilter className="text-slate-500" />
+        <div className="flex items-center gap-2 bg-white border border-gray-200 rounded-xl px-3 h-10 shadow-sm focus-within:border-[var(--accent)] focus-within:ring-1 focus-within:ring-[var(--accent)] transition-all">
+          <FiFilter className="text-gray-400" />
           <select 
             value={filter} 
             onChange={(e) => setFilter(e.target.value)}
-            className="text-sm border-none outline-none text-slate-300 bg-transparent cursor-pointer font-medium appearance-none w-full"
+            className="text-sm border-none outline-none text-gray-700 bg-transparent cursor-pointer font-medium appearance-none w-full"
           >
-            <option value="" className="bg-slate-900">All Entities</option>
-            <option value="customer" className="bg-slate-900">Wanderers (Customers)</option>
-            <option value="vendor" className="bg-slate-900">Harvesters (Vendors)</option>
-            <option value="admin" className="bg-slate-900">Overlords (Admins)</option>
+            <option value="">All Users</option>
+            <option value="customer">Customers</option>
+            <option value="vendor">Vendors</option>
+            <option value="admin">Admins</option>
           </select>
         </div>
       </div>
 
-      <div className="bg-slate-900/80 backdrop-blur-sm rounded-2xl border border-red-900/30 overflow-hidden shadow-[0_0_15px_rgba(0,0,0,0.5)] hover:shadow-[0_0_20px_rgba(220,38,38,0.2)] hover:border-red-500/30 transition-all duration-300">
+      <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow duration-300">
         <div className="overflow-x-auto custom-scrollbar">
           <table className="w-full text-left border-collapse">
             <thead>
-              <tr className="bg-slate-900/90 border-b border-red-900/30">
-                <th className="px-6 py-4 text-xs tracking-wider text-slate-400 font-bold uppercase">Identity</th>
-                <th className="px-6 py-4 text-xs tracking-wider text-slate-400 font-bold uppercase">Signature</th>
-                <th className="px-6 py-4 text-xs tracking-wider text-slate-400 font-bold uppercase">Class</th>
-                <th className="px-6 py-4 text-xs tracking-wider text-slate-400 font-bold uppercase">State</th>
-                <th className="px-6 py-4 text-xs tracking-wider text-red-500 font-bold uppercase text-right">Intervene</th>
+              <tr className="bg-gray-50 border-b border-gray-200">
+                <th className="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">User</th>
+                <th className="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Email</th>
+                <th className="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Role</th>
+                <th className="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider">Status</th>
+                <th className="px-6 py-4 text-xs font-semibold text-gray-500 uppercase tracking-wider text-right">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-red-900/20">
+            <tbody className="divide-y divide-gray-100">
               {loading ? (
                 <tr>
-                  <td colSpan="5" className="p-8 text-center text-slate-500">
-                    <Loader className="w-8 h-8 text-red-600 mx-auto mb-2" />
-                    <p className="text-sm font-light">Scanning network...</p>
+                  <td colSpan="5" className="p-8 text-center text-gray-400">
+                    <Loader className="w-8 h-8 text-[var(--accent)] mx-auto mb-2" />
+                    <p className="text-sm">Loading users...</p>
                   </td>
                 </tr>
               ) : users.length === 0 ? (
                 <tr>
-                  <td colSpan="5" className="p-8 text-center text-slate-500 text-sm font-light">No entities found.</td>
+                  <td colSpan="5" className="p-8 text-center text-gray-400 text-sm">No users found.</td>
                 </tr>
               ) : (
                 users.map((user) => (
-                  <tr key={user._id} className="hover:bg-slate-800/50 transition-colors">
+                  <tr key={user._id} className="hover:bg-gray-50 transition-colors">
                     <td className="px-6 py-4">
-                      <div className="text-sm font-bold text-slate-200">{user.name}</div>
+                      <div className="text-sm font-medium text-gray-900">{user.name}</div>
                       {user.role === 'vendor' && user.storeInfo?.name && (
-                        <div className="text-xs text-amber-500/80 mt-0.5">{user.storeInfo.name}</div>
+                        <div className="text-xs text-[var(--accent)] mt-0.5">{user.storeInfo.name}</div>
                       )}
                     </td>
-                    <td className="px-6 py-4 text-sm text-slate-400">{user.email}</td>
+                    <td className="px-6 py-4 text-sm text-gray-500">{user.email}</td>
                     <td className="px-6 py-4">
-                      <span className={`inline-flex px-2.5 py-1 rounded-md text-xs font-semibold ${
-                        user.role === 'admin' ? 'bg-red-900/50 text-red-400 border border-red-500/30' :
-                        user.role === 'vendor' ? 'bg-amber-900/30 text-amber-500 border border-amber-500/30' :
-                        'bg-slate-800 text-slate-300 border border-slate-700'
+                      <span className={`inline-flex px-2.5 py-1 rounded-md text-xs font-semibold border ${
+                        user.role === 'admin' ? 'bg-purple-50 text-purple-700 border-purple-200' :
+                        user.role === 'vendor' ? 'bg-amber-50 text-amber-700 border-amber-200' :
+                        'bg-gray-100 text-gray-700 border-gray-200'
                       }`}>
-                        {user.role.toUpperCase()}
+                        {user.role.charAt(0).toUpperCase() + user.role.slice(1)}
                       </span>
                     </td>
                     <td className="px-6 py-4">
                       {user.isActive ? (
-                        <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-500 bg-emerald-900/20 px-2.5 py-1 rounded-md border border-emerald-500/20">
-                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_5px_rgba(16,185,129,0.8)]" /> Linked
+                        <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-emerald-700 bg-emerald-50 px-2.5 py-1 rounded-md border border-emerald-200">
+                          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" /> Active
                         </span>
                       ) : (
-                        <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-red-500 bg-red-900/20 px-2.5 py-1 rounded-md border border-red-500/30 shadow-[0_0_8px_rgba(220,38,38,0.2)]">
-                          <span className="w-1.5 h-1.5 rounded-full bg-red-600 shadow-[0_0_5px_rgba(220,38,38,1)]" /> Exiled
+                        <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-red-700 bg-red-50 px-2.5 py-1 rounded-md border border-red-200">
+                          <span className="w-1.5 h-1.5 rounded-full bg-red-500" /> Suspended
                         </span>
                       )}
                     </td>
@@ -116,14 +116,14 @@ const Users = () => {
                       {user.role !== 'admin' && (
                         <button
                           onClick={() => handleToggleStatus(user._id)}
-                          className={`inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-all duration-300 border cursor-pointer shadow-sm ${
+                          className={`inline-flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold transition-all duration-300 border cursor-pointer shadow-sm ${
                             user.isActive 
-                              ? 'bg-red-900/20 text-red-500 border-red-500/30 hover:bg-red-900/40 hover:shadow-[0_0_10px_rgba(220,38,38,0.4)]' 
-                              : 'bg-emerald-900/20 text-emerald-500 border-emerald-500/30 hover:bg-emerald-900/40 hover:shadow-[0_0_10px_rgba(16,185,129,0.4)]'
+                              ? 'bg-red-50 text-red-600 border-red-200 hover:bg-red-100' 
+                              : 'bg-emerald-50 text-emerald-600 border-emerald-200 hover:bg-emerald-100'
                           }`}
                         >
                           {user.isActive ? <FiUserX /> : <FiUserCheck />}
-                          {user.isActive ? 'Exile' : 'Restore'}
+                          {user.isActive ? 'Suspend' : 'Activate'}
                         </button>
                       )}
                     </td>

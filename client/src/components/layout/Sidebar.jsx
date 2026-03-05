@@ -32,9 +32,9 @@ const Sidebar = () => {
   const title = userInfo?.role === 'admin' ? 'Admin Tools' : 'Vendor Tools';
 
   return (
-    <aside className="w-64 bg-slate-950 border-r border-red-900/30 min-h-[calc(100vh-4rem)] hidden md:block shrink-0">
+    <aside className="w-64 bg-white border-r border-gray-200 min-h-[calc(100vh-4rem)] hidden md:block shrink-0">
       <div className="py-6 px-4">
-        <h2 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-4 px-3 font-stranger text-red-500">
+        <h2 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-4 px-3">
           {title}
         </h2>
         <nav className="space-y-1">
@@ -44,10 +44,10 @@ const Sidebar = () => {
               to={link.path}
               end={link.path === '/vendor/dashboard' || link.path === '/admin/dashboard'}
               className={({ isActive }) =>
-                `flex items-center space-x-3 px-3 py-3 rounded-lg font-medium transition-all duration-300 ${
+                `flex items-center space-x-3 px-3 py-3 rounded-xl font-medium transition-all duration-200 ${
                   isActive
-                    ? 'bg-red-900/30 text-amber-500 border border-red-900/50 shadow-[0_0_10px_rgba(220,38,38,0.2)]'
-                    : 'text-slate-400 hover:bg-slate-900 hover:text-amber-400'
+                    ? 'bg-[var(--accent)]/10 text-[var(--accent)]'
+                    : 'text-gray-500 hover:bg-gray-50 hover:text-gray-900'
                 }`
               }
             >

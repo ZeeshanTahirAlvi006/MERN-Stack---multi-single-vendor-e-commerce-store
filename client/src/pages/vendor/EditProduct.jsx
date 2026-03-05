@@ -120,82 +120,82 @@ const EditProduct = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center pt-24">
-        <Loader className="w-8 h-8 text-blue-800" />
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center pt-24">
+        <Loader className="w-8 h-8 text-[var(--accent)]" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 py-8 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-gray-50 py-8 px-4 sm:px-6 lg:px-8">
       <div className="max-w-3xl mx-auto">
         
         <div className="mb-8">
-          <h1 className="text-2xl font-bold text-slate-900 mb-2">Edit Product</h1>
-          <p className="text-slate-500 text-sm">Update your product details and inventory.</p>
+          <h1 className="text-2xl font-bold text-gray-900 mb-2">Edit Product</h1>
+          <p className="text-gray-500 text-sm">Update your product details and inventory.</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6 bg-white p-8 rounded-2xl border border-slate-200 shadow-sm">
+        <form onSubmit={handleSubmit} className="space-y-6 bg-white p-8 rounded-2xl border border-gray-200 shadow-sm">
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="md:col-span-2">
-              <label className="block text-sm font-semibold text-slate-700 mb-2">Product Name</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Product Name</label>
               <input
                 type="text"
                 name="name"
                 value={formData.name}
                 onChange={handleInputChange}
-                className="w-full h-11 px-4 border border-slate-200 rounded-xl text-sm outline-none focus:border-blue-800 focus:ring-2 focus:ring-blue-800/10 transition-all"
+                className="w-full h-11 px-4 border border-gray-200 rounded-xl text-sm outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/10 transition-all"
                 required
               />
             </div>
 
             <div className="md:col-span-2">
-              <label className="block text-sm font-semibold text-slate-700 mb-2">Description</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Description</label>
               <textarea
                 name="description"
                 value={formData.description}
                 onChange={handleInputChange}
                 rows={4}
-                className="w-full p-4 border border-slate-200 rounded-xl text-sm outline-none focus:border-blue-800 focus:ring-2 focus:ring-blue-800/10 transition-all resize-none"
+                className="w-full p-4 border border-gray-200 rounded-xl text-sm outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/10 transition-all resize-none"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-2">Price (PKR)</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Price (PKR)</label>
               <input
                 type="number"
                 name="price"
                 min="0"
                 value={formData.price}
                 onChange={handleInputChange}
-                className="w-full h-11 px-4 border border-slate-200 rounded-xl text-sm outline-none focus:border-blue-800 focus:ring-2 focus:ring-blue-800/10 transition-all"
+                className="w-full h-11 px-4 border border-gray-200 rounded-xl text-sm outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/10 transition-all"
                 required
               />
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-slate-700 mb-2">Stock Quantity</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Stock Quantity</label>
               <input
                 type="number"
                 name="stock"
                 min="0"
                 value={formData.stock}
                 onChange={handleInputChange}
-                className="w-full h-11 px-4 border border-slate-200 rounded-xl text-sm outline-none focus:border-blue-800 focus:ring-2 focus:ring-blue-800/10 transition-all"
+                className="w-full h-11 px-4 border border-gray-200 rounded-xl text-sm outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/10 transition-all"
                 required
               />
             </div>
 
             <div className="md:col-span-2">
-              <label className="block text-sm font-semibold text-slate-700 mb-2">Category</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Category</label>
               <div className="relative">
                 <select
                   name="category"
                   value={formData.category}
                   onChange={handleInputChange}
-                  className="w-full h-11 px-4 border border-slate-200 rounded-xl text-sm text-slate-700 outline-none focus:border-blue-800 focus:ring-2 focus:ring-blue-800/10 appearance-none bg-white cursor-pointer transition-all"
+                  className="w-full h-11 px-4 border border-gray-200 rounded-xl text-sm text-gray-700 outline-none focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/10 appearance-none bg-white cursor-pointer transition-all"
                   required
                 >
                   <option value="" disabled>Select a category</option>
@@ -203,7 +203,7 @@ const EditProduct = () => {
                     <option key={cat} value={cat}>{cat}</option>
                   ))}
                 </select>
-                <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-slate-400">
+                <div className="absolute right-4 top-1/2 -trangray-y-1/2 pointer-events-none text-gray-400">
                   <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                   </svg>
@@ -212,19 +212,19 @@ const EditProduct = () => {
             </div>
 
             <div className="md:col-span-2">
-              <label className="block text-sm font-semibold text-slate-700 mb-2">Product Images</label>
+              <label className="block text-sm font-semibold text-gray-700 mb-2">Product Images</label>
               
               {/* Existing Images */}
               {existingImages.length > 0 && (
                 <div className="mb-4">
-                  <span className="text-xs text-slate-500 uppercase tracking-wider font-semibold mb-2 block">Current Images</span>
+                  <span className="text-xs text-gray-500 uppercase tracking-wider font-semibold mb-2 block">Current Images</span>
                   <div className="flex flex-wrap gap-4">
                     {existingImages.map((imgUrl, index) => (
                       <div key={index} className="relative group">
                         <img
                           src={imgUrl.startsWith('http') ? imgUrl : `${import.meta.env.VITE_API_URL || 'http://localhost:5000'}${imgUrl}`}
                           alt="product"
-                          className="w-24 h-24 object-cover rounded-xl border border-slate-200"
+                          className="w-24 h-24 object-cover rounded-xl border border-gray-200"
                         />
                         <button
                           type="button"
@@ -242,7 +242,7 @@ const EditProduct = () => {
               {/* New Images */}
               {imagePreviewUrls.length > 0 && (
                 <div className="mb-4">
-                  <span className="text-xs text-slate-500 uppercase tracking-wider font-semibold mb-2 block">New Uploads</span>
+                  <span className="text-xs text-gray-500 uppercase tracking-wider font-semibold mb-2 block">New Uploads</span>
                   <div className="flex flex-wrap gap-4">
                     {imagePreviewUrls.map((url, index) => (
                       <div key={index} className="relative group">
@@ -272,26 +272,26 @@ const EditProduct = () => {
                   onChange={handleImageChange}
                   className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
                 />
-                <div className="w-full h-32 border-2 border-dashed border-slate-200 hover:border-blue-800 rounded-xl flex flex-col items-center justify-center text-slate-400 hover:text-blue-800 transition-colors bg-slate-50 group">
-                  <FiUploadCloud className="w-8 h-8 mb-2 group-hover:-translate-y-1 transition-transform" />
+                <div className="w-full h-32 border-2 border-dashed border-gray-200 hover:border-[var(--accent)] rounded-xl flex flex-col items-center justify-center text-gray-400 hover:text-[var(--accent)] transition-colors bg-gray-50 group">
+                  <FiUploadCloud className="w-8 h-8 mb-2 group-hover:-trangray-y-1 transition-transform" />
                   <span className="text-sm font-medium">Click or drag new images to upload</span>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="pt-4 border-t border-slate-100 flex gap-4">
+          <div className="pt-4 border-t border-gray-100 flex gap-4">
             <button
               type="button"
               onClick={() => navigate('/vendor/products')}
-              className="flex-1 h-12 bg-slate-100 text-slate-700 rounded-full font-semibold hover:bg-slate-200 transition-colors"
+              className="flex-1 h-12 bg-gray-100 text-gray-700 rounded-full font-semibold hover:bg-gray-200 transition-colors"
             >
               Cancel
             </button>
             <button
               type="submit"
               disabled={saving}
-              className="flex-1 h-12 bg-blue-800 text-white rounded-full font-semibold flex items-center justify-center gap-2 hover:bg-blue-900 transition-all disabled:opacity-70 disabled:cursor-not-allowed shadow-sm hover:shadow-md"
+              className="flex-1 h-12 bg-[var(--accent)] text-white rounded-full font-semibold flex items-center justify-center gap-2 hover:bg-[var(--accent-hover)] transition-all disabled:opacity-70 disabled:cursor-not-allowed shadow-sm hover:shadow-md"
             >
               {saving ? (
                 <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin" />

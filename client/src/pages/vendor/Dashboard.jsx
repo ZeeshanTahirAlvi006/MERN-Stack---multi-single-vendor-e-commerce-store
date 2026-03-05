@@ -61,40 +61,40 @@ const Dashboard = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-bleed-void flex items-center justify-center relative crt-overlay">
-        <Loader className="w-8 h-8 text-bleed-amber theme-glitch" />
+      <div className="min-h-screen bg-[var(--bg-primary)] flex items-center justify-center relative">
+        <Loader className="w-8 h-8 text-[var(--accent)]" />
       </div>
     );
   }
 
   const statCards = [
     {
-      label: 'Energy Harvested',
+      label: 'Total Revenue',
       value: formatCurrency(stats?.totalRevenue),
       icon: <FiDollarSign />,
-      color: 'text-green-500 drop-shadow-[0_0_5px_rgba(34,197,94,0.8)]',
-      bg: 'bg-green-900/10 border border-green-500/30',
+      color: 'text-[var(--accent)]',
+      bg: 'bg-[var(--accent)]/10',
     },
     {
-      label: 'Hive Tribute (10%)',
+      label: 'Platform Fee (10%)',
       value: formatCurrency(stats?.platformFee),
       icon: <FiBarChart2 />,
-      color: 'text-bleed-rift drop-shadow-[0_0_5px_rgba(230,30,42,0.8)]',
-      bg: 'bg-bleed-rift/10 border border-bleed-rift/30',
+      color: 'text-red-500',
+      bg: 'bg-red-50',
     },
     {
-      label: 'Net Power',
+      label: 'Net Earnings',
       value: formatCurrency(stats?.netEarnings),
       icon: <FiTrendingUp />,
-      color: 'text-green-400 drop-shadow-[0_0_5px_rgba(74,222,128,0.8)]',
-      bg: 'bg-bleed-void border border-green-500/20',
+      color: 'text-emerald-600',
+      bg: 'bg-emerald-50',
     },
     {
-      label: 'Signals This Cycle',
+      label: 'Orders This Month',
       value: stats?.ordersThisMonth || 0,
       icon: <FiShoppingBag />,
-      color: 'text-bleed-signal',
-      bg: 'bg-bleed-void border border-bleed-ash',
+      color: 'text-blue-600',
+      bg: 'bg-blue-50',
     },
   ];
 
@@ -102,85 +102,83 @@ const Dashboard = () => {
   const maxRevenue = Math.max(1, ...(stats?.monthlyRevenue?.map((m) => m.revenue) || []));
 
   return (
-    <div className="min-h-screen bg-bleed-void flex relative">
-      <div className="crt-overlay z-50 pointer-events-none mix-blend-overlay"></div>
-      
+    <div className="min-h-screen bg-[var(--bg-primary)] flex relative">
       <div className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full relative z-10">
+        <div className="mb-8">
+          <h1 className="text-2xl font-bold text-gray-900 mb-1 tracking-tight">Vendor Dashboard</h1>
+          <p className="text-gray-500 text-sm">Welcome back, {userInfo?.name}</p>
+        </div>
+
         {/* Stat Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           {statCards.map((card) => (
             <div
               key={card.label}
-              className="bg-bleed-void/80 backdrop-blur-sm rounded-lg border border-green-500/20 p-5 shadow-[0_0_10px_rgba(34,197,94,0.1)] hover:shadow-[0_0_20px_rgba(34,197,94,0.3)] hover:border-green-500/50 transition-all duration-300 relative overflow-hidden group"
+              className="bg-white rounded-2xl border border-gray-100 p-5 shadow-sm hover:shadow-md hover:border-gray-200 transition-all duration-300 relative overflow-hidden"
             >
-              <div className="absolute inset-0 bg-gradient-to-br from-green-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
               <div className="flex items-center justify-between mb-3 relative z-10">
-                <span className={`w-10 h-10 ${card.bg} ${card.color} flex items-center justify-center text-xl shadow-[0_0_15px_rgba(34,197,94,0.2)]`}>
-                  {card.icon}
+                <span className={`w-10 h-10 rounded-xl ${card.bg} flex items-center justify-center text-xl text-${card.color.split('-')[1]}-600`}>
+                  {React.cloneElement(card.icon, { className: card.color })}
                 </span>
-                <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse shadow-[0_0_5px_rgba(34,197,94,1)]"></div>
               </div>
-              <p className="text-2xl font-mono text-bleed-signal mb-0.5 tracking-wider">{card.value}</p>
-              <p className="text-xs text-green-500/70 font-mono-tag">{card.label}</p>
+              <p className="text-2xl font-bold text-gray-900 mb-0.5">{card.value}</p>
+              <p className="text-sm text-gray-500 font-medium">{card.label}</p>
             </div>
           ))}
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Monthly Revenue Chart */}
-          <div className="lg:col-span-2 bg-bleed-void/80 backdrop-blur-sm border border-green-500/20 p-6 shadow-[0_0_15px_rgba(34,197,94,0.05)] relative">
-            <h2 className="text-sm font-mono-tag text-green-500 mb-6 drop-shadow-[0_0_5px_rgba(34,197,94,0.5)] tracking-widest border-b border-green-500/20 pb-2">SYS.DATA // HARVEST_CYCLES</h2>
+          <div className="lg:col-span-2 bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+            <h2 className="text-base font-bold text-gray-900 mb-6 border-b border-gray-100 pb-2">Revenue History</h2>
             {stats?.monthlyRevenue?.length > 0 ? (
               <div className="flex items-end gap-3 h-48">
                 {stats.monthlyRevenue.map((m, i) => (
                   <div key={i} className="flex-1 flex flex-col items-center gap-2 group">
-                    <span className="text-[10px] text-green-400/50 font-mono opacity-0 group-hover:opacity-100 transition-opacity">
+                    <span className="text-xs text-gray-500 font-medium opacity-0 group-hover:opacity-100 transition-opacity">
                       {formatCurrency(m.revenue)}
                     </span>
                     <div
-                      className="w-full bg-green-500/20 group-hover:bg-green-500/40 transition-all duration-300 border-x border-t border-green-500/50 shadow-[0_0_10px_rgba(34,197,94,0.2)] group-hover:shadow-[0_0_15px_rgba(34,197,94,0.6)]"
+                      className="w-full bg-[var(--accent)]/20 rounded-t-sm group-hover:bg-[var(--accent)]/40 transition-all duration-300"
                       style={{ height: `${(m.revenue / maxRevenue) * 100}%`, minHeight: m.revenue > 0 ? '4px' : '0px' }}
                     />
-                    <span className="text-[10px] text-green-500/70 font-mono-tag group-hover:text-green-400">{MONTHS[m.month - 1]}</span>
+                    <span className="text-xs text-gray-500 font-medium group-hover:text-gray-900">{MONTHS[m.month - 1]}</span>
                   </div>
                 ))}
               </div>
             ) : (
-              <div className="h-48 flex items-center justify-center text-green-500/30 text-xs font-mono">
-                [NO DATA FOUND IN CURRENT SECTOR]
+              <div className="h-48 flex items-center justify-center text-gray-400 text-sm">
+                No revenue data available
               </div>
             )}
           </div>
 
           {/* Stock Alerts */}
-          <div className="bg-bleed-void/80 backdrop-blur-sm border border-bleed-rift/30 p-6 shadow-[0_0_15px_rgba(230,30,42,0.1)] relative overflow-hidden">
-            <div className="absolute top-0 right-0 w-8 h-8 bg-bleed-rift/10 flex items-center justify-center border-l border-b border-bleed-rift/30">
-              <div className="w-2 h-2 rounded-full bg-bleed-rift animate-pulse shadow-[0_0_8px_rgba(230,30,42,1)]"></div>
-            </div>
-            <div className="flex items-center gap-2 mb-4 border-b border-bleed-rift/20 pb-2">
-              <FiAlertTriangle className="text-bleed-rift drop-shadow-[0_0_5px_rgba(230,30,42,0.8)]" />
-              <h2 className="text-sm font-mono-tag text-bleed-rift tracking-widest">CRITICAL.ALERTS</h2>
+          <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm relative overflow-hidden">
+            <div className="flex items-center gap-2 mb-4 border-b border-gray-100 pb-2">
+              <FiAlertTriangle className="text-red-500" />
+              <h2 className="text-base font-bold text-gray-900">Low Stock Alerts</h2>
             </div>
             {stats?.stockAlerts?.length > 0 ? (
               <div className="flex flex-col gap-3">
                 {stats.stockAlerts.map((item) => (
-                  <div key={item._id} className="flex items-center gap-3 p-3 bg-bleed-void border border-bleed-rift/40 hover:bg-bleed-rift/5 transition-colors group">
+                  <div key={item._id} className="flex items-center gap-3 p-3 bg-gray-50 rounded-xl border border-gray-100 hover:border-gray-200 transition-colors">
                     <img
-                      src={item.images?.[0] || 'https://placehold.co/40x40/1e293b/94a3b8?text=?'}
+                      src={item.images?.[0] || 'https://placehold.co/40x40/f8fafc/94a3b8?text=?'}
                       alt={item.name}
-                      className="w-10 h-10 object-cover opacity-60 mix-blend-luminosity group-hover:mix-blend-normal group-hover:opacity-100 transition-all border border-bleed-rift/20"
+                      className="w-10 h-10 object-cover rounded-lg border border-gray-200"
                     />
                     <div className="flex-1 min-w-0">
-                      <p className="text-xs font-mono text-bleed-signal truncate drop-shadow-md">{item.name}</p>
-                      <p className={`text-[10px] font-mono-tag tracking-wider ${item.stock === 0 ? 'text-bleed-rift shadow-[0_0_5px_rgba(230,30,42,0.3)]' : 'text-bleed-amber'}`}>
-                        {item.stock === 0 ? 'VOID (EMPTY)' : `QTY: ${item.stock}`}
+                      <p className="text-sm font-medium text-gray-900 truncate">{item.name}</p>
+                      <p className={`text-xs font-semibold ${item.stock === 0 ? 'text-red-500' : 'text-amber-500'}`}>
+                        {item.stock === 0 ? 'Out of Stock' : `Only ${item.stock} left`}
                       </p>
                     </div>
                   </div>
                 ))}
               </div>
             ) : (
-              <p className="text-[10px] text-green-500/50 text-center py-6 font-mono">[ALL SYSTEMS NOMINAL]</p>
+              <p className="text-sm text-gray-500 text-center py-6">All products fully stocked</p>
             )}
           </div>
         </div>
@@ -188,66 +186,66 @@ const Dashboard = () => {
         {/* Top Products + My Products */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
           {/* Top Products */}
-          <div className="bg-bleed-void/80 backdrop-blur-sm border border-green-500/20 p-6 shadow-[0_0_15px_rgba(34,197,94,0.05)] relative">
-             <h2 className="text-sm font-mono-tag text-green-500 mb-6 drop-shadow-[0_0_5px_rgba(34,197,94,0.5)] tracking-widest border-b border-green-500/20 pb-2">SYS.DATA // HIGH_YIELD_NODES</h2>
+          <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+             <h2 className="text-base font-bold text-gray-900 mb-6 border-b border-gray-100 pb-2">Top Selling Products</h2>
             {stats?.topProducts?.length > 0 ? (
               <div className="flex flex-col gap-3">
                 {stats.topProducts.map((p, i) => (
-                  <div key={p._id} className="flex items-center gap-3 border-b border-green-500/10 pb-2 last:border-0 last:pb-0 hover:bg-green-500/5 transition-colors p-2 -mx-2">
-                    <span className="w-6 h-6 border border-green-500/50 flex items-center justify-center text-[10px] font-mono text-green-400 bg-bleed-void">
+                  <div key={p._id} className="flex items-center gap-3 border-b border-gray-50 pb-2 last:border-0 last:pb-0 hover:bg-gray-50 rounded-lg p-2 -mx-2 transition-colors">
+                    <span className="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center text-xs font-bold text-gray-500">
                       {i + 1}
                     </span>
                     <img
-                      src={p.image || 'https://placehold.co/40x40/1e293b/94a3b8?text=?'}
+                      src={p.image || 'https://placehold.co/40x40/f8fafc/94a3b8?text=?'}
                       alt={p.name}
-                      className="w-10 h-10 object-cover opacity-60 mix-blend-luminosity border border-bleed-ash"
+                      className="w-10 h-10 object-cover rounded-md border border-gray-200"
                     />
                     <div className="flex-1 min-w-0">
-                      <p className="text-xs text-bleed-signal font-mono truncate">{p.name}</p>
-                      <p className="text-[10px] text-green-500/50 font-mono-tag tracking-wider">YIELD: {p.totalQty}</p>
+                      <p className="text-sm text-gray-900 font-medium truncate">{p.name}</p>
+                      <p className="text-xs text-gray-500">Sold: {p.totalQty}</p>
                     </div>
-                    <span className="text-xs font-mono text-green-400 drop-shadow-[0_0_2px_rgba(74,222,128,0.5)]">
+                    <span className="text-sm font-bold text-[var(--accent)]">
                       {formatCurrency(p.totalSales)}
                     </span>
                   </div>
                 ))}
               </div>
             ) : (
-              <p className="text-[10px] text-green-500/30 text-center py-6 font-mono">[NO YIELD DATA]</p>
+              <p className="text-sm text-gray-400 text-center py-6">No sales data yet</p>
             )}
           </div>
 
           {/* My Products */}
-          <div className="bg-bleed-void/80 backdrop-blur-sm border border-green-500/20 p-6 shadow-[0_0_15px_rgba(34,197,94,0.05)] relative">
-            <div className="flex items-center justify-between mb-4 border-b border-green-500/20 pb-2">
-              <h2 className="text-sm font-mono-tag text-green-500 drop-shadow-[0_0_5px_rgba(34,197,94,0.5)] tracking-widest">LOCAL.NODES</h2>
-              <span className="text-[10px] font-mono-tag tracking-wider text-bleed-void bg-green-500 px-2 py-0.5 shadow-[0_0_8px_rgba(34,197,94,0.5)]">
-                ACTIVE: {products.length}
+          <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
+            <div className="flex items-center justify-between mb-4 border-b border-gray-100 pb-2">
+              <h2 className="text-base font-bold text-gray-900">Your Products</h2>
+              <span className="text-xs font-semibold text-[var(--accent)] bg-[var(--accent)]/10 px-2 py-0.5 rounded-full">
+                {products.length} Items
               </span>
             </div>
             {products.length > 0 ? (
               <div className="flex flex-col gap-3 max-h-80 overflow-y-auto custom-scrollbar pr-1">
                 {products.slice(0, 10).map((p) => (
-                  <div key={p._id} className="flex items-center gap-3 bg-bleed-void p-2 border border-bleed-ash/50 hover:border-bleed-rift/50 transition-colors group">
+                  <div key={p._id} className="flex items-center gap-3 bg-white p-2 border border-gray-100 rounded-xl hover:border-gray-200 transition-colors group">
                     <img
-                      src={p.images?.[0] || 'https://placehold.co/40x40/1e293b/94a3b8?text=?'}
+                      src={p.images?.[0] || 'https://placehold.co/40x40/f8fafc/94a3b8?text=?'}
                       alt={p.name}
-                      className="w-10 h-10 object-cover opacity-60 mix-blend-luminosity border border-bleed-ash group-hover:mix-blend-normal group-hover:opacity-100 transition-all"
+                      className="w-10 h-10 object-cover rounded-lg border border-gray-200"
                     />
                     <div className="flex-1 min-w-0">
-                      <p className="text-xs font-mono text-bleed-signal truncate">{p.name}</p>
-                      <p className="text-[10px] text-bleed-signal/40 font-mono-tag tracking-wider">TYPE: {p.category} | DURABILITY: {p.stock}</p>
+                      <p className="text-sm font-medium text-gray-900 truncate">{p.name}</p>
+                      <p className="text-xs text-gray-500 truncate">{p.category} | Stock: {p.stock}</p>
                     </div>
                     <div className="flex flex-col items-end gap-1">
-                      <span className="text-xs font-mono text-bleed-signal">
+                      <span className="text-sm font-bold text-gray-900">
                         {formatCurrency(p.price)}
                       </span>
                       <button
                         onClick={() => handleDeleteProduct(p._id)}
-                        className="text-bleed-rift/50 hover:text-bleed-rift bg-bleed-void border border-transparent hover:border-bleed-rift/30 cursor-pointer px-2 py-0.5 rounded-lg font-mono-tag text-[10px] tracking-widest transition-all duration-300 hover:shadow-[0_0_5px_rgba(230,30,42,0.5)] uppercase"
-                        title="Sever Node"
+                        className="text-gray-400 hover:text-red-500 p-1 rounded-md transition-colors"
+                        title="Delete Product"
                       >
-                        Purge
+                        <FiTrash2 size={14} />
                       </button>
                     </div>
                   </div>
@@ -255,12 +253,12 @@ const Dashboard = () => {
               </div>
             ) : (
               <div className="text-center py-6 flex flex-col items-center">
-                <p className="text-[10px] text-green-500/50 mb-4 font-mono">[NO LOCAL NODES FOUND]</p>
+                <p className="text-sm text-gray-500 mb-4">You haven't added any products yet.</p>
                 <Link
                   to="/vendor/add-product"
-                  className="inline-flex items-center gap-2 px-4 py-2 bg-green-500/10 text-green-400 text-[10px] font-mono-tag hover:bg-green-500 hover:text-bleed-void transition-all duration-300 shadow-[0_0_10px_rgba(34,197,94,0.1)] hover:shadow-[0_0_15px_rgba(34,197,94,0.5)] border border-green-500/50 uppercase tracking-widest no-underline"
+                  className="inline-flex items-center justify-center gap-2 px-4 py-2 bg-[var(--accent)] text-white rounded-full text-sm font-semibold hover:bg-[var(--accent-hover)] transition-colors shadow-sm"
                 >
-                  <FiPlus size={12} /> INIT NODE
+                  <FiPlus size={16} /> Add Product
                 </Link>
               </div>
             )}
