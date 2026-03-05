@@ -16,6 +16,14 @@ const Register = () => {
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState({});
+  const [mousePos, setMousePos] = useState({ x: -1000, y: -1000 });
+
+  const handleMouseMove = (e) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    setMousePos({ x, y });
+  };
 
   const roles = [
     { value: 'customer', label: 'Customer', desc: 'Shop and order products' },
@@ -62,8 +70,63 @@ const Register = () => {
   const wrapperError = "border-red-400";
 
   return (
-    <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center bg-[var(--bg-secondary)] px-4 py-10">
-      <div className="w-full max-w-md">
+    <div 
+      className="min-h-[calc(100vh-4rem)] flex items-center justify-center bg-[var(--bg-secondary)] px-4 py-10 relative overflow-hidden"
+      onMouseMove={handleMouseMove}
+      onMouseLeave={() => setMousePos({ x: -1000, y: -1000 })}
+    >
+      {/* Base Subtle Pattern */}
+      <div className="absolute inset-0 opacity-15 pointer-events-none animate-pattern z-0">
+        <svg width="100%" height="200%" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <pattern id="hex-floral-base" x="0" y="0" width="120" height="207.84" patternUnits="userSpaceOnUse">
+              <g stroke="#10B981" strokeWidth="1" fill="none">
+                <path d="M60 0 L120 34.64 L120 103.92 L60 138.56 L0 103.92 L0 34.64 Z" />
+                <path d="M60 207.84 L120 173.2 L120 103.92 L60 69.28 L0 103.92 L0 173.2 Z" />
+                <path d="M0 34.64 L120 103.92 M120 34.64 L0 103.92 M60 0 L60 138.56" />
+                <path d="M0 173.2 L120 103.92 M120 173.2 L0 103.92 M60 207.84 L60 69.28" />
+                <path d="M60 69.28 Q 75 86.6 90 69.28 Q 75 51.96 60 69.28 Z" />
+                <path d="M60 69.28 Q 45 86.6 30 69.28 Q 45 51.96 60 69.28 Z" />
+                <path d="M60 138.56 Q 75 121.24 90 138.56 Q 75 155.88 60 138.56 Z" />
+                <path d="M60 138.56 Q 45 121.24 30 138.56 Q 45 155.88 60 138.56 Z" />
+              </g>
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#hex-floral-base)" />
+        </svg>
+      </div>
+
+      {/* Cursor Reveal Zoomed/Darker Pattern */}
+      <div 
+        className="absolute inset-0 pointer-events-none z-0"
+        style={{
+          maskImage: `radial-gradient(circle 200px at ${mousePos.x}px ${mousePos.y}px, black 0%, transparent 100%)`,
+          WebkitMaskImage: `radial-gradient(circle 200px at ${mousePos.x}px ${mousePos.y}px, black 0%, transparent 100%)`,
+        }}
+      >
+        <div className="absolute inset-0 opacity-90 animate-pattern">
+          {/* Exact 1:1 mapping with the base layer, no scaling/zooming, just darker thicker lines */}
+          <svg width="100%" height="200%" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <pattern id="hex-floral-hover" x="0" y="0" width="120" height="207.84" patternUnits="userSpaceOnUse">
+                <g stroke="#047857" strokeWidth="2.5" fill="none">
+                  <path d="M60 0 L120 34.64 L120 103.92 L60 138.56 L0 103.92 L0 34.64 Z" />
+                  <path d="M60 207.84 L120 173.2 L120 103.92 L60 69.28 L0 103.92 L0 173.2 Z" />
+                  <path d="M0 34.64 L120 103.92 M120 34.64 L0 103.92 M60 0 L60 138.56" />
+                  <path d="M0 173.2 L120 103.92 M120 173.2 L0 103.92 M60 207.84 L60 69.28" />
+                  <path d="M60 69.28 Q 75 86.6 90 69.28 Q 75 51.96 60 69.28 Z" />
+                  <path d="M60 69.28 Q 45 86.6 30 69.28 Q 45 51.96 60 69.28 Z" />
+                  <path d="M60 138.56 Q 75 121.24 90 138.56 Q 75 155.88 60 138.56 Z" />
+                  <path d="M60 138.56 Q 45 121.24 30 138.56 Q 45 155.88 60 138.56 Z" />
+                </g>
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#hex-floral-hover)" />
+          </svg>
+        </div>
+      </div>
+
+      <div className="w-full max-w-md relative z-10">
         <div className="text-center mb-8">
           <h1 className="text-2xl font-bold text-gray-900 mb-2">Create Account</h1>
           <p className="text-sm text-gray-500">Join us and start shopping today.</p>

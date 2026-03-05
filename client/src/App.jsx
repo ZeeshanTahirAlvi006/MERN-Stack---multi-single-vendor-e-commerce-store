@@ -25,7 +25,7 @@ import Sidebar from './components/layout/Sidebar';
 function App() {
   return (
     <Router>
-      <div className="flex flex-col min-h-screen bg-white text-gray-900 font-sans">
+      <div className="flex flex-col min-h-screen text-gray-900 font-sans">
         <Navbar />
         <main className="flex-grow">
           <Routes>

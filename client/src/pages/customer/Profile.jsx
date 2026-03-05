@@ -4,6 +4,7 @@ import { getUserProfile, updateUserProfile } from '../../api/api';
 import { setCredentials } from '../../slices/authSlice';
 import { toast } from 'react-toastify';
 import { FiUser, FiMail, FiLock, FiSave } from 'react-icons/fi';
+import Loader from '../../components/common/Loader';
 
 const Profile = () => {
   const dispatch = useDispatch();
@@ -66,8 +67,8 @@ const Profile = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="w-8 h-8 border-3 border-gray-200 border-t-[var(--accent)] rounded-full animate-spin" />
+      <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center">
+        <Loader />
       </div>
     );
   }

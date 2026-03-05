@@ -3,6 +3,8 @@ import { useSearchParams } from 'react-router-dom';
 import { getProducts } from '../../api/api';
 import ProductCard from '../../components/product/ProductCard';
 import { FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import { toast } from 'react-toastify';
+import Loader from '../../components/common/Loader';
 
 const Home = () => {
   const [products, setProducts] = useState([]);
@@ -20,8 +22,9 @@ const Home = () => {
       const res = await getProducts({ page, search, category, limit: 12 });
       setProducts(res.data.products);
       setTotalPages(res.data.totalPages);
-    } catch {
+    } catch (error) {
       setProducts([]);
+      toast.error('Failed to fetch products.');
     } finally {
       setLoading(false);
     }
@@ -31,15 +34,16 @@ const Home = () => {
     fetchProducts();
   }, [fetchProducts]);
 
-  const categories = ['Electronics', 'Clothing', 'Books', 'Home & Kitchen', 'Sports'];
+  const categories = ['All', 'Electronics', 'Clothing', 'Books', 'Home & Kitchen', 'Sports'];
 
   const handleCategoryClick = (cat) => {
-    const params = new URLSearchParams();
+    const params = new URLSearchParams(searchParams);
     if (cat === 'All' || category === cat) {
-      // Clear category filter
+      params.delete('category');
     } else {
       params.set('category', cat);
     }
+    params.set('page', 1); // Reset to first page when category changes
     setSearchParams(params);
   };
 
@@ -50,27 +54,57 @@ const Home = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen">
       {/* Hero Section */}
-      <section className="relative bg-gradient-to-r from-gray-900 to-gray-800 overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-28 relative z-10">
-          <p className="text-sm font-semibold text-[var(--accent)] uppercase tracking-widest mb-4">New Collection 2025</p>
-          <h1 className="text-4xl md:text-6xl font-extrabold text-white mb-6 leading-tight max-w-xl">
+      <section className="relative bg-gradient-to-br from-[#2D3748] to-[#1A202C] overflow-hidden">
+        {/* Geometric Floral Logo Pattern Background */}
+        <div className="absolute inset-0 opacity-10 pointer-events-none">
+          <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <pattern id="hex-floral" x="0" y="0" width="120" height="207.84" patternUnits="userSpaceOnUse">
+                <g stroke="#6BCFA0" strokeWidth="1" fill="none">
+                  {/* Hexagon Base */}
+                  <path d="M60 0 L120 34.64 L120 103.92 L60 138.56 L0 103.92 L0 34.64 Z" />
+                  <path d="M60 207.84 L120 173.2 L120 103.92 L60 69.28 L0 103.92 L0 173.2 Z" />
+                  {/* Internal Intersecting Lines (Floral effect) */}
+                  <path d="M0 34.64 L120 103.92 M120 34.64 L0 103.92 M60 0 L60 138.56" />
+                  <path d="M0 173.2 L120 103.92 M120 173.2 L0 103.92 M60 207.84 L60 69.28" />
+                  {/* Small detailed petals/leaves */}
+                  <path d="M60 69.28 Q 75 86.6 90 69.28 Q 75 51.96 60 69.28 Z" />
+                  <path d="M60 69.28 Q 45 86.6 30 69.28 Q 45 51.96 60 69.28 Z" />
+                  <path d="M60 138.56 Q 75 121.24 90 138.56 Q 75 155.88 60 138.56 Z" />
+                  <path d="M60 138.56 Q 45 121.24 30 138.56 Q 45 155.88 60 138.56 Z" />
+                </g>
+              </pattern>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#hex-floral)" />
+          </svg>
+        </div>
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 md:py-32 relative z-10 flex flex-col items-center text-center">
+          <div className="inline-block mb-6 px-4 py-1.5 rounded-full border border-[var(--accent)] bg-[var(--accent)]/10 backdrop-blur-sm">
+            <p className="text-sm font-bold text-[var(--accent)] uppercase tracking-[0.2em] m-0">New Collection 2025</p>
+          </div>
+          
+          <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold text-[#F6F6EE] mb-8 leading-tight max-w-4xl tracking-tight">
             Discover Premium Products
           </h1>
-          <p className="text-gray-300 text-lg mb-8 max-w-md">
+          
+          <p className="text-gray-300 text-lg md:text-xl mb-10 max-w-2xl font-light leading-relaxed">
             Shop the latest trends with unbeatable prices and free shipping on your first order.
           </p>
-          <div className="flex gap-4">
-            <a href="#products" className="px-8 py-3 bg-[var(--accent)] text-white font-semibold rounded-lg hover:bg-[var(--accent-hover)] transition-colors no-underline text-sm">
+          
+          <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
+            <a href="#products" className="px-8 py-4 bg-[var(--accent)] text-white font-semibold rounded-xl hover:bg-[var(--accent-hover)] hover:scale-105 transition-all shadow-[0_0_20px_rgba(16,185,129,0.3)] no-underline text-base text-center">
               Shop Now
             </a>
-            <a href="#categories" className="px-8 py-3 bg-transparent border-2 border-white text-white font-semibold rounded-lg hover:bg-white hover:text-gray-900 transition-all no-underline text-sm">
+            <a href="#categories" className="px-8 py-4 bg-transparent border-2 border-slate-500 text-slate-300 font-semibold rounded-xl hover:bg-slate-800 hover:border-slate-400 hover:text-white transition-all no-underline text-base text-center">
               Browse Categories
             </a>
           </div>
         </div>
-        <div className="absolute inset-0 bg-black/20"></div>
+        
+        {/* Bottom subtle gradient fade removed */}
       </section>
 
       {/* Categories */}
@@ -81,7 +115,7 @@ const Home = () => {
               key={cat}
               onClick={() => handleCategoryClick(cat)}
               className={`px-5 py-2 rounded-full text-sm font-medium border transition-all cursor-pointer ${
-                category === cat
+                category === cat || (cat === 'All' && !category)
                   ? 'bg-[var(--accent)] text-white border-[var(--accent)]'
                   : 'bg-white text-gray-600 border-gray-200 hover:border-[var(--accent)] hover:text-[var(--accent)]'
               }`}
@@ -102,7 +136,7 @@ const Home = () => {
 
         {loading ? (
           <div className="flex items-center justify-center py-20">
-            <div className="w-8 h-8 border-3 border-gray-200 border-t-[var(--accent)] rounded-full animate-spin" />
+            <Loader />
           </div>
         ) : products.length === 0 ? (
           <div className="text-center py-20">

@@ -6,8 +6,8 @@
   --bg-secondary: #FFFFFF;
   --text-primary: #2D3748;
   --text-secondary: #636B78;
-  --accent: #6BCFA0;
-  --accent-hover: #55B98A;
+  --accent: #10B981;
+  --accent-hover: #059669;
   --accent-dark: #4A5568;
   --border: #E2E0DB;
   --danger: #EF4444;
@@ -38,4 +38,37 @@ body {
 
 ::-webkit-scrollbar-thumb:hover {
   background: #94A3B8;
+}
+
+/* Pattern Animations */
+@keyframes patternSlide {
+  0% {
+    transform: translateY(0) scale(1.05);
+  }
+
+  50% {
+    transform: translateY(-20px) scale(1.05);
+  }
+
+  100% {
+    transform: translateY(0) scale(1.05);
+  }
+}
+
+@keyframes patternFade {
+  0% {
+    opacity: 0.05;
+  }
+
+  50% {
+    opacity: 0.15;
+  }
+
+  100% {
+    opacity: 0.05;
+  }
+}
+
+.animate-pattern {
+  animation: patternSlide 30s ease-in-out infinite, patternFade 15s ease-in-out infinite;
 }

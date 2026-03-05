@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { getMyOrders } from '../../api/api';
 import { toast } from 'react-toastify';
-import { FiPackage, FiClock, FiCheckCircle, FiTruck, FiXCircle } from 'react-icons/fi';
+import { FiPackage, FiClock, FiCheckCircle, FiXCircle } from 'react-icons/fi';
+import Loader from '../../components/common/Loader';
 import { format } from 'date-fns';
 
 const Orders = () => {
@@ -50,8 +51,8 @@ const Orders = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="w-8 h-8 border-3 border-gray-200 border-t-[var(--accent)] rounded-full animate-spin" />
+      <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center">
+        <Loader />
       </div>
     );
   }

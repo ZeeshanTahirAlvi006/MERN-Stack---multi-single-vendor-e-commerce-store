@@ -84,7 +84,7 @@ const Navbar = () => {
               <img src="/logo.png" alt="The Hive PK" className="h-9 w-auto" />
               <div className="hidden sm:block leading-none">
                 <span className="text-lg font-extrabold tracking-tight" style={{ color: '#4A5568' }}>THE HIVE</span>
-                <span className="block text-xs font-bold tracking-widest" style={{ color: '#6BCFA0' }}>PK</span>
+                <span className="block text-xs font-bold tracking-widest" style={{ color: '#10B981' }}>PK</span>
               </div>
             </Link>
           </div>

@@ -4,6 +4,7 @@ import { getProductById } from '../../api/api';
 import useCart from '../../hooks/useCart';
 import { toast } from 'react-toastify';
 import { FiShoppingCart, FiArrowLeft, FiMinus, FiPlus } from 'react-icons/fi';
+import Loader from '../../components/common/Loader';
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -35,8 +36,8 @@ const ProductDetail = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="w-8 h-8 border-3 border-gray-200 border-t-[var(--accent)] rounded-full animate-spin" />
+      <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center">
+        <Loader />
       </div>
     );
   }
@@ -52,7 +53,7 @@ const ProductDetail = () => {
   const inStock = product.stock > 0;
 
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Breadcrumb */}
         <Link to="/" className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-[var(--accent)] mb-8 transition-colors no-underline">
