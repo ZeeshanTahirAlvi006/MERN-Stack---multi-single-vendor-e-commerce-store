@@ -31,11 +31,10 @@ const Cart = () => {
         total: subtotal,
       });
       if (res.data.stripeUrl) {
-        // Stripe payment — redirect to Stripe checkout
-        clearCart();
+        // Stripe payment — redirect to Stripe checkout (cart stays until payment confirmed)
         window.location.href = res.data.stripeUrl;
       } else {
-        // COD — go to success page
+        // COD — clear cart and go to success page
         clearCart();
         navigate('/success');
       }

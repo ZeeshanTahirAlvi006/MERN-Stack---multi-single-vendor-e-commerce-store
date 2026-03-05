@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { FiCheckCircle, FiPackage, FiArrowRight, FiAlertCircle } from 'react-icons/fi';
 import { verifyStripeSession } from '../../api/api';
+import useCart from '../../hooks/useCart';
 
 const Success = () => {
   const [searchParams] = useSearchParams();
@@ -9,6 +10,7 @@ const Success = () => {
   const [verifying, setVerifying] = useState(!!sessionId);
   const [verified, setVerified] = useState(false);
   const [error, setError] = useState(null);
+  const { clearCart } = useCart();
 
   useEffect(() => {
     if (sessionId) {
@@ -19,7 +21,10 @@ const Success = () => {
   const verifyPayment = async () => {
     try {
       const res = await verifyStripeSession(sessionId);
-      setVerified(res.data.status === 'Paid');
+      if (res.data.status === 'Paid') {
+        setVerified(true);
+        clearCart(); // Clear cart only after payment is confirmed
+      }
     } catch (err) {
       setError('Could not verify payment status');
     } finally {

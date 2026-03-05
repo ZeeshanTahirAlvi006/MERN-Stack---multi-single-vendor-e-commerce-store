@@ -6,7 +6,6 @@ import {
     getAllOrders,
     getOrderById,
     updateOrderStatus,
-    retryPayment,
     verifyStripeSession,
 } from '../controllers/orderController.js';
 import { protectRole } from '../middleware/authMiddleware.js';
@@ -28,6 +27,6 @@ router.post('/', protectRole, authorizeRoles('customer', 'vendor'), placeOrder);
 // Parameterized routes
 router.get('/:id', protectRole, getOrderById);
 router.put('/:id/status', protectRole, authorizeRoles('vendor', 'admin'), updateOrderStatus);
-router.post('/:id/retry-payment', protectRole, authorizeRoles('customer', 'vendor'), retryPayment);
+
 
 export default router;

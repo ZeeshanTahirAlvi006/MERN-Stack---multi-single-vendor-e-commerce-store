@@ -65,7 +65,7 @@ export const placeOrder = async (userId, { items, shippingAddress, paymentMethod
         items: orderItems,
         shippingAddress,
         paymentMethod,
-        status: 'Pending',
+        status: isStripe ? 'Awaiting Payment' : 'Pending',
         total: 0,
     });
 
@@ -102,61 +102,7 @@ export const placeOrder = async (userId, { items, shippingAddress, paymentMethod
     return order;
 };
 
-export const retryPayment = async (orderId, userId) => {
-    const order = await Order.findById(orderId);
 
-    if (!order) {
-        const error = new Error('Order not found');
-        error.statusCode = 404;
-        throw error;
-    }
-
-    if (order.customerId.toString() !== userId.toString()) {
-        const error = new Error('Not authorized');
-        error.statusCode = 403;
-        throw error;
-    }
-
-    if (order.status !== 'Pending') {
-        const error = new Error('Only pending orders can retry payment');
-        error.statusCode = 400;
-        throw error;
-    }
-
-    if (order.paymentMethod !== 'Card (Stripe)') {
-        const error = new Error('Retry is only available for card payments');
-        error.statusCode = 400;
-        throw error;
-    }
-
-    const lineItems = order.items.map((item) => ({
-        price_data: {
-            currency: 'pkr',
-            product_data: {
-                name: item.name,
-            },
-            unit_amount: item.price * 100,
-        },
-        quantity: item.qty,
-    }));
-
-    const stripe = getStripe();
-    const session = await stripe.checkout.sessions.create({
-        payment_method_types: ['card'],
-        line_items: lineItems,
-        mode: 'payment',
-        success_url: `${process.env.FRONTEND_URL || 'http://localhost:5173'}/success?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${process.env.FRONTEND_URL || 'http://localhost:5173'}/orders`,
-        metadata: {
-            orderId: order._id.toString(),
-        },
-    });
-
-    order.stripeSessionId = session.id;
-    await order.save();
-
-    return { stripeUrl: session.url };
-};
 
 export const verifyStripeSession = async (sessionId, userId) => {
     const stripe = getStripe();
@@ -189,7 +135,7 @@ export const verifyStripeSession = async (sessionId, userId) => {
     }
 
     // If payment was successful and order is still Pending, update it
-    if (session.payment_status === 'paid' && order.status === 'Pending') {
+    if (session.payment_status === 'paid' && order.status === 'Awaiting Payment') {
         for (const item of order.items) {
             const product = await Product.findById(item.productId);
             if (product) {
@@ -206,7 +152,7 @@ export const verifyStripeSession = async (sessionId, userId) => {
 };
 
 export const getMyOrders = async (userId) => {
-    return await Order.find({ customerId: userId })
+    return await Order.find({ customerId: userId, status: { $ne: 'Awaiting Payment' } })
         .sort({ createdAt: -1 });
 };
 
@@ -310,7 +256,7 @@ export const processStripeWebhook = async (rawBody, signature, webhookSecret) =>
             console.log('📦 Order found:', !!order);
             console.log('📦 Order status:', order?.status);
             console.log('📦 Order paymentMethod:', order?.paymentMethod);
-            if (order && order.status === 'Pending') {
+            if (order && order.status === 'Awaiting Payment') {
                 // Payment succeeded — now deduct stock
                 for (const item of order.items) {
                     const product = await Product.findById(item.productId);
@@ -336,7 +282,7 @@ export const processStripeWebhook = async (rawBody, signature, webhookSecret) =>
 
         if (orderId) {
             const order = await Order.findById(orderId);
-            if (order && order.status === 'Pending') {
+            if (order && order.status === 'Awaiting Payment') {
                 order.status = 'Cancelled';
                 await order.save();
             }

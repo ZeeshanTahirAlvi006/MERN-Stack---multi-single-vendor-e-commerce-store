@@ -71,8 +71,6 @@ export const getOrderById = (id) =>
 export const updateOrderStatus = (id, status) =>
   API.put(`/orders/${id}/status`, { status });
 
-export const retryOrderPayment = (id) =>
-  API.post(`/orders/${id}/retry-payment`);
 
 export const verifyStripeSession = (sessionId) =>
   API.get(`/orders/verify-session?session_id=${sessionId}`);

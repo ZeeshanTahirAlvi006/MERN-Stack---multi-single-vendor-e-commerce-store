@@ -55,14 +55,7 @@ export const updateOrderStatus = async (req, res) => {
     }
 };
 
-export const retryPayment = async (req, res) => {
-    try {
-        const result = await orderService.retryPayment(req.params.id, req.user._id);
-        res.json(result);
-    } catch (error) {
-        res.status(error.statusCode || 400).json({ message: error.message });
-    }
-};
+
 
 export const verifyStripeSession = async (req, res) => {
     try {
