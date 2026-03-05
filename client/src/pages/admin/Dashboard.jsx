@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { getAdminStats } from '../../api/api';
 import { toast } from 'react-toastify';
 import { FiUsers, FiPackage, FiShoppingBag, FiDollarSign } from 'react-icons/fi';
