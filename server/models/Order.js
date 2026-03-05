@@ -92,7 +92,7 @@ export const OrderSchema = new mongoose.Schema({
         default:0,
     },status:{
         type:String,
-        enum:["Awaiting Payment","Pending","Paid","Shipped","Delivered","Cancelled"]
+        enum:["Pending","Paid","Shipped","Delivered","Cancelled"]
     },paidAt:{
         type:Date,
         validate:{

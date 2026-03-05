@@ -50,26 +50,8 @@ export const placeOrder = async (userId, { items, shippingAddress, paymentMethod
 
     const isStripe = paymentMethod === 'Card (Stripe)';
 
-    // For Stripe: don't deduct stock yet — wait for payment confirmation
-    // For COD: deduct stock immediately
-    if (!isStripe) {
-        for (const item of items) {
-            const product = await Product.findById(item.productId);
-            product.stock -= item.qty;
-            await product.save();
-        }
-    }
-
-    const order = await Order.create({
-        customerId: userId,
-        items: orderItems,
-        shippingAddress,
-        paymentMethod,
-        status: isStripe ? 'Awaiting Payment' : 'Pending',
-        total: 0,
-    });
-
     if (isStripe) {
+        // For Stripe: DON'T create order yet — create it only after payment confirmed
         const lineItems = orderItems.map((item) => ({
             price_data: {
                 currency: 'pkr',
@@ -89,20 +71,84 @@ export const placeOrder = async (userId, { items, shippingAddress, paymentMethod
             success_url: `${process.env.FRONTEND_URL || 'http://localhost:5173'}/success?session_id={CHECKOUT_SESSION_ID}`,
             cancel_url: `${process.env.FRONTEND_URL || 'http://localhost:5173'}/cart`,
             metadata: {
-                orderId: order._id.toString(),
+                customerId: userId.toString(),
+                // Store compact item data: "productId:qty,productId:qty" to avoid 500-char limit
+                items: orderItems.map(i => `${i.productId}:${i.qty}`).join(','),
+                shippingAddress: JSON.stringify(shippingAddress),
+                paymentMethod,
             },
         });
 
-        order.stripeSessionId = session.id;
-        await order.save();
-
-        return { ...order.toObject(), stripeUrl: session.url };
+        return { stripeUrl: session.url };
     }
+
+    // COD: deduct stock and create order immediately
+    for (const item of items) {
+        const product = await Product.findById(item.productId);
+        product.stock -= item.qty;
+        await product.save();
+    }
+
+    const order = await Order.create({
+        customerId: userId,
+        items: orderItems,
+        shippingAddress,
+        paymentMethod,
+        status: 'Pending',
+        total: 0,
+    });
 
     return order;
 };
 
 
+
+// Helper: create order from Stripe session metadata after payment confirmed
+const createOrderFromStripeSession = async (session) => {
+    // Check if order already exists for this session (prevent duplicates)
+    const existing = await Order.findOne({ stripeSessionId: session.id });
+    if (existing) return existing;
+
+    const customerId = session.metadata.customerId;
+    const shippingAddress = JSON.parse(session.metadata.shippingAddress);
+    const paymentMethod = session.metadata.paymentMethod;
+
+    // Parse compact items format: "productId:qty,productId:qty"
+    const itemEntries = session.metadata.items.split(',').map(entry => {
+        const [productId, qty] = entry.split(':');
+        return { productId, qty: Number(qty) };
+    });
+
+    // Re-fetch product details from DB and deduct stock
+    const orderItems = [];
+    for (const entry of itemEntries) {
+        const product = await Product.findById(entry.productId);
+        if (product) {
+            product.stock -= entry.qty;
+            await product.save();
+            orderItems.push({
+                productId: product._id,
+                name: product.name,
+                qty: entry.qty,
+                price: product.price,
+                vendorId: product.vendorid,
+            });
+        }
+    }
+
+    const order = await Order.create({
+        customerId,
+        items: orderItems,
+        shippingAddress,
+        paymentMethod,
+        status: 'Paid',
+        paidAt: new Date(),
+        stripeSessionId: session.id,
+        total: 0,
+    });
+
+    return order;
+};
 
 export const verifyStripeSession = async (sessionId, userId) => {
     const stripe = getStripe();
@@ -114,45 +160,22 @@ export const verifyStripeSession = async (sessionId, userId) => {
         throw error;
     }
 
-    const orderId = session.metadata?.orderId;
-    if (!orderId) {
-        const error = new Error('No order associated with this session');
-        error.statusCode = 400;
-        throw error;
-    }
-
-    const order = await Order.findById(orderId);
-    if (!order) {
-        const error = new Error('Order not found');
-        error.statusCode = 404;
-        throw error;
-    }
-
-    if (order.customerId.toString() !== userId.toString()) {
+    if (session.metadata?.customerId !== userId.toString()) {
         const error = new Error('Not authorized');
         error.statusCode = 403;
         throw error;
     }
 
-    // If payment was successful and order is still Pending, update it
-    if (session.payment_status === 'paid' && order.status === 'Awaiting Payment') {
-        for (const item of order.items) {
-            const product = await Product.findById(item.productId);
-            if (product) {
-                product.stock -= item.qty;
-                await product.save();
-            }
-        }
-        order.status = 'Paid';
-        order.paidAt = new Date();
-        await order.save();
+    if (session.payment_status === 'paid') {
+        const order = await createOrderFromStripeSession(session);
+        return { status: order.status, orderId: order._id };
     }
 
-    return { status: order.status, orderId: order._id };
+    return { status: 'unpaid' };
 };
 
 export const getMyOrders = async (userId) => {
-    return await Order.find({ customerId: userId, status: { $ne: 'Awaiting Payment' } })
+    return await Order.find({ customerId: userId })
         .sort({ createdAt: -1 });
 };
 
@@ -247,45 +270,13 @@ export const processStripeWebhook = async (rawBody, signature, webhookSecret) =>
 
     if (event.type === 'checkout.session.completed') {
         const session = event.data.object;
-        const orderId = session.metadata?.orderId;
         console.log('📦 Event: checkout.session.completed');
-        console.log('📦 orderId from metadata:', orderId);
 
-        if (orderId) {
-            const order = await Order.findById(orderId);
-            console.log('📦 Order found:', !!order);
-            console.log('📦 Order status:', order?.status);
-            console.log('📦 Order paymentMethod:', order?.paymentMethod);
-            if (order && order.status === 'Awaiting Payment') {
-                // Payment succeeded — now deduct stock
-                for (const item of order.items) {
-                    const product = await Product.findById(item.productId);
-                    if (product) {
-                        product.stock -= item.qty;
-                        await product.save();
-                    }
-                }
-                order.status = 'Paid';
-                order.paidAt = new Date();
-                await order.save();
-                console.log('✅ Order updated to Paid');
-            }
+        if (session.payment_status === 'paid' && session.metadata?.customerId) {
+            const order = await createOrderFromStripeSession(session);
+            console.log('✅ Order created as Paid:', order._id);
         } else {
-            console.log('⚠️ No orderId in session metadata');
-        }
-    }
-
-    // Handle expired/failed checkout sessions
-    if (event.type === 'checkout.session.expired') {
-        const session = event.data.object;
-        const orderId = session.metadata?.orderId;
-
-        if (orderId) {
-            const order = await Order.findById(orderId);
-            if (order && order.status === 'Awaiting Payment') {
-                order.status = 'Cancelled';
-                await order.save();
-            }
+            console.log('⚠️ Session not paid or missing metadata');
         }
     }
 };
