@@ -75,7 +75,7 @@ const Navbar = () => {
   const dropdownLinkClass = "block px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 hover:text-[var(--accent)] transition-colors";
 
   return (
-    <nav className="bg-white border-b border-gray-100 sticky top-0 z-50">
+    <nav className="bg-[#F6F6EE] border-b border-gray-100 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
           {/* Logo */}
