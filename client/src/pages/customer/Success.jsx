@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { FiCheckCircle, FiAlertCircle, FiShoppingBag, FiArrowRight } from 'react-icons/fi';
+import { FiCheckCircle, FiAlertCircle, FiShoppingBag, FiArrowRight, FiPackage } from 'react-icons/fi';
 import { verifyStripeSession } from '../../api/api';
 import useCart from '../../hooks/useCart';
 import { toast } from 'react-toastify';
