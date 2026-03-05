@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { getProducts, deleteProduct } from '../../api/api';
 import { toast } from 'react-toastify';
 import { FiTrash2, FiImage, FiSearch } from 'react-icons/fi';
+import Loader from '../../components/common/Loader';
 
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -71,7 +72,7 @@ const Products = () => {
               {loading ? (
                 <tr>
                   <td colSpan="5" className="p-8 text-center text-slate-500">
-                    <span className="w-6 h-6 border-2 border-red-800/30 border-t-red-600 rounded-full animate-spin inline-block mx-auto mb-2" />
+                    <Loader className="w-8 h-8 text-red-600 mx-auto mb-2" />
                     <p className="text-sm font-light">Scanning the void...</p>
                   </td>
                 </tr>

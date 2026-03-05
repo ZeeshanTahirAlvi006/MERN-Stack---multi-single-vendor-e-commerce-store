@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { getAdminStats } from '../../api/api';
 import { toast } from 'react-toastify';
 import { FiUsers, FiPackage, FiShoppingBag, FiDollarSign } from 'react-icons/fi';
+import Loader from '../../components/common/Loader';
 
 const AdminDashboard = () => {
   const [stats, setStats] = useState(null);
@@ -28,7 +29,7 @@ const AdminDashboard = () => {
   if (loading) {
     return (
       <div className="min-h-[calc(100vh-4rem)] bg-slate-950 flex items-center justify-center">
-        <div className="w-8 h-8 border-3 border-red-800/30 border-t-red-600 rounded-full animate-spin" />
+        <Loader className="w-8 h-8 text-red-600" />
       </div>
     );
   }

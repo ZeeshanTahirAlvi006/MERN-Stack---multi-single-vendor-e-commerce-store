@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { FiCheckCircle, FiPackage, FiArrowRight, FiAlertCircle } from 'react-icons/fi';
+import { FiCheckCircle, FiAlertCircle, FiShoppingBag, FiArrowRight } from 'react-icons/fi';
 import { verifyStripeSession } from '../../api/api';
 import useCart from '../../hooks/useCart';
+import { toast } from 'react-toastify';
+import Loader from '../../components/common/Loader';
 
 const Success = () => {
   const [searchParams] = useSearchParams();
@@ -44,7 +46,7 @@ const Success = () => {
         {verifying ? (
           <>
             <div className="w-16 h-16 bg-gray-50 rounded-full flex items-center justify-center mx-auto mb-6">
-              <div className="w-8 h-8 border-3 border-gray-200 border-t-[var(--accent)] rounded-full animate-spin" />
+              <Loader className="w-8 h-8 text-[var(--accent)]" />
             </div>
             <h1 className="text-2xl font-bold text-gray-900 mb-2">Verifying Payment...</h1>
             <p className="text-gray-500 text-sm">Please wait while we confirm your payment.</p>

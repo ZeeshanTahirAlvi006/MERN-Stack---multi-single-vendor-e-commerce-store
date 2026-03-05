@@ -3,6 +3,7 @@ import { getVendorSales, updateOrderStatus } from '../../api/api';
 import { toast } from 'react-toastify';
 import { FiTrendingUp, FiPackage, FiClock, FiCheckCircle, FiTruck, FiXCircle } from 'react-icons/fi';
 import { format } from 'date-fns';
+import Loader from '../../components/common/Loader';
 
 const Sales = () => {
   const [orders, setOrders] = useState([]);
@@ -65,7 +66,7 @@ const Sales = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center">
-        <div className="w-8 h-8 border-3 border-blue-800/30 border-t-blue-800 rounded-full animate-spin" />
+        <Loader className="w-8 h-8 text-blue-800" />
       </div>
     );
   }

@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { getVendorProducts, deleteProduct } from '../../api/api';
 import { toast } from 'react-toastify';
 import { FiPlus, FiTrash2, FiEdit2, FiPackage, FiImage } from 'react-icons/fi';
+import Loader from '../../components/common/Loader';
 
 const MyProducts = () => {
   const [products, setProducts] = useState([]);
@@ -41,7 +42,7 @@ const MyProducts = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center">
-        <div className="w-8 h-8 border-3 border-blue-800/30 border-t-blue-800 rounded-full animate-spin" />
+        <Loader className="w-8 h-8 text-blue-800" />
       </div>
     );
   }

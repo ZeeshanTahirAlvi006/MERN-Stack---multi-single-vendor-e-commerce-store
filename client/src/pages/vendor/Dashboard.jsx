@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { getVendorDashboard, getVendorProducts, deleteProduct } from '../../api/api';
 import { toast } from 'react-toastify';
+import Loader from '../../components/common/Loader';
 import {
   FiDollarSign,
   FiTrendingUp,
@@ -61,7 +62,7 @@ const Dashboard = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-bleed-void flex items-center justify-center relative crt-overlay">
-        <div className="w-8 h-8 border-3 border-bleed-amber/30 border-t-bleed-amber rounded-full animate-spin theme-glitch" />
+        <Loader className="w-8 h-8 text-bleed-amber theme-glitch" />
       </div>
     );
   }

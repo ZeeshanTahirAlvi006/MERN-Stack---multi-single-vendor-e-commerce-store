@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { getAllOrders } from '../../api/api';
 import { toast } from 'react-toastify';
 import { FiPackage, FiCalendar } from 'react-icons/fi';
+import Loader from '../../components/common/Loader';
 
 const Orders = () => {
   const [orders, setOrders] = useState([]);
@@ -36,7 +37,7 @@ const Orders = () => {
   if (loading) {
     return (
       <div className="min-h-[calc(100vh-4rem)] flex items-center justify-center bg-slate-950">
-        <div className="w-8 h-8 border-3 border-red-800/30 border-t-red-600 rounded-full animate-spin" />
+        <Loader className="w-8 h-8 text-red-600" />
       </div>
     );
   }

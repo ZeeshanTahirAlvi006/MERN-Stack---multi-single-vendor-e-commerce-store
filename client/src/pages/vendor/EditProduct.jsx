@@ -3,6 +3,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { getProductById, updateProduct } from '../../api/api';
 import { FiSave, FiImage, FiUploadCloud, FiX } from 'react-icons/fi';
+import Loader from '../../components/common/Loader';
 
 const EditProduct = () => {
   const { id } = useParams();
@@ -120,7 +121,7 @@ const EditProduct = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-slate-50 flex items-center justify-center pt-24">
-        <div className="w-8 h-8 border-3 border-blue-800/30 border-t-blue-800 rounded-full animate-spin" />
+        <Loader className="w-8 h-8 text-blue-800" />
       </div>
     );
   }
