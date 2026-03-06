@@ -1,49 +1,15 @@
-import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import useCart from '../../hooks/useCart';
-import { placeOrder } from '../../api/api';
 import { useSelector } from 'react-redux';
-import { toast } from 'react-toastify';
 import { FiTrash2, FiMinus, FiPlus, FiArrowLeft, FiShoppingBag } from 'react-icons/fi';
 
 const Cart = () => {
-  const { items, removeFromCart, updateQty, clearCart, subtotal } = useCart();
+  const { items, removeFromCart, updateQty, subtotal } = useCart();
   const { userInfo } = useSelector((state) => state.auth);
   const navigate = useNavigate();
-  const [showCheckout, setShowCheckout] = useState(false);
-  const [address, setAddress] = useState({ name: '', street: '', city: '', state: '', zip: '', country: '' });
-  const [paymentMethod, setPaymentMethod] = useState('Cash on Delivery');
-  const [placing, setPlacing] = useState(false);
 
   const formatCurrency = (n) =>
     `Rs. ${(n || 0).toLocaleString('en-PK', { minimumFractionDigits: 0 })}`;
-
-  const handlePlaceOrder = async () => {
-    if (!address.name || !address.street || !address.city || !address.country) {
-      return toast.error('Please fill in all required address fields');
-    }
-    setPlacing(true);
-    try {
-      const res = await placeOrder({
-        items: items.map((i) => ({ productId: i.productId, qty: i.qty, price: i.price })),
-        shippingAddress: address,
-        paymentMethod,
-        total: subtotal,
-      });
-      if (res.data.stripeUrl) {
-        // Stripe payment — redirect to Stripe checkout (cart stays until payment confirmed)
-        window.location.href = res.data.stripeUrl;
-      } else {
-        // COD — clear cart and go to success page
-        clearCart();
-        navigate('/success');
-      }
-    } catch (error) {
-      toast.error(error.response?.data?.message || 'Order failed');
-    } finally {
-      setPlacing(false);
-    }
-  };
 
   if (items.length === 0) {
     return (
@@ -72,30 +38,36 @@ const Cart = () => {
           {/* Cart Items */}
           <div className="lg:col-span-2 space-y-4">
             {items.map((item) => (
-              <div key={item.productId} className="bg-white rounded-xl p-4 flex items-center gap-4 shadow-sm">
-                <img
-                  src={item.image || 'https://placehold.co/80x80/f5f7f9/999?text=?'}
-                  alt={item.name}
-                  className="w-20 h-20 object-cover rounded-lg flex-shrink-0"
-                />
-                <div className="flex-1 min-w-0">
-                  <h3 className="text-sm font-semibold text-gray-900 truncate">{item.name}</h3>
-                  <p className="text-sm font-bold text-[var(--accent)] mt-1">{formatCurrency(item.price)}</p>
+              <div key={item.productId} className="bg-white rounded-xl p-4 flex flex-col sm:flex-row items-start sm:items-center gap-4 shadow-sm">
+                {/* Image and basic info */}
+                <div className="flex items-center gap-4 w-full sm:w-auto">
+                  <img
+                    src={item.image || 'https://placehold.co/80x80/f5f7f9/999?text=?'}
+                    alt={item.name}
+                    className="w-20 h-20 object-cover rounded-lg flex-shrink-0"
+                  />
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-sm font-semibold text-gray-900 truncate">{item.name}</h3>
+                    <p className="text-sm font-bold text-[var(--accent)] mt-1">{formatCurrency(item.price)}</p>
+                  </div>
                 </div>
 
-                <div className="flex items-center border border-gray-200 rounded-lg">
-                  <button onClick={() => updateQty(item.productId, item.qty - 1)} className="p-2 hover:bg-gray-50 cursor-pointer bg-white border-none">
-                    <FiMinus size={12} />
-                  </button>
-                  <span className="px-3 text-sm font-semibold border-x border-gray-200">{item.qty}</span>
-                  <button onClick={() => updateQty(item.productId, item.qty + 1)} className="p-2 hover:bg-gray-50 cursor-pointer bg-white border-none">
-                    <FiPlus size={12} />
+                {/* Controls */}
+                <div className="flex items-center justify-between w-full sm:w-auto sm:ml-auto gap-4 mt-2 sm:mt-0 pt-2 sm:pt-0 border-t border-gray-100 sm:border-0">
+                  <div className="flex items-center border border-gray-200 rounded-lg">
+                    <button onClick={() => updateQty(item.productId, item.qty - 1)} className="p-2 hover:bg-gray-50 cursor-pointer bg-white border-none">
+                      <FiMinus size={12} />
+                    </button>
+                    <span className="px-3 text-sm font-semibold border-x border-gray-200">{item.qty}</span>
+                    <button onClick={() => updateQty(item.productId, item.qty + 1)} className="p-2 hover:bg-gray-50 cursor-pointer bg-white border-none">
+                      <FiPlus size={12} />
+                    </button>
+                  </div>
+
+                  <button onClick={() => removeFromCart(item.productId)} className="p-2 text-gray-400 hover:text-red-500 transition-colors cursor-pointer bg-transparent border-none">
+                    <FiTrash2 size={16} />
                   </button>
                 </div>
-
-                <button onClick={() => removeFromCart(item.productId)} className="p-2 text-gray-400 hover:text-red-500 transition-colors cursor-pointer bg-transparent border-none">
-                  <FiTrash2 size={16} />
-                </button>
               </div>
             ))}
           </div>
@@ -118,54 +90,15 @@ const Cart = () => {
               </div>
             </div>
 
-            {!showCheckout ? (
-              <button
-                onClick={() => {
-                  if (!userInfo) return navigate('/auth/login');
-                  setShowCheckout(true);
-                }}
-                className="w-full py-3 bg-[var(--accent)] text-white font-semibold rounded-lg hover:bg-[var(--accent-hover)] transition-colors cursor-pointer border-none text-sm"
-              >
-                Proceed to Checkout
-              </button>
-            ) : (
-              <div className="flex flex-col gap-3">
-                <h4 className="text-sm font-semibold text-gray-900">Shipping Address</h4>
-                {['name', 'street', 'city', 'state', 'zip', 'country'].map((field) => (
-                  <input
-                    key={field}
-                    placeholder={`${field.charAt(0).toUpperCase() + field.slice(1)}${field === 'zip' || field === 'state' ? ' (optional)' : ''}`}
-                    value={address[field]}
-                    onChange={(e) => setAddress({ ...address, [field]: e.target.value })}
-                    className="w-full h-10 px-3 border border-gray-200 bg-white text-sm text-gray-900 placeholder:text-gray-400 outline-none focus:border-[var(--accent)] rounded-lg transition-colors"
-                  />
-                ))}
-
-                <h4 className="text-sm font-semibold text-gray-900 mt-2">Payment Method</h4>
-                <select
-                  value={paymentMethod}
-                  onChange={(e) => setPaymentMethod(e.target.value)}
-                  className="w-full h-10 px-3 border border-gray-200 bg-white text-sm text-gray-900 outline-none focus:border-[var(--accent)] rounded-lg cursor-pointer appearance-none transition-colors"
-                >
-                  <option>Cash on Delivery</option>
-                  <option>Card (Stripe)</option>
-                </select>
-
-                <button
-                  onClick={handlePlaceOrder}
-                  disabled={placing}
-                  className="w-full py-3 bg-[var(--accent)] text-white font-semibold rounded-lg hover:bg-[var(--accent-hover)] transition-colors cursor-pointer border-none text-sm mt-2 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  {placing ? 'Placing Order...' : 'Place Order'}
-                </button>
-                <button
-                  onClick={() => setShowCheckout(false)}
-                  className="w-full py-2 text-sm text-gray-500 hover:text-gray-700 transition-colors cursor-pointer bg-transparent border-none"
-                >
-                  ← Back to cart
-                </button>
-              </div>
-            )}
+            <button
+              onClick={() => {
+                if (!userInfo) return navigate('/auth/login');
+                navigate('/checkout');
+              }}
+              className="w-full py-3 bg-[var(--accent)] text-white font-semibold rounded-lg hover:bg-[var(--accent-hover)] transition-colors cursor-pointer border-none text-sm shadow-[0_2px_10px_rgba(16,185,129,0.2)]"
+            >
+              Proceed to Checkout
+            </button>
           </div>
         </div>
       </div>

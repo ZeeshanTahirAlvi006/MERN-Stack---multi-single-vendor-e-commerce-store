@@ -154,6 +154,7 @@ const Navbar = () => {
           {/* Desktop Navigation */}
           <div className="hidden sm:flex items-center space-x-5">
             <Link to="/" className={linkClass}>Home</Link>
+            <Link to="/products" className={linkClass}>Products</Link>
             
             <Link to="/cart" className="relative text-gray-600 hover:text-[var(--accent)] transition-colors p-2 rounded-full hover:bg-gray-50">
               <ShoppingCart size={22} weight="regular" />
@@ -236,15 +237,18 @@ const Navbar = () => {
               placeholder="Search..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-4 pr-10 py-3 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-900 placeholder:text-gray-400 outline-none focus:border-[var(--accent)] transition-all"
+              className="w-full pl-4 pr-10 py-2.5 bg-gray-50 border border-gray-200 rounded-lg text-sm text-gray-900 placeholder:text-gray-400 outline-none focus:border-[var(--accent)] transition-all"
             />
-            <button type="submit" className="absolute right-3 top-3 text-gray-400 hover:text-[var(--accent)] bg-transparent border-none cursor-pointer">
+            <button type="submit" className="absolute right-3 top-2.5 text-gray-400 hover:text-[var(--accent)] bg-transparent border-none cursor-pointer">
               <MagnifyingGlass size={20} weight="bold" />
             </button>
           </form>
 
           <Link to="/" onClick={() => setIsMenuOpen(false)} className="block px-4 py-3 text-sm font-medium text-gray-700 hover:text-[var(--accent)] hover:bg-gray-50 rounded-lg transition-colors">
             Home
+          </Link>
+          <Link to="/products" onClick={() => setIsMenuOpen(false)} className="block px-4 py-3 text-sm font-medium text-gray-700 hover:text-[var(--accent)] hover:bg-gray-50 rounded-lg transition-colors">
+            Products
           </Link>
           <Link to="/cart" onClick={() => setIsMenuOpen(false)} className="flex justify-between items-center px-4 py-3 text-sm font-medium text-gray-700 hover:text-[var(--accent)] hover:bg-gray-50 rounded-lg transition-colors">
             <span>Cart</span>

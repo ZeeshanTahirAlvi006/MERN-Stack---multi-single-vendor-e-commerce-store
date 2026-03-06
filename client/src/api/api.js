@@ -55,6 +55,12 @@ export const getVendorDashboard = () =>
 export const getVendorSales = () =>
   API.get('/vendors/sales');
 
+export const getVendors = () =>
+  API.get('/vendors');
+
+export const getVendorProfile = (id) =>
+  API.get(`/vendors/${id}`);
+
 // ─── Orders ───
 export const placeOrder = (orderData) =>
   API.post('/orders', orderData);

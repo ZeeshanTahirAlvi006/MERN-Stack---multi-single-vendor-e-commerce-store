@@ -1,10 +1,16 @@
 import Product from '../models/Product.js';
 
-export const getAllProducts = async ({ category, search, page = 1, limit = 12 }) => {
+export const getAllProducts = async ({ category, search, priceMin, priceMax, page = 1, limit = 12 }) => {
     const query = { isActive: true };
 
     if (category) query.category = category;
     if (search) query.name = { $regex: search, $options: 'i' };
+    
+    if (priceMin !== undefined || priceMax !== undefined) {
+        query.price = {};
+        if (priceMin !== undefined && priceMin !== '') query.price.$gte = Number(priceMin);
+        if (priceMax !== undefined && priceMax !== '') query.price.$lte = Number(priceMax);
+    }
 
     const skip = (Number(page) - 1) * Number(limit);
     const total = await Product.countDocuments(query);

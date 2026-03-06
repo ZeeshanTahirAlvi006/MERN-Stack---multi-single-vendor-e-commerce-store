@@ -86,16 +86,16 @@ const Home = () => {
             <p className="text-sm font-bold text-[var(--accent)] uppercase tracking-[0.2em] m-0">New Collection 2025</p>
           </div>
           
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-extrabold text-[#F6F6EE] mb-8 leading-tight max-w-4xl tracking-tight">
+          <h1 className="text-3xl sm:text-4xl md:text-6xl lg:text-7xl font-extrabold text-[#F6F6EE] mb-6 md:mb-8 leading-tight max-w-4xl tracking-tight px-2">
             Discover Premium Products
           </h1>
           
-          <p className="text-gray-300 text-lg md:text-xl mb-10 max-w-2xl font-light leading-relaxed">
+          <p className="text-gray-300 text-base sm:text-lg md:text-xl mb-8 md:mb-10 max-w-2xl font-light leading-relaxed px-4">
             Shop the latest trends with unbeatable prices and free shipping on your first order.
           </p>
           
-          <div className="flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-            <a href="#products" className="px-8 py-4 bg-[var(--accent)] text-white font-semibold rounded-xl hover:bg-[var(--accent-hover)] hover:scale-105 transition-all shadow-[0_0_20px_rgba(16,185,129,0.3)] no-underline text-base text-center">
+          <div className="flex flex-col sm:flex-row gap-3 md:gap-4 w-full sm:w-auto px-4 sm:px-0">
+            <a href="#products" className="px-6 md:px-8 py-3 md:py-4 bg-[var(--accent)] text-white font-semibold rounded-xl hover:bg-[var(--accent-hover)] hover:scale-105 transition-all shadow-[0_0_20px_rgba(16,185,129,0.3)] no-underline text-sm md:text-base text-center w-full sm:w-auto">
               Shop Now
             </a>
             <a href="#categories" className="px-8 py-4 bg-transparent border-2 border-slate-500 text-slate-300 font-semibold rounded-xl hover:bg-slate-800 hover:border-slate-400 hover:text-white transition-all no-underline text-base text-center">
@@ -144,7 +144,7 @@ const Home = () => {
           </div>
         ) : (
           <>
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
               {products.map((product) => (
                 <ProductCard key={product._id} product={product} />
               ))}

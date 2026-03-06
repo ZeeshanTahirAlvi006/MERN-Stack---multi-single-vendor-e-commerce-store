@@ -2,8 +2,11 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './pages/auth/Login';
 import Register from './pages/auth/Register';
 import Home from './pages/customer/Home';
+import Products from './pages/customer/Products';
 import ProductDetail from './pages/customer/ProductDetail';
+import VendorProfile from './pages/customer/VendorProfile';
 import Cart from './pages/customer/Cart';
+import Checkout from './pages/customer/Checkout';
 import Success from './pages/customer/Success';
 import Orders from './pages/customer/Orders';
 import Profile from './pages/customer/Profile';
@@ -31,12 +34,15 @@ function App() {
           <Routes>
             {/* Public routes */}
             <Route path="/" element={<Home />} />
+            <Route path="/products" element={<Products />} />
             <Route path="/products/:id" element={<ProductDetail />} />
+            <Route path="/vendors/:id" element={<VendorProfile />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/auth/login" element={<Login />} />
             <Route path="/auth/register" element={<Register />} />
 
             {/* Customer Protected Routes */}
+            <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
             <Route path="/success" element={<ProtectedRoute><Success /></ProtectedRoute>} />
             <Route path="/orders" element={<ProtectedRoute><Orders /></ProtectedRoute>} />
             <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />

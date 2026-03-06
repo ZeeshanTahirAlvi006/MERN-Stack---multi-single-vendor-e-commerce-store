@@ -71,12 +71,12 @@ const ProductDetail = () => {
               />
             </div>
             {product.images?.length > 1 && (
-              <div className="flex gap-3">
+              <div className="flex gap-3 overflow-x-auto pb-2 snap-x scrollbar-hide">
                 {product.images.map((img, idx) => (
                   <button
                     key={idx}
                     onClick={() => setSelectedImage(idx)}
-                    className={`w-20 h-20 rounded-lg overflow-hidden border-2 transition-all cursor-pointer ${
+                    className={`w-20 h-20 flex-shrink-0 snap-start rounded-lg overflow-hidden border-2 transition-all cursor-pointer ${
                       selectedImage === idx ? 'border-[var(--accent)]' : 'border-transparent hover:border-gray-300'
                     }`}
                   >
@@ -112,18 +112,18 @@ const ProductDetail = () => {
 
             {/* Quantity + Add to Cart */}
             {inStock && (
-              <div className="flex items-center gap-4 mt-auto">
-                <div className="flex items-center border border-gray-200 rounded-lg overflow-hidden">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 mt-auto">
+                <div className="flex items-center justify-between sm:justify-center border border-gray-200 rounded-lg overflow-hidden shrink-0">
                   <button
                     onClick={() => setQty(Math.max(1, qty - 1))}
-                    className="p-3 hover:bg-gray-50 transition-colors cursor-pointer bg-white border-none"
+                    className="p-3 px-5 sm:px-3 hover:bg-gray-50 transition-colors cursor-pointer bg-white border-none"
                   >
                     <FiMinus size={14} />
                   </button>
                   <span className="px-5 py-3 text-sm font-semibold min-w-[50px] text-center border-x border-gray-200">{qty}</span>
                   <button
                     onClick={() => setQty(Math.min(product.stock, qty + 1))}
-                    className="p-3 hover:bg-gray-50 transition-colors cursor-pointer bg-white border-none"
+                    className="p-3 px-5 sm:px-3 hover:bg-gray-50 transition-colors cursor-pointer bg-white border-none"
                   >
                     <FiPlus size={14} />
                   </button>
@@ -131,7 +131,7 @@ const ProductDetail = () => {
 
                 <button
                   onClick={handleAddToCart}
-                  className="flex-1 flex items-center justify-center gap-2 px-8 py-3 bg-[var(--accent)] text-white font-semibold rounded-lg hover:bg-[var(--accent-hover)] transition-colors cursor-pointer border-none text-sm"
+                  className="flex-1 w-full sm:w-auto flex items-center justify-center gap-2 px-8 py-3 bg-[var(--accent)] text-white font-semibold rounded-lg hover:bg-[var(--accent-hover)] transition-colors cursor-pointer border-none text-sm"
                 >
                   <FiShoppingCart size={18} /> Add to Cart
                 </button>
