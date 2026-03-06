@@ -15,7 +15,7 @@ export const getAllProducts = async ({ category, search, priceMin, priceMax, pag
     const skip = (Number(page) - 1) * Number(limit);
     const total = await Product.countDocuments(query);
     const products = await Product.find(query)
-        .populate('vendorid', 'name email')
+        .populate('vendorid', 'name storeInfo.name')
         .sort({ createdAt: -1 })
         .skip(skip)
         .limit(Number(limit));
@@ -23,7 +23,7 @@ export const getAllProducts = async ({ category, search, priceMin, priceMax, pag
     return {
         products,
         page: Number(page),
-        pages: Math.ceil(total / Number(limit)),
+        totalPages: Math.ceil(total / Number(limit)),
         total,
     };
 };
