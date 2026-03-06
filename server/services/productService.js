@@ -6,7 +6,7 @@ export const getAllProducts = async ({ category, search, priceMin, priceMax, pag
     if (category) query.category = category;
     if (search) query.name = { $regex: search, $options: 'i' };
     
-    if (priceMin !== undefined || priceMax !== undefined) {
+    if ((priceMin !== undefined && priceMin !== '') || (priceMax !== undefined && priceMax !== '')) {
         query.price = {};
         if (priceMin !== undefined && priceMin !== '') query.price.$gte = Number(priceMin);
         if (priceMax !== undefined && priceMax !== '') query.price.$lte = Number(priceMax);
