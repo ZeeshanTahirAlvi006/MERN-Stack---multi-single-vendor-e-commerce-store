@@ -55,6 +55,10 @@ const EditProduct = () => {
 
   const handleImageChange = (e) => {
     const files = Array.from(e.target.files);
+    if (existingImages.length + newImages.length + files.length > 3) {
+      return toast.error('You can only upload a maximum of 3 images');
+    }
+
     setNewImages((prev) => [...prev, ...files]);
 
     const urls = files.map((file) => URL.createObjectURL(file));
@@ -270,11 +274,20 @@ const EditProduct = () => {
                   multiple
                   accept="image/*"
                   onChange={handleImageChange}
-                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10"
+                  disabled={existingImages.length + newImages.length >= 3}
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10 disabled:cursor-not-allowed"
                 />
-                <div className="w-full h-32 border-2 border-dashed border-gray-200 hover:border-[var(--accent)] rounded-xl flex flex-col items-center justify-center text-gray-400 hover:text-[var(--accent)] transition-colors bg-gray-50 group">
-                  <FiUploadCloud className="w-8 h-8 mb-2 group-hover:-trangray-y-1 transition-transform" />
-                  <span className="text-sm font-medium">Click or drag new images to upload</span>
+                <div className={`w-full h-32 border-2 border-dashed rounded-xl flex flex-col items-center justify-center transition-colors group ${
+                  existingImages.length + newImages.length >= 3 
+                    ? 'border-gray-200 bg-gray-100 text-gray-400' 
+                    : 'border-gray-200 hover:border-[var(--accent)] text-gray-400 hover:text-[var(--accent)] bg-gray-50'
+                }`}>
+                  <FiUploadCloud className="w-8 h-8 mb-2 group-hover:-translate-y-1 transition-transform" />
+                  <span className="text-sm font-medium">
+                    {existingImages.length + newImages.length >= 3 
+                      ? 'Maximum of 3 images reached' 
+                      : 'Click or drag new images to upload'}
+                  </span>
                 </div>
               </div>
             </div>

@@ -44,6 +44,12 @@ export const getProductById = async (id) => {
 export const createProduct = async (data, vendorId) => {
     const { name, description, price, images, stock, category } = data;
 
+    if (images && images.length > 3) {
+        const error = new Error('Maximum of 3 images allowed');
+        error.statusCode = 400;
+        throw error;
+    }
+
     const product = await Product.create({
         name,
         description,
@@ -73,6 +79,12 @@ export const updateProduct = async (id, data, user) => {
     }
 
     const { name, description, price, images, stock, category, isActive } = data;
+
+    if (images && images.length > 3) {
+        const error = new Error('Maximum of 3 images allowed');
+        error.statusCode = 400;
+        throw error;
+    }
 
     product.name = name ?? product.name;
     product.description = description ?? product.description;

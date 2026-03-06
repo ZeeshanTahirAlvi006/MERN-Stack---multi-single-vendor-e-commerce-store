@@ -55,6 +55,10 @@ const AddProduct = () => {
     const files = Array.from(e.target.files);
     if (files.length === 0) return;
 
+    if (images.length + files.length > 3) {
+      return toast.error('You can only upload a maximum of 3 images');
+    }
+
     setUploading(true);
     try {
       const uploadPromises = files.map(async (file) => {
@@ -232,7 +236,7 @@ const AddProduct = () => {
               ${errors.images ? 'border-red-500 bg-red-50/50' : 'border-gray-300 bg-white hover:border-[var(--accent)] hover:bg-[var(--accent-hover)]/30'}`}>
               <FiImage className="mx-auto text-3xl text-gray-400 mb-2" />
               <p className="text-sm text-gray-500 mb-3">Drag & drop or click to upload</p>
-              <label className="inline-flex items-center gap-2 px-4 py-2 bg-[var(--accent)] text-white text-sm font-medium rounded-lg cursor-pointer hover:bg-[var(--accent)] transition-colors">
+              <label className={`inline-flex items-center gap-2 px-4 py-2 text-white text-sm font-medium rounded-lg cursor-pointer transition-colors ${images.length >= 3 ? 'bg-gray-400 cursor-not-allowed' : 'bg-[var(--accent)] hover:bg-[var(--accent)]'}`}>
                 <FiUploadCloud />
                 {uploading ? 'Uploading...' : 'Choose Files'}
                 <input
@@ -240,10 +244,11 @@ const AddProduct = () => {
                   accept="image/*"
                   multiple
                   onChange={handleImageUpload}
-                  disabled={uploading}
+                  disabled={uploading || images.length >= 3}
                   className="hidden"
                 />
               </label>
+              {images.length >= 3 && <p className="text-xs text-amber-600 mt-2 font-medium">Maximum limit of 3 images reached.</p>}
             </div>
             {errors.images && <span className="block text-red-500 text-xs mt-1 font-medium">{errors.images}</span>}
 
