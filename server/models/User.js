@@ -76,7 +76,7 @@ UserSchema.methods.comparePassword = async function(passwordfromuser){
 }
 
 UserSchema.methods.generateJWTToken = function(){
-    return generateJWTToken(this._id);
+    return generateJWTToken(this._id, this.role);
 }
 
 export default mongoose.model("User", UserSchema)
