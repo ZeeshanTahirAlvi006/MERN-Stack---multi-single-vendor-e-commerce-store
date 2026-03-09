@@ -9,6 +9,10 @@ import {
 } from '../controllers/productController.js';
 import { protectRole } from '../middleware/authMiddleware.js';
 import { authorizeRoles } from '../middleware/roleMiddleWare.js';
+import { 
+    validateProductData, 
+    checkValidationResults 
+} from '../middleware/validationMiddleware.js';
 
 const router = express.Router();
 
@@ -20,8 +24,8 @@ router.get('/', getProducts);
 router.get('/:id', getProductById);
 
 // Protected routes — vendor or admin only
-router.post('/', protectRole, authorizeRoles('vendor', 'admin'), createProduct);
-router.put('/:id', protectRole, authorizeRoles('vendor'), updateProduct);
+router.post('/', protectRole, authorizeRoles('vendor', 'admin'), validateProductData, checkValidationResults, createProduct);
+router.put('/:id', protectRole, authorizeRoles('vendor'), validateProductData, checkValidationResults, updateProduct);
 router.delete('/:id', protectRole, authorizeRoles('vendor', 'admin'), deleteProduct);
 
 export default router;

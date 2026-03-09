@@ -10,6 +10,10 @@ import {
 } from '../controllers/orderController.js';
 import { protectRole } from '../middleware/authMiddleware.js';
 import { authorizeRoles } from '../middleware/roleMiddleWare.js';
+import { 
+    validateOrderData, 
+    checkValidationResults 
+} from '../middleware/validationMiddleware.js';
 
 const router = express.Router();
 
@@ -22,7 +26,7 @@ router.get('/vendor/sales', protectRole, authorizeRoles('vendor'), getVendorSale
 router.get('/', protectRole, authorizeRoles('admin'), getAllOrders);
 
 // Customer & Vendor — create order
-router.post('/', protectRole, authorizeRoles('customer', 'vendor'), placeOrder);
+router.post('/', protectRole, authorizeRoles('customer', 'vendor'), validateOrderData, checkValidationResults, placeOrder);
 
 // Parameterized routes
 router.get('/:id', protectRole, getOrderById);

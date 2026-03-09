@@ -59,6 +59,19 @@ const EditProduct = () => {
       return toast.error('You can only upload a maximum of 3 images');
     }
 
+    // New Strict File Validation
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+    const maxSize = 5 * 1024 * 1024; // 5MB limit
+    
+    for (const file of files) {
+      if (!allowedTypes.includes(file.type)) {
+        return toast.error(`Invalid file type: ${file.name}. Only JPG, PNG, and WEBP allowed.`);
+      }
+      if (file.size > maxSize) {
+        return toast.error(`File too large: ${file.name}. Maximum size is 5MB.`);
+      }
+    }
+
     setNewImages((prev) => [...prev, ...files]);
 
     const urls = files.map((file) => URL.createObjectURL(file));
