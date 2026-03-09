@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getAllOrders } from '../../api/api';
+import { getAllOrders, updateOrderStatus } from '../../api/api';
 import { toast } from 'react-toastify';
 import { FiPackage, FiCalendar } from 'react-icons/fi';
 import Loader from '../../components/common/Loader';
@@ -27,11 +27,22 @@ const Orders = () => {
     const map = {
       'Pending': 'bg-amber-100 text-amber-700',
       'Paid': 'bg-blue-100 text-blue-700',
+      'Processing': 'bg-purple-100 text-purple-700',
       'Shipped': 'bg-indigo-100 text-indigo-700',
       'Delivered': 'bg-emerald-100 text-emerald-700',
       'Cancelled': 'bg-red-100 text-red-700',
     };
     return map[status] || 'bg-slate-100 text-slate-700';
+  };
+
+  const handleStatusChange = async (id, newStatus) => {
+    try {
+      await updateOrderStatus(id, newStatus);
+      setOrders(orders.map(o => o._id === id ? { ...o, status: newStatus } : o));
+      toast.success('Order status updated');
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Failed to update order status');
+    }
   };
 
   if (loading) {
@@ -89,9 +100,18 @@ const Orders = () => {
                       Rs. {order.total?.toLocaleString() || 0}
                     </td>
                     <td className="px-6 py-4">
-                      <span className={`inline-flex px-2.5 py-1 rounded-md text-xs font-semibold border ${getStatusColor(order.status)}`}>
-                        {order.status}
-                      </span>
+                      <select
+                        value={order.status}
+                        onChange={(e) => handleStatusChange(order._id, e.target.value)}
+                        className={`text-xs font-semibold px-2 py-1 rounded-md border outline-none cursor-pointer ${getStatusColor(order.status)}`}
+                      >
+                        <option value="Pending">Pending</option>
+                        <option value="Paid">Paid</option>
+                        <option value="Processing">Processing</option>
+                        <option value="Shipped">Shipped</option>
+                        <option value="Delivered">Delivered</option>
+                        <option value="Cancelled">Cancelled</option>
+                      </select>
                     </td>
                   </tr>
                 ))

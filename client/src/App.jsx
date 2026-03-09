@@ -99,6 +99,7 @@ function App() {
                           <Route path="users" element={<AdminUsers />} />
                           <Route path="orders" element={<AdminOrders />} />
                           <Route path="products" element={<AdminProducts />} />
+                          <Route path="settings" element={<Settings />} />
                         </Routes>
                       </div>
                     </div>

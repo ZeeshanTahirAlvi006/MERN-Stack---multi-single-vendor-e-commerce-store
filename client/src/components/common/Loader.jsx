@@ -2,7 +2,7 @@ import React from 'react';
 
 const Loader = ({ className = "" }) => {
   return (
-    <div className={`flex flex-col items-center justify-center min-h-[400px] w-full bg-[#f6f6ee] ${className}`}>
+    <div className={`flex flex-col items-center justify-center min-h-[400px] w-full bg-white/60 backdrop-blur-sm ${className}`}>
       <div className="w-32 h-32">
         <svg
           viewBox="0 0 100 100"

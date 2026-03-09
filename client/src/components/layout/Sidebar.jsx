@@ -25,7 +25,7 @@ const Sidebar = () => {
     { name: 'Manage Users', path: '/admin/users', icon: <Users size={24} /> },
     { name: 'All Orders', path: '/admin/orders', icon: <CurrencyDollar size={24} /> },
     { name: 'Directory', path: '/admin/products', icon: <Package size={24} /> },
-    { name: 'Account Settings', path: '/vendor/settings', icon: <Gear size={24} /> },
+    { name: 'Account Settings', path: '/admin/settings', icon: <Gear size={24} /> },
   ];
 
   const links = userInfo?.role === 'admin' ? adminLinks : vendorLinks;
