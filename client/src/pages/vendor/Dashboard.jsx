@@ -38,7 +38,6 @@ const Dashboard = () => {
       setStats(dashRes.data);
       setProducts(prodRes.data);
     } catch {
-      // Will show empty state
     } finally {
       setLoading(false);
     }
@@ -53,7 +52,6 @@ const Dashboard = () => {
       await deleteProduct(productId);
       setProducts(products.filter((p) => p._id !== productId));
       toast.success('Product deleted successfully');
-      // Optionally refresh dashboard stats here, but removing from local list is fine for UX
     } catch (error) {
       toast.error(error.response?.data?.message || 'Failed to delete product');
     }
@@ -98,7 +96,6 @@ const Dashboard = () => {
     },
   ];
 
-  // Revenue chart: simple bar chart
   const maxRevenue = Math.max(1, ...(stats?.monthlyRevenue?.map((m) => m.revenue) || []));
 
   return (
@@ -109,7 +106,6 @@ const Dashboard = () => {
           <p className="text-gray-500 text-sm">Welcome back, {userInfo?.name}</p>
         </div>
 
-        {/* Stat Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           {statCards.map((card) => (
             <div
@@ -128,7 +124,6 @@ const Dashboard = () => {
         </div>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Monthly Revenue Chart */}
           <div className="lg:col-span-2 bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
             <h2 className="text-base font-bold text-gray-900 mb-6 border-b border-gray-100 pb-2">Revenue History</h2>
             {stats?.monthlyRevenue?.length > 0 ? (
@@ -153,7 +148,6 @@ const Dashboard = () => {
             )}
           </div>
 
-          {/* Stock Alerts */}
           <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm relative overflow-hidden">
             <div className="flex items-center gap-2 mb-4 border-b border-gray-100 pb-2">
               <FiAlertTriangle className="text-red-500" />
@@ -183,9 +177,7 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* Top Products + My Products */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
-          {/* Top Products */}
           <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
              <h2 className="text-base font-bold text-gray-900 mb-6 border-b border-gray-100 pb-2">Top Selling Products</h2>
             {stats?.topProducts?.length > 0 ? (
@@ -215,7 +207,6 @@ const Dashboard = () => {
             )}
           </div>
 
-          {/* My Products */}
           <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
             <div className="flex items-center justify-between mb-4 border-b border-gray-100 pb-2">
               <h2 className="text-base font-bold text-gray-900">Your Products</h2>

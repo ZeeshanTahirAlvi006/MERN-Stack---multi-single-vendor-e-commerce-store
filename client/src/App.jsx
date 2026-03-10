@@ -1,14 +1,12 @@
 import React, { lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
-// Static Layout and Routing Components
 import ProtectedRoute from './routes/ProtectedRoute';
 import RoleRoute from './routes/RoleRoute';
 import Navbar from './components/layout/Navbar';
 import Sidebar from './components/layout/Sidebar';
 import Loader from './components/common/Loader';
 
-// Public routes
 const Login = lazy(() => import('./pages/auth/Login'));
 const Register = lazy(() => import('./pages/auth/Register'));
 const Home = lazy(() => import('./pages/customer/Home'));
@@ -17,13 +15,11 @@ const ProductDetail = lazy(() => import('./pages/customer/ProductDetail'));
 const VendorProfile = lazy(() => import('./pages/customer/VendorProfile'));
 const Cart = lazy(() => import('./pages/customer/Cart'));
 
-// Customer Protected Routes
 const Checkout = lazy(() => import('./pages/customer/Checkout'));
 const Success = lazy(() => import('./pages/customer/Success'));
 const Orders = lazy(() => import('./pages/customer/Orders'));
 const Profile = lazy(() => import('./pages/customer/Profile'));
 
-// Vendor-only routes
 const AddProduct = lazy(() => import('./pages/vendor/AddProduct'));
 const Dashboard = lazy(() => import('./pages/vendor/Dashboard'));
 const Settings = lazy(() => import('./pages/vendor/Settings'));
@@ -31,7 +27,6 @@ const MyProducts = lazy(() => import('./pages/vendor/MyProducts'));
 const EditProduct = lazy(() => import('./pages/vendor/EditProduct'));
 const Sales = lazy(() => import('./pages/vendor/Sales'));
 
-// Admin-only routes
 const AdminDashboard = lazy(() => import('./pages/admin/Dashboard'));
 const AdminUsers = lazy(() => import('./pages/admin/Users'));
 const AdminOrders = lazy(() => import('./pages/admin/Orders'));
@@ -49,7 +44,6 @@ function App() {
             </div>
           }>
             <Routes>
-              {/* Public routes */}
               <Route path="/" element={<Home />} />
               <Route path="/products" element={<Products />} />
               <Route path="/products/:id" element={<ProductDetail />} />
@@ -58,13 +52,11 @@ function App() {
               <Route path="/auth/login" element={<Login />} />
               <Route path="/auth/register" element={<Register />} />
 
-              {/* Customer Protected Routes */}
               <Route path="/checkout" element={<ProtectedRoute><Checkout /></ProtectedRoute>} />
               <Route path="/success" element={<ProtectedRoute><Success /></ProtectedRoute>} />
               <Route path="/orders" element={<ProtectedRoute><Orders /></ProtectedRoute>} />
               <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
 
-              {/* Vendor-only routes */}
               <Route
                 path="/vendor/*"
                 element={
@@ -86,7 +78,6 @@ function App() {
                 }
               />
 
-              {/* Admin-only routes */}
               <Route
                 path="/admin/*"
                 element={

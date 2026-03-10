@@ -82,7 +82,6 @@ const Products = () => {
 
   return (
     <div className="min-h-screen bg-[var(--bg-secondary)] flex flex-col md:flex-row">
-      {/* Mobile Filter Toggle */}
       <div className="md:hidden p-4 bg-white border-b flex justify-between items-center">
         <h1 className="text-xl font-bold">All Products</h1>
         <button 
@@ -93,7 +92,6 @@ const Products = () => {
         </button>
       </div>
 
-      {/* Sidebar Filters */}
       <aside className={`fixed inset-0 z-50 bg-white md:bg-transparent md:static md:w-64 md:block flex-shrink-0 border-r border-gray-200 p-6 overflow-y-auto transition-transform ${showFilters ? 'translate-x-0' : '-translate-x-full md:translate-x-0'}`}>
         <div className="flex justify-between items-center md:mb-6 mb-8">
           <h2 className="text-xl font-bold text-gray-900">Filters</h2>
@@ -102,7 +100,6 @@ const Products = () => {
           </button>
         </div>
 
-        {/* Categories */}
         <div className="mb-8">
           <h3 className="text-sm font-semibold text-gray-900 mb-4 uppercase tracking-wider">Categories</h3>
           <div className="flex flex-col gap-2">
@@ -123,7 +120,6 @@ const Products = () => {
           </div>
         </div>
 
-        {/* Price Range */}
         <div className="mb-8">
           <h3 className="text-sm font-semibold text-gray-900 mb-4 uppercase tracking-wider">Price Range (Rs.)</h3>
           <form onSubmit={applyPriceFilter} className="space-y-4">
@@ -163,7 +159,6 @@ const Products = () => {
         </button>
       </aside>
 
-      {/* Main Content */}
       <div className="flex-1 p-4 sm:p-6 lg:p-8">
         <div className="hidden md:flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold text-gray-900">
@@ -202,7 +197,6 @@ const Products = () => {
               ))}
             </div>
 
-            {/* Pagination */}
             {totalPages > 1 && (
               <div className="flex items-center justify-center gap-2 mt-12 bg-white w-fit mx-auto p-2 rounded-xl shadow-sm border border-gray-100">
                 <button

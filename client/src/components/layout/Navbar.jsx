@@ -78,7 +78,6 @@ const Navbar = () => {
     <nav className="bg-[#F6F6EE] border-b border-gray-100 sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex justify-between h-16 items-center">
-          {/* Logo */}
           <div className="flex-shrink-0">
             <Link to="/" className="flex items-center gap-2 no-underline">
               <img src="/logo.png" alt="The Hive PK" className="h-9 w-auto" />
@@ -89,7 +88,6 @@ const Navbar = () => {
             </Link>
           </div>
 
-          {/* Search Bar - Desktop */}
           <div ref={searchRef} className="hidden sm:flex flex-1 max-w-md mx-8 relative z-50">
             <form onSubmit={handleSearch} className="w-full relative">
               <input
@@ -105,7 +103,6 @@ const Navbar = () => {
               </button>
             </form>
 
-            {/* Auto-suggest Dropdown */}
             {showDropdown && (
               <div className="absolute top-full left-0 right-0 mt-2 bg-white border border-gray-200 shadow-lg rounded-xl overflow-hidden py-1 z-50">
                 {isSearching ? (
@@ -151,7 +148,6 @@ const Navbar = () => {
             )}
           </div>
 
-          {/* Desktop Navigation */}
           <div className="hidden sm:flex items-center space-x-5">
             <Link to="/" className={linkClass}>Home</Link>
             <Link to="/products" className={linkClass}>Products</Link>
@@ -172,7 +168,6 @@ const Navbar = () => {
                   <span className="text-sm font-medium max-w-[100px] truncate">{userInfo.name}</span>
                 </button>
                 
-                {/* Dropdown menu */}
                 <div className="absolute right-0 w-52 mt-0 pt-2 opacity-0 invisible group-hover/nav:opacity-100 group-hover/nav:visible transition-all duration-200 z-50">
                   <div className="bg-white border border-gray-200 shadow-lg rounded-xl overflow-hidden">
                     <div className="py-1">
@@ -216,7 +211,6 @@ const Navbar = () => {
             )}
           </div>
 
-          {/* Mobile menu button */}
           <div className="sm:hidden flex items-center">
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
@@ -228,7 +222,6 @@ const Navbar = () => {
         </div>
       </div>
 
-      {/* Mobile Menu */}
       <div className={`sm:hidden absolute w-full left-0 bg-white border-b border-gray-200 shadow-lg overflow-hidden transition-all duration-300 ease-in-out origin-top ${isMenuOpen ? 'max-h-[80vh] opacity-100' : 'max-h-0 opacity-0 pointer-events-none'}`}>
         <div className="p-4 space-y-1">
           <form onSubmit={handleSearch} className="mb-4 relative">

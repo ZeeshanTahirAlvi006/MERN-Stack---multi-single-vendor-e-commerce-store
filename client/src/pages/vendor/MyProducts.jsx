@@ -89,7 +89,6 @@ const MyProducts = () => {
                 key={product._id}
                 className="bg-white rounded-2xl border border-gray-100 overflow-hidden shadow-sm hover:shadow-md transition-shadow group flex flex-col"
               >
-                {/* Image Wrap */}
                 <div className="relative aspect-square bg-gray-100 overflow-hidden">
                   {product.images && product.images.length > 0 ? (
                     <img
@@ -103,7 +102,6 @@ const MyProducts = () => {
                       <span className="text-sm font-medium">No Image</span>
                     </div>
                   )}
-                  {/* Stock Badge Overlay */}
                   <div className="absolute top-3 left-3">
                      <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold backdrop-blur-md shadow-sm border
                         ${product.stock > 0 
@@ -114,7 +112,6 @@ const MyProducts = () => {
                   </div>
                 </div>
 
-                {/* Content */}
                 <div className="p-4 flex flex-col flex-grow">
                   <div className="mb-1 text-xs font-semibold text-[var(--accent)] uppercase tracking-wider">
                     {product.category}

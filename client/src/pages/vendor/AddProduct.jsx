@@ -59,9 +59,8 @@ const AddProduct = () => {
       return toast.error('You can only upload a maximum of 3 images');
     }
 
-    // New Strict File Validation
     const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
-    const maxSize = 5 * 1024 * 1024; // 5MB limit
+    const maxSize = 5 * 1024 * 1024;
     
     for (const file of files) {
       if (!allowedTypes.includes(file.type)) {
@@ -131,10 +130,8 @@ const AddProduct = () => {
 
   return (
     <div className="min-h-screen bg-[var(--bg-primary)] flex">
-      {/* Form */}
       <div className="flex-1 max-w-3xl mx-auto px-6 py-8 w-full">
         <form onSubmit={handleSubmit} className="flex flex-col gap-6" noValidate>
-          {/* Product Name */}
           <div>
             <label htmlFor="name" className="block text-sm font-semibold text-gray-700 mb-1.5">
               Product Name
@@ -154,7 +151,6 @@ const AddProduct = () => {
             {errors.name && <span className="block text-red-500 text-xs mt-1 font-medium">{errors.name}</span>}
           </div>
 
-          {/* Description */}
           <div>
             <label htmlFor="description" className="block text-sm font-semibold text-gray-700 mb-1.5">
               Description
@@ -174,7 +170,6 @@ const AddProduct = () => {
             {errors.description && <span className="block text-red-500 text-xs mt-1 font-medium">{errors.description}</span>}
           </div>
 
-          {/* Price & Stock (side by side) */}
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label htmlFor="price" className="block text-sm font-semibold text-gray-700 mb-1.5">
@@ -217,7 +212,6 @@ const AddProduct = () => {
             </div>
           </div>
 
-          {/* Category */}
           <div>
             <label htmlFor="category" className="block text-sm font-semibold text-gray-700 mb-1.5">
               Category
@@ -240,7 +234,6 @@ const AddProduct = () => {
             {errors.category && <span className="block text-red-500 text-xs mt-1 font-medium">{errors.category}</span>}
           </div>
 
-          {/* Image Upload */}
           <div>
             <label className="block text-sm font-semibold text-gray-700 mb-1.5">
               Product Images
@@ -265,7 +258,6 @@ const AddProduct = () => {
             </div>
             {errors.images && <span className="block text-red-500 text-xs mt-1 font-medium">{errors.images}</span>}
 
-            {/* Image Preview */}
             {images.length > 0 && (
               <div className="flex flex-wrap gap-3 mt-4">
                 {images.map((url, i) => (
@@ -284,7 +276,6 @@ const AddProduct = () => {
             )}
           </div>
 
-          {/* Submit */}
           <button
             type="submit"
             disabled={loading || uploading}

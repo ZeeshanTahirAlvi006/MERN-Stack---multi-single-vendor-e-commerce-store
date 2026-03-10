@@ -9,8 +9,6 @@ import { protectRole } from '../middleware/authMiddleware.js';
 import { authorizeRoles } from '../middleware/roleMiddleWare.js';
 
 const router = express.Router();
-
-// All admin routes require admin role
 router.use(protectRole, authorizeRoles('admin'));
 
 router.get('/stats', getStats);

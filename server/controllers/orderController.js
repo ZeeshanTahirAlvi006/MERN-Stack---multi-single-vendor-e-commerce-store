@@ -72,7 +72,7 @@ export const handleStripeWebhook = async (req, res) => {
     console.log('Body type:', typeof req.rawBody, 'isBuffer:', Buffer.isBuffer(req.rawBody));
     try {
         await orderService.processStripeWebhook(
-            req.rawBody || req.body, // Use rawBody if available, fallback to body
+            req.rawBody || req.body,
             req.headers['stripe-signature'],
             process.env.STRIPE_WEBHOOK_SECRET
         );

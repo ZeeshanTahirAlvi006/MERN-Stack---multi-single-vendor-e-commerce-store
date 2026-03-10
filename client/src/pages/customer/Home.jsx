@@ -43,7 +43,7 @@ const Home = () => {
     } else {
       params.set('category', cat);
     }
-    params.set('page', 1); // Reset to first page when category changes
+    params.set('page', 1);
     setSearchParams(params);
   };
 
@@ -55,21 +55,16 @@ const Home = () => {
 
   return (
     <div className="min-h-screen">
-      {/* Hero Section */}
       <section className="relative bg-gradient-to-br from-[#2D3748] to-[#1A202C] overflow-hidden">
-        {/* Geometric Floral Logo Pattern Background */}
         <div className="absolute inset-0 opacity-10 pointer-events-none">
           <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <pattern id="hex-floral" x="0" y="0" width="120" height="207.84" patternUnits="userSpaceOnUse">
                 <g stroke="#6BCFA0" strokeWidth="1" fill="none">
-                  {/* Hexagon Base */}
                   <path d="M60 0 L120 34.64 L120 103.92 L60 138.56 L0 103.92 L0 34.64 Z" />
                   <path d="M60 207.84 L120 173.2 L120 103.92 L60 69.28 L0 103.92 L0 173.2 Z" />
-                  {/* Internal Intersecting Lines (Floral effect) */}
                   <path d="M0 34.64 L120 103.92 M120 34.64 L0 103.92 M60 0 L60 138.56" />
                   <path d="M0 173.2 L120 103.92 M120 173.2 L0 103.92 M60 207.84 L60 69.28" />
-                  {/* Small detailed petals/leaves */}
                   <path d="M60 69.28 Q 75 86.6 90 69.28 Q 75 51.96 60 69.28 Z" />
                   <path d="M60 69.28 Q 45 86.6 30 69.28 Q 45 51.96 60 69.28 Z" />
                   <path d="M60 138.56 Q 75 121.24 90 138.56 Q 75 155.88 60 138.56 Z" />
@@ -103,11 +98,8 @@ const Home = () => {
             </a>
           </div>
         </div>
-        
-        {/* Bottom subtle gradient fade removed */}
       </section>
 
-      {/* Categories */}
       <section id="categories" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <div className="flex flex-wrap gap-3 justify-center">
           {categories.map((cat) => (
@@ -126,7 +118,6 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Products Grid */}
       <section id="products" className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-20">
         {search && (
           <p className="text-sm text-gray-500 mb-6">
@@ -150,7 +141,6 @@ const Home = () => {
               ))}
             </div>
 
-            {/* Pagination */}
             {totalPages > 1 && (
               <div className="flex items-center justify-center gap-2 mt-12">
                 <button

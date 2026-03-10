@@ -4,7 +4,6 @@ const API = axios.create({
   baseURL: import.meta.env.VITE_API_URL || 'http://localhost:5000/api',
 });
 
-// Interceptor to add Token
 API.interceptors.request.use((config) => {
   const userInfo = localStorage.getItem('userInfo')
     ? JSON.parse(localStorage.getItem('userInfo'))
@@ -16,7 +15,6 @@ API.interceptors.request.use((config) => {
   return config;
 });
 
-// ─── Auth ───
 export const loginUser = (email, password) =>
   API.post('/auth/login', { email, password });
 
@@ -29,7 +27,6 @@ export const getUserProfile = () =>
 export const updateUserProfile = (profileData) =>
   API.put('/auth/profile', profileData);
 
-// ─── Products ───
 export const getProducts = (params = {}) =>
   API.get('/products', { params });
 
@@ -48,7 +45,6 @@ export const deleteProduct = (id) =>
 export const getVendorProducts = () =>
   API.get('/products/vendor/mine');
 
-// ─── Vendor ───
 export const getVendorDashboard = () =>
   API.get('/vendors/dashboard');
 
@@ -61,7 +57,6 @@ export const getVendors = () =>
 export const getVendorProfile = (id) =>
   API.get(`/vendors/${id}`);
 
-// ─── Orders ───
 export const placeOrder = (orderData) =>
   API.post('/orders', orderData);
 
@@ -81,7 +76,6 @@ export const updateOrderStatus = (id, status) =>
 export const verifyStripeSession = (sessionId) =>
   API.get(`/orders/verify-session?session_id=${sessionId}`);
 
-// ─── Admin ───
 export const getAdminStats = () =>
   API.get('/admin/stats');
 

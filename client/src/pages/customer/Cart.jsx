@@ -35,11 +35,9 @@ const Cart = () => {
         <h1 className="text-2xl font-bold text-gray-900 mb-8">Shopping Cart</h1>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-          {/* Cart Items */}
           <div className="lg:col-span-2 space-y-4">
             {items.map((item) => (
               <div key={item.productId} className="bg-white rounded-xl p-4 flex flex-col sm:flex-row items-start sm:items-center gap-4 shadow-sm">
-                {/* Image and basic info */}
                 <div className="flex items-center gap-4 w-full sm:w-auto">
                   <img
                     src={item.image || 'https://placehold.co/80x80/f5f7f9/999?text=?'}
@@ -52,7 +50,6 @@ const Cart = () => {
                   </div>
                 </div>
 
-                {/* Controls */}
                 <div className="flex items-center justify-between w-full sm:w-auto sm:ml-auto gap-4 mt-2 sm:mt-0 pt-2 sm:pt-0 border-t border-gray-100 sm:border-0">
                   <div className="flex items-center border border-gray-200 rounded-lg">
                     <button onClick={() => updateQty(item.productId, item.qty - 1)} className="p-2 hover:bg-gray-50 cursor-pointer bg-white border-none">
@@ -72,7 +69,6 @@ const Cart = () => {
             ))}
           </div>
 
-          {/* Summary / Checkout */}
           <div className="bg-white rounded-xl p-6 shadow-sm h-fit sticky top-24">
             <h3 className="text-lg font-bold text-gray-900 mb-4">Order Summary</h3>
             <div className="space-y-3 mb-6">

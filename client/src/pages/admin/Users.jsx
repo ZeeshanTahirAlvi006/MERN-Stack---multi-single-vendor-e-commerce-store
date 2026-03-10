@@ -7,7 +7,7 @@ import Loader from '../../components/common/Loader';
 const Users = () => {
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState(''); // '' = all, 'vendor', 'customer', 'admin'
+  const [filter, setFilter] = useState('');
 
   useEffect(() => {
     fetchUsers(filter);

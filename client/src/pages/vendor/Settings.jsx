@@ -3,10 +3,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import { updateUserProfile } from '../../api/api';
 import { FiUser, FiMail, FiLock, FiSave } from 'react-icons/fi';
-// Assuming there might be a Redux action to update local state after profile change.
-// For now we'll rely on local state to show changes, or prompt re-login for token refresh if needed.
-// Actually, updating name doesn't invalidate token, but we should dispatch an action if we had one.
-// We'll just update local state if possible or rely on the user seeing success.
 
 const Settings = () => {
   const { userInfo } = useSelector((state) => state.auth);
@@ -51,7 +47,6 @@ const Settings = () => {
       await updateUserProfile(updateData);
       toast.success('Profile updated successfully! Login again to see changes everywhere.');
       
-      // Clear password fields
       setFormData((prev) => ({ ...prev, password: '', confirmPassword: '' }));
       
     } catch (error) {
@@ -75,8 +70,6 @@ const Settings = () => {
         
         <div className="bg-white rounded-2xl border border-gray-100 p-6 shadow-sm">
           <form onSubmit={handleSubmit} className="space-y-5">
-            
-            {/* Name Field */}
             <div>
               <label htmlFor="name" className="block text-sm font-semibold text-gray-700 mb-1.5">
                 Full Name
@@ -96,7 +89,6 @@ const Settings = () => {
               </div>
             </div>
 
-            {/* Email Field (Read Only usually, but showing it) */}
             <div>
               <label htmlFor="email" className="block text-sm font-semibold text-gray-700 mb-1.5">
                 Email Address
@@ -123,7 +115,6 @@ const Settings = () => {
               <p className="text-xs text-gray-500 mt-1">Leave blank if you do not wish to change your password.</p>
             </div>
 
-            {/* Password Field */}
             <div>
               <label htmlFor="password" className="block text-sm font-semibold text-gray-700 mb-1.5">
                 New Password
@@ -143,7 +134,6 @@ const Settings = () => {
               </div>
             </div>
 
-            {/* Confirm Password Field */}
             <div>
               <label htmlFor="confirmPassword" className="block text-sm font-semibold text-gray-700 mb-1.5">
                 Confirm New Password

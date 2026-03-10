@@ -16,7 +16,6 @@ const ProductCard = ({ product }) => {
 
   return (
     <Link to={`/products/${product._id}`} className="group block no-underline">
-      {/* Image */}
       <div className="relative aspect-square bg-[var(--bg-secondary)] rounded-xl overflow-hidden mb-4">
         <img
           src={product.images?.[0] || 'https://placehold.co/400x400/f5f7f9/999?text=No+Image'}
@@ -38,7 +37,6 @@ const ProductCard = ({ product }) => {
         )}
       </div>
 
-      {/* Details */}
       <div>
         {product.category && (
           <p className="text-xs text-gray-400 uppercase tracking-wider mb-1">{product.category}</p>

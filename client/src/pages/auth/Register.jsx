@@ -75,7 +75,6 @@ const Register = () => {
       onMouseMove={handleMouseMove}
       onMouseLeave={() => setMousePos({ x: -1000, y: -1000 })}
     >
-      {/* Base Subtle Pattern */}
       <div className="absolute inset-0 opacity-15 pointer-events-none animate-pattern z-0">
         <svg width="100%" height="200%" xmlns="http://www.w3.org/2000/svg">
           <defs>
@@ -96,7 +95,6 @@ const Register = () => {
         </svg>
       </div>
 
-      {/* Cursor Reveal Zoomed/Darker Pattern */}
       <div 
         className="absolute inset-0 pointer-events-none z-0"
         style={{
@@ -105,7 +103,6 @@ const Register = () => {
         }}
       >
         <div className="absolute inset-0 opacity-90 animate-pattern">
-          {/* Exact 1:1 mapping with the base layer, no scaling/zooming, just darker thicker lines */}
           <svg width="100%" height="200%" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <pattern id="hex-floral-hover" x="0" y="0" width="120" height="207.84" patternUnits="userSpaceOnUse">
@@ -134,7 +131,6 @@ const Register = () => {
 
         <div className="bg-white rounded-xl shadow-sm p-6">
           <form onSubmit={handleSubmit} className="flex flex-col gap-4" noValidate>
-            {/* Name */}
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1.5">Full Name</label>
               <div className={`${wrapperBase} ${errors.name ? wrapperError : wrapperNormal}`}>
@@ -144,7 +140,6 @@ const Register = () => {
               {errors.name && <span className="block text-red-500 text-xs mt-1">{errors.name}</span>}
             </div>
 
-            {/* Email */}
             <div>
               <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1.5">Email Address</label>
               <div className={`${wrapperBase} ${errors.email ? wrapperError : wrapperNormal}`}>
@@ -154,7 +149,6 @@ const Register = () => {
               {errors.email && <span className="block text-red-500 text-xs mt-1">{errors.email}</span>}
             </div>
 
-            {/* Password */}
             <div>
               <label htmlFor="password" className="block text-sm font-medium text-gray-700 mb-1.5">Password</label>
               <div className={`${wrapperBase} ${errors.password ? wrapperError : wrapperNormal}`}>
@@ -167,7 +161,6 @@ const Register = () => {
               {errors.password && <span className="block text-red-500 text-xs mt-1">{errors.password}</span>}
             </div>
 
-            {/* Confirm Password */}
             <div>
               <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 mb-1.5">Confirm Password</label>
               <div className={`${wrapperBase} ${errors.confirmPassword ? wrapperError : wrapperNormal}`}>
@@ -180,7 +173,6 @@ const Register = () => {
               {errors.confirmPassword && <span className="block text-red-500 text-xs mt-1">{errors.confirmPassword}</span>}
             </div>
 
-            {/* Role Selector */}
             <div className="pt-3 border-t border-gray-100">
               <label className="block text-sm font-medium text-gray-700 mb-2">Account Type</label>
               <div className="grid grid-cols-2 gap-3">

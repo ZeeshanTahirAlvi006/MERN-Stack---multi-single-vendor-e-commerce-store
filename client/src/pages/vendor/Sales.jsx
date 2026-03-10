@@ -102,8 +102,6 @@ const Sales = () => {
           <div className="space-y-4">
             {orders.map((order) => (
               <div key={order._id} className="bg-white rounded-2xl border border-gray-100 shadow-sm overflow-hidden flex flex-col md:flex-row">
-                
-                {/* Left side: Order Info */}
                 <div className="p-6 border-b md:border-b-0 md:border-r border-gray-100 flex-1">
                   <div className="flex flex-wrap items-center justify-between gap-4 mb-4">
                     <div>
@@ -136,7 +134,6 @@ const Sales = () => {
                   </div>
                 </div>
 
-                {/* Right side: Action & Total */}
                 <div className="p-6 bg-gray-50 md:w-64 flex flex-col justify-between">
                    <div>
                      <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">Order Total</p>

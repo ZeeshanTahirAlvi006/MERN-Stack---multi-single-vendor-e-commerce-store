@@ -60,7 +60,6 @@ const Login = () => {
       onMouseMove={handleMouseMove}
       onMouseLeave={() => setMousePos({ x: -1000, y: -1000 })}
     >
-      {/* Base Subtle Pattern */}
       <div className="absolute inset-0 opacity-15 pointer-events-none animate-pattern z-0">
         <svg width="100%" height="200%" xmlns="http://www.w3.org/2000/svg">
           <defs>
@@ -81,7 +80,6 @@ const Login = () => {
         </svg>
       </div>
 
-      {/* Cursor Reveal Zoomed/Darker Pattern */}
       <div 
         className="absolute inset-0 pointer-events-none z-0"
         style={{
@@ -90,7 +88,6 @@ const Login = () => {
         }}
       >
         <div className="absolute inset-0 opacity-90 animate-pattern">
-          {/* Exact 1:1 mapping with the base layer, no scaling/zooming, just darker thicker lines */}
           <svg width="100%" height="200%" xmlns="http://www.w3.org/2000/svg">
             <defs>
               <pattern id="hex-floral-hover" x="0" y="0" width="120" height="207.84" patternUnits="userSpaceOnUse">

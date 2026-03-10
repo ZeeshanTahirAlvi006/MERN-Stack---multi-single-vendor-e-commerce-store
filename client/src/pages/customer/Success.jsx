@@ -27,7 +27,7 @@ const Success = () => {
       console.log('🔍 Verify response:', res.data);
       if (res.data.status === 'Paid') {
         setVerified(true);
-        clearCart(); // Clear cart only after payment is confirmed
+        clearCart();
       } else {
         setError(`Payment status: ${res.data.status}`);
       }

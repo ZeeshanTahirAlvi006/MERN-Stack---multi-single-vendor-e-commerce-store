@@ -40,7 +40,6 @@ export const placeOrder = async (userId, { items, shippingAddress, paymentMethod
     const isStripe = paymentMethod === 'Card (Stripe)';
 
     if (isStripe) {
-        // For Stripe: DON'T create order yet — create it only after payment confirmed
         const lineItems = orderItems.map((item) => ({
             price_data: {
                 currency: 'pkr',
@@ -61,7 +60,6 @@ export const placeOrder = async (userId, { items, shippingAddress, paymentMethod
             cancel_url: `${process.env.FRONTEND_URL || 'http://localhost:5173'}/cart`,
             metadata: {
                 customerId: userId.toString(),
-                // Store compact item data: "productId:qty,productId:qty" to avoid 500-char limit
                 items: orderItems.map(i => `${i.productId}:${i.qty}`).join(','),
                 shippingAddress: JSON.stringify(shippingAddress),
                 paymentMethod,
@@ -71,7 +69,6 @@ export const placeOrder = async (userId, { items, shippingAddress, paymentMethod
         return { stripeUrl: session.url };
     }
 
-    // COD: deduct stock and create order immediately
     for (const item of items) {
         const product = await Product.findById(item.productId);
         product.stock -= item.qty;
@@ -92,9 +89,7 @@ export const placeOrder = async (userId, { items, shippingAddress, paymentMethod
 
 
 
-// Helper: create order from Stripe session metadata after payment confirmed
 const createOrderFromStripeSession = async (session) => {
-    // Check if order already exists for this session (prevent duplicates)
     const existing = await Order.findOne({ stripeSessionId: session.id });
     if (existing) return existing;
 
@@ -102,13 +97,11 @@ const createOrderFromStripeSession = async (session) => {
     const shippingAddress = JSON.parse(session.metadata.shippingAddress);
     const paymentMethod = session.metadata.paymentMethod;
 
-    // Parse compact items format: "productId:qty,productId:qty"
     const itemEntries = session.metadata.items.split(',').map(entry => {
         const [productId, qty] = entry.split(':');
         return { productId, qty: Number(qty) };
     });
 
-    // Re-fetch product details from DB and deduct stock
     const orderItems = [];
     for (const entry of itemEntries) {
         const product = await Product.findById(entry.productId);

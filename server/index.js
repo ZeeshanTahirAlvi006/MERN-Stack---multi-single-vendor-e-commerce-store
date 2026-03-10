@@ -19,10 +19,8 @@ app.use(cors({
   credentials: true,
 }));
 app.options(/.*/, cors())
-// Stripe Webhook route - using the rawBody from express.json
 app.post(['/api/orders/webhook', '/api/orders/webhook/'], handleStripeWebhook);
 
-// Apply JSON parsing globally, but save the raw body buffer for Stripe
 app.use(express.json({
   verify: (req, res, buf) => {
     req.rawBody = buf;
@@ -35,7 +33,6 @@ app.get('/',(req,res)=>{
     res.send('API is running...');
 })
 
-// Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/vendors', vendorRoutes);

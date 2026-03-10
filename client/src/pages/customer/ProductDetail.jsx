@@ -55,13 +55,11 @@ const ProductDetail = () => {
   return (
     <div className="min-h-screen">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {/* Breadcrumb */}
         <Link to="/" className="inline-flex items-center gap-2 text-sm text-gray-500 hover:text-[var(--accent)] mb-8 transition-colors no-underline">
           <FiArrowLeft size={16} /> Back to Shop
         </Link>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
-          {/* Images */}
           <div>
             <div className="aspect-square bg-[var(--bg-secondary)] rounded-2xl overflow-hidden mb-4">
               <img
@@ -87,7 +85,6 @@ const ProductDetail = () => {
             )}
           </div>
 
-          {/* Details */}
           <div className="flex flex-col">
             {product.category && (
               <p className="text-xs text-gray-400 uppercase tracking-widest mb-2">{product.category}</p>
@@ -97,7 +94,6 @@ const ProductDetail = () => {
               Rs. {product.price.toLocaleString()}
             </p>
 
-            {/* Stock Status */}
             <div className="flex items-center gap-2 mb-6">
               <span className={`w-2 h-2 rounded-full ${inStock ? 'bg-green-500' : 'bg-red-500'}`} />
               <span className={`text-sm font-medium ${inStock ? 'text-green-600' : 'text-red-500'}`}>
@@ -105,12 +101,10 @@ const ProductDetail = () => {
               </span>
             </div>
 
-            {/* Description */}
             <p className="text-gray-600 text-sm leading-relaxed mb-8 border-t border-gray-100 pt-6">
               {product.description || 'No description available.'}
             </p>
 
-            {/* Quantity + Add to Cart */}
             {inStock && (
               <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-4 mt-auto">
                 <div className="flex items-center justify-between sm:justify-center border border-gray-200 rounded-lg overflow-hidden shrink-0">
@@ -138,7 +132,6 @@ const ProductDetail = () => {
               </div>
             )}
 
-            {/* Vendor */}
             {product.vendor && (
               <div className="mt-8 pt-6 border-t border-gray-100">
                 <p className="text-xs text-gray-400">

@@ -51,9 +51,7 @@ const VendorProfile = () => {
 
   return (
     <div className="min-h-screen bg-[var(--bg-secondary)]">
-      {/* Dynamic Cover/Banner Block */}
       <div className="h-48 md:h-64 bg-gradient-to-r from-slate-900 to-[#1e293b] relative overflow-hidden">
-        {/* Subtle pattern */}
         <div className="absolute inset-0 opacity-10">
           <svg width="100%" height="100%" xmlns="http://www.w3.org/2000/svg">
             <defs>
@@ -68,7 +66,6 @@ const VendorProfile = () => {
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative -mt-24 pb-20">
         
-        {/* Vendor Header Card */}
         <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-6 md:p-8 mb-8 flex flex-col md:flex-row gap-4 md:gap-6 items-center md:items-end text-center md:text-left">
           <div className="w-28 h-28 md:w-40 md:h-40 bg-white rounded-2xl shadow-md border-4 border-white overflow-hidden flex-shrink-0 relative z-10 flex items-center justify-center">
             {vendor.storeInfo?.logo ? (
@@ -101,7 +98,6 @@ const VendorProfile = () => {
           </div>
         </div>
 
-        {/* Vendor Products */}
         <div className="mb-6 flex justify-between items-end">
           <h2 className="text-xl font-bold text-gray-900 border-b-2 border-[var(--accent)] pb-2 inline-block">
             Store Catalogue

@@ -59,9 +59,8 @@ const EditProduct = () => {
       return toast.error('You can only upload a maximum of 3 images');
     }
 
-    // New Strict File Validation
     const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
-    const maxSize = 5 * 1024 * 1024; // 5MB limit
+    const maxSize = 5 * 1024 * 1024;
     
     for (const file of files) {
       if (!allowedTypes.includes(file.type)) {
@@ -106,7 +105,7 @@ const EditProduct = () => {
         const uploadPromises = newImages.map(async (file) => {
           const data = new FormData();
           data.append('file', file);
-          data.append('upload_preset', 'E-Commerce-App'); // Replace with your preset if different
+          data.append('upload_preset', 'E-Commerce-App');
           const res = await fetch('https://api.cloudinary.com/v1_1/dl7ws1viu/image/upload', {
             method: 'POST',
             body: data,

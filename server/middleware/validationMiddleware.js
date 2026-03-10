@@ -1,6 +1,5 @@
 import { body, validationResult } from 'express-validator';
 
-// 1. Middleware to check and return validation errors
 export const checkValidationResults = (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -13,18 +12,17 @@ export const checkValidationResults = (req, res, next) => {
     next();
 };
 
-// 2. Validation chain for User Registration
 export const validateUserRegistration = [
     body('name')
         .trim()
         .notEmpty().withMessage('Name is required')
         .isLength({ min: 2, max: 50 }).withMessage('Name must be between 2 and 50 characters')
-        .escape(), // Sanitizes HTML/scripts
+        .escape(),
     body('email')
         .trim()
         .notEmpty().withMessage('Email is required')
         .isEmail().withMessage('Please provide a valid email address')
-        .normalizeEmail(), // Standardizes email format
+        .normalizeEmail(),
     body('password')
         .notEmpty().withMessage('Password is required')
         .isLength({ min: 8 }).withMessage('Password must be at least 8 characters long'),
@@ -33,7 +31,6 @@ export const validateUserRegistration = [
         .isIn(['admin', 'vendor', 'customer']).withMessage('Invalid role specified')
 ];
 
-// 3. Validation chain for User Login
 export const validateUserLogin = [
     body('email')
         .trim()
@@ -44,7 +41,6 @@ export const validateUserLogin = [
         .notEmpty().withMessage('Password is required')
 ];
 
-// 4. Validation chain for Product Creation & Updates
 export const validateProductData = [
     body('name')
         .trim()
@@ -75,7 +71,6 @@ export const validateProductData = [
         .withMessage('Invalid category selected')
 ];
 
-// 5. Validation chain for Order Placement
 export const validateOrderData = [
     body('shippingAddress.name')
         .trim()

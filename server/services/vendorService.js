@@ -100,7 +100,6 @@ export const getDashboard = async (vendorId) => {
         { $sort: { year: 1, month: 1 } },
     ]);
 
-    // Backfill missing months with 0 revenue
     const monthlyRevenue = [];
     for (let i = 5; i >= 0; i--) {
         const d = new Date();

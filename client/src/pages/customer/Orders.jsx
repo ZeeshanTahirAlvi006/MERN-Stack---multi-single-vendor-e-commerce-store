@@ -74,7 +74,6 @@ const Orders = () => {
           <div className="space-y-4">
             {orders.map((order) => (
               <div key={order._id} className="bg-white rounded-xl shadow-sm overflow-hidden">
-                {/* Order Header */}
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 p-5 border-b border-gray-100">
                   <div>
                     <span className="text-xs text-gray-400">Order #{order._id.slice(-6)}</span>
@@ -88,7 +87,6 @@ const Orders = () => {
                   </div>
                 </div>
 
-                {/* Items */}
                 <div className="p-5 space-y-3">
                   {order.items.map((item, idx) => (
                     <div key={idx} className="flex items-center justify-between text-sm">
@@ -103,7 +101,6 @@ const Orders = () => {
                   ))}
                 </div>
 
-                {/* Footer */}
                 <div className="px-5 py-4 bg-gray-50 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
                   <span className="text-xs text-gray-500">Payment: {order.paymentMethod}</span>
                   <span className="text-base font-bold text-gray-900">Total: {formatCurrency(order.total)}</span>
